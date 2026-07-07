@@ -76,6 +76,8 @@
             background: #a7f3d0;
             border-radius: 10px;
         }
+        
+        /* LOADING ANIMATION */
         .spinner {
             border: 4px solid rgba(255, 255, 255, 0.1);
             border-top: 4px solid #facc15;
@@ -86,25 +88,44 @@
             margin: 20px auto;
         }
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
+        
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
         .fade-in {
             animation: fadeIn 0.3s ease;
         }
         @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Progress bar loading */
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: linear-gradient(90deg, #facc15, #a7f3d0);
+            border-radius: 4px;
+            transition: width 0.3s ease;
         }
     </style>
 </head>
@@ -134,10 +155,14 @@
         <!-- MAIN -->
         <main class="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full">
 
-            <!-- LOADING -->
+            <!-- LOADING dengan Progress -->
             <div x-show="isLoading" class="flex flex-col items-center justify-center min-h-[60vh]">
                 <div class="spinner"></div>
-                <p class="text-dwali-light mt-4 text-sm">Memuat data...</p>
+                <p class="text-dwali-light mt-4 text-sm" x-text="loadingMessage"></p>
+                <div class="progress-bar w-64">
+                    <div class="fill" :style="'width: ' + loadingProgress + '%'"></div>
+                </div>
+                <p class="text-xs text-dwali-light/50 mt-2" x-text="loadingProgress + '%'"></p>
             </div>
 
             <!-- ============ LOGIN ============ -->
@@ -649,20 +674,43 @@
         // ============================================================
         const API_URL = 'https://script.google.com/macros/s/AKfycbyOR1N6rti1N5iMUGLFJOKRH7uRU4oBcDDdunhajL3RWhapsBgOZ2PkcbicgAZExaYf/exec';
 
-        async function callAPI(action, data = {}) {
-            try {
-                const url = `${API_URL}?action=${action}&data=${encodeURIComponent(JSON.stringify(data))}`;
-                console.log('📤 API Call:', action, data);
-                const res = await fetch(url, { method: 'GET', mode: 'cors', headers: { 'Accept': 'application/json' } });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const json = await res.json();
-                console.log('📥 API Response:', json);
-                if (!json.success) throw new Error(json.error || 'Gagal memuat data');
-                return json.data;
-            } catch (e) {
-                console.error('❌ API Error:', e);
-                throw e;
+        // ============================================================
+        // API CALL dengan timeout dan retry
+        // ============================================================
+        async function callAPI(action, data = {}, retries = 2) {
+            let lastError;
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 detik timeout
+                    
+                    const url = `${API_URL}?action=${action}&data=${encodeURIComponent(JSON.stringify(data))}`;
+                    console.log(`📤 API Call (attempt ${i+1}):`, action, data);
+                    
+                    const res = await fetch(url, {
+                        method: 'GET',
+                        mode: 'cors',
+                        headers: { 'Accept': 'application/json' },
+                        signal: controller.signal
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    
+                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                    const json = await res.json();
+                    console.log('📥 API Response:', json);
+                    
+                    if (!json.success) throw new Error(json.error || 'Gagal memuat data');
+                    return json.data;
+                } catch (e) {
+                    lastError = e;
+                    console.warn(`⚠️ Attempt ${i+1} failed:`, e.message);
+                    if (i < retries - 1) {
+                        await new Promise(r => setTimeout(r, 1000 * (i + 1))); // Exponential backoff
+                    }
+                }
             }
+            throw lastError || new Error('Gagal terhubung ke server');
         }
 
         // ============================================================
@@ -675,6 +723,8 @@
                 currentUser: null,
                 loginForm: { name: '', class: '', email: '', password: '' },
                 isLoading: false,
+                loadingMessage: 'Memuat data...',
+                loadingProgress: 0,
                 navHistory: [],
 
                 // Cache data
@@ -722,7 +772,8 @@
                             const v = localStorage.getItem('dwali_view') ||
                                 (this.currentUser.role === 'admin' ? 'admin-dashboard' : 'student-dashboard');
                             this.view = v;
-                            this.loadData();
+                            // Load data di background
+                            setTimeout(() => this.loadData(), 100);
                         } catch (_) { localStorage.removeItem('dwali_user'); }
                     }
                 },
@@ -735,7 +786,10 @@
                     this.view = view;
                     history.pushState({ view }, '', `#${view}`);
                     localStorage.setItem('dwali_view', view);
-                    if (this.currentUser) this.loadData();
+                    if (this.currentUser) {
+                        // Load data dengan delay kecil agar UI cepat
+                        setTimeout(() => this.loadData(), 50);
+                    }
                 },
 
                 goBack() {
@@ -770,23 +824,51 @@
                 },
 
                 // ------------------------------------------------------
-                // LOAD DATA
+                // LOAD DATA dengan progress
                 // ------------------------------------------------------
                 async loadData() {
                     if (!this.currentUser || this.isLoading) return;
+                    
                     this.isLoading = true;
+                    this.loadingProgress = 0;
+                    this.loadingMessage = 'Menghubungi server...';
+                    
                     try {
+                        const tasks = [];
+                        let totalTasks = 0;
+                        
                         if (this.currentUser.role === 'admin') {
-                            await this.loadStudents();
-                            await this.loadCurhats();
+                            tasks.push(
+                                { fn: this.loadStudents.bind(this), name: 'Memuat data siswa' },
+                                { fn: this.loadCurhats.bind(this), name: 'Memuat data curhat' }
+                            );
+                            totalTasks = 2;
                         } else {
-                            await this.loadMyJurnals();
-                            await this.loadMyCurhats();
-                            await this.loadPotensi();
-                            await this.loadPerbuatanBaik();
+                            tasks.push(
+                                { fn: this.loadMyJurnals.bind(this), name: 'Memuat jurnal' },
+                                { fn: this.loadMyCurhats.bind(this), name: 'Memuat curhat' },
+                                { fn: this.loadPotensi.bind(this), name: 'Memuat potensi' },
+                                { fn: this.loadPerbuatanBaik.bind(this), name: 'Memuat perbuatan baik' }
+                            );
+                            totalTasks = 4;
                         }
+                        
+                        let completed = 0;
+                        for (const task of tasks) {
+                            this.loadingMessage = task.name + '...';
+                            await task.fn();
+                            completed++;
+                            this.loadingProgress = Math.round((completed / totalTasks) * 100);
+                        }
+                        
+                        this.loadingProgress = 100;
+                        this.loadingMessage = 'Selesai! ✅';
+                        
+                        // Sembunyikan loading setelah 300ms
+                        await new Promise(r => setTimeout(r, 300));
+                        
                     } catch (e) {
-                        console.error(e);
+                        console.error('❌ Load error:', e);
                         this.showToast('⚠️ ' + (e.message || 'Gagal memuat data'));
                     } finally {
                         this.isLoading = false;
@@ -798,14 +880,21 @@
                 // ------------------------------------------------------
                 async studentLogin() {
                     this.isLoading = true;
+                    this.loadingMessage = 'Memverifikasi akun...';
+                    this.loadingProgress = 30;
+                    
                     try {
                         const result = await callAPI('loginStudent', {
                             name: this.loginForm.name,
                             class: this.loginForm.class,
                             password: this.loginForm.password
                         });
+                        this.loadingProgress = 70;
                         this.currentUser = result;
                         localStorage.setItem('dwali_user', JSON.stringify(result));
+                        this.loadingProgress = 100;
+                        this.loadingMessage = 'Login berhasil!';
+                        await new Promise(r => setTimeout(r, 300));
                         this.navigateTo('student-dashboard');
                         this.showToast('✅ Login berhasil!');
                     } catch (e) {
@@ -816,14 +905,21 @@
 
                 async adminLogin() {
                     this.isLoading = true;
+                    this.loadingMessage = 'Memverifikasi akun...';
+                    this.loadingProgress = 30;
+                    
                     try {
                         const result = await callAPI('loginAdmin', {
                             email: this.loginForm.email,
                             password: this.loginForm.password
                         });
+                        this.loadingProgress = 70;
                         this.currentUser = result;
                         localStorage.setItem('dwali_user', JSON.stringify(result));
                         this.initLaporanForm();
+                        this.loadingProgress = 100;
+                        this.loadingMessage = 'Login berhasil!';
+                        await new Promise(r => setTimeout(r, 300));
                         this.navigateTo('admin-dashboard');
                         this.showToast('✅ Selamat datang, Wali!');
                     } catch (e) {
@@ -850,6 +946,7 @@
                 // ------------------------------------------------------
                 async savePotensi() {
                     this.isLoading = true;
+                    this.loadingMessage = 'Menyimpan peta potensi...';
                     try {
                         await callAPI('savePotensi', { student_id: this.currentUser.id, ...this.potensiForm });
                         this.currentUser.is_potensi_filled = true;
@@ -888,6 +985,7 @@
                 async submitGoodAction(action) {
                     const today = new Date().toISOString().split('T')[0];
                     this.isLoading = true;
+                    this.loadingMessage = 'Menyimpan perbuatan baik...';
                     try {
                         await callAPI('savePerbuatanBaik', { student_id: this.currentUser.id, action, date: today });
                         this.modalGoodAction = false;
@@ -920,6 +1018,7 @@
                     if (!this.tempCerita.trim()) return alert('Cerita tidak boleh kosong');
                     this.curhatForm.cerita = this.tempCerita;
                     this.isLoading = true;
+                    this.loadingMessage = 'Mengirim curhat...';
                     try {
                         await callAPI('saveCurhat', {
                             id: 'c' + Date.now(),
@@ -958,6 +1057,7 @@
                     }
                     const today = new Date().toISOString().split('T')[0];
                     this.isLoading = true;
+                    this.loadingMessage = 'Menyimpan jurnal...';
                     try {
                         await callAPI('saveJurnal', { student_id: this.currentUser.id, ...this.jurnalForm, date: today });
                         this.jurnalForm = { perasaan: '', cerita: '' };
@@ -1000,6 +1100,7 @@
                 async addStudent() {
                     if (!this.newStudent.name || !this.newStudent.nis) return alert('Nama dan NIS wajib diisi');
                     this.isLoading = true;
+                    this.loadingMessage = 'Menambahkan siswa...';
                     try {
                         await callAPI('addStudent', {
                             id: 's' + Date.now(),
@@ -1021,6 +1122,7 @@
                 async resetPassword(id) {
                     if (!confirm('Reset password siswa ke default (siswa123)?')) return;
                     this.isLoading = true;
+                    this.loadingMessage = 'Mereset password...';
                     try {
                         await callAPI('resetPassword', { student_id: id });
                         this.showToast('✅ Password direset!');
@@ -1034,6 +1136,7 @@
                 async deleteStudent(id) {
                     if (!confirm('Yakin hapus siswa ini?')) return;
                     this.isLoading = true;
+                    this.loadingMessage = 'Menghapus siswa...';
                     try {
                         await callAPI('deleteStudent', { student_id: id });
                         this.showToast('✅ Siswa dihapus.');
@@ -1077,6 +1180,7 @@
                     const reply = this.replyText[curhatId];
                     if (!reply) return alert('Balasan tidak boleh kosong');
                     this.isLoading = true;
+                    this.loadingMessage = 'Mengirim balasan...';
                     try {
                         await callAPI('replyCurhat', { curhat_id: curhatId, balasan: reply, balasan_at: new Date()
                                 .toISOString() });
