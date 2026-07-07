@@ -69,7 +69,6 @@
             color: #0f3d2e;
             border-radius: 16px 16px 4px 16px;
         }
-        /* Scrollbar styling */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
         ::-webkit-scrollbar-thumb { background: #a7f3d0; border-radius: 10px; }
@@ -110,6 +109,13 @@
                         <button @click="view='student-login'" class="btn btn-block text-white border-dwali-light bg-dwali-green hover:bg-dwali-dark">Login sebagai Siswa</button>
                         <button @click="view='admin-login'" class="btn btn-block text-dwali-dark bg-dwali-yellow hover:bg-yellow-400 border-yellow-400">Login sebagai Wali Kelas</button>
                     </div>
+                    
+                    <!-- Info Login -->
+                    <div class="mt-6 text-xs text-dwali-light/70">
+                        <p class="font-bold text-dwali-yellow">🔑 Akun Demo:</p>
+                        <p>Siswa: Ahmad Fauzi | Kelas: 7A | Pass: siswa123</p>
+                        <p>Wali: admin@dwali.com | Pass: admin123</p>
+                    </div>
                 </div>
             </div>
         </template>
@@ -126,6 +132,11 @@
                         <button type="submit" class="btn btn-block bg-dwali-yellow text-dwali-dark border-none hover:bg-yellow-400">Masuk</button>
                         <button type="button" @click="view='login'" class="text-xs text-dwali-light hover:underline w-full">&larr; Kembali</button>
                     </form>
+                    <div class="mt-4 text-xs text-dwali-light/70 text-center">
+                        <p class="font-bold text-dwali-yellow">📝 Contoh Akun:</p>
+                        <p>Ahmad Fauzi, Budi Santoso, Citra Dewi, dll</p>
+                        <p>Kelas: 7A | Password: siswa123</p>
+                    </div>
                 </div>
             </div>
         </template>
@@ -141,6 +152,11 @@
                         <button type="submit" class="btn btn-block bg-dwali-yellow text-dwali-dark border-none hover:bg-yellow-400">Masuk</button>
                         <button type="button" @click="view='login'" class="text-xs text-dwali-light hover:underline w-full">&larr; Kembali</button>
                     </form>
+                    <div class="mt-4 text-xs text-dwali-light/70 text-center">
+                        <p class="font-bold text-dwali-yellow">📝 Contoh Akun:</p>
+                        <p>Email: admin@dwali.com | Pass: admin123</p>
+                        <p>Email: wali@dwali.com | Pass: wali123</p>
+                    </div>
                 </div>
             </div>
         </template>
@@ -151,7 +167,7 @@
         <template x-if="currentUser?.role === 'student' && !currentUser.is_potensi_filled && view === 'student-dashboard'">
             <div class="glass p-6 rounded-3xl shadow-xl max-w-2xl mx-auto">
                 <h2 class="text-2xl font-bold mb-2">Peta Potensi Siswa 🗺️</h2>
-                <p class="text-dwali-light mb-6">Lengkapi data berikut 1 kali saja. Ini akan membantu walmu memahamimu lebih baik.</p>
+                <p class="text-dwali-light mb-6">Lengkapi data berikut 1 kali saja. Ini akan membantu walimu memahamimu lebih baik.</p>
                 
                 <div class="space-y-4">
                     <div>
@@ -202,7 +218,6 @@
         <!-- STUDENT DASHBOARD -->
         <template x-if="currentUser?.role === 'student' && currentUser.is_potensi_filled && view === 'student-dashboard'">
             <div class="space-y-6">
-                <!-- Hero -->
                 <div class="glass p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center">
                     <div>
                         <h2 class="text-2xl font-bold">Halo, <span x-text="currentUser.name"></span>! 👋</h2>
@@ -214,30 +229,25 @@
                     </div>
                 </div>
 
-                <!-- Quick Actions -->
                 <div class="grid grid-cols-2 gap-4">
-                    <!-- Perbuatan Baik -->
                     <div @click="openGoodAction()" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center">
                         <div class="text-5xl mb-2">⭐</div>
                         <p class="font-bold">Perbuatan Baik</p>
                         <p class="text-xs text-dwali-light" x-text="hasDoneGoodToday() ? '✔️ Sudah isi hari ini' : 'Klik untuk isi'"></p>
                     </div>
 
-                    <!-- Jurnal -->
                     <div @click="view='student-jurnal'" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center">
                         <div class="text-5xl mb-2">📔</div>
                         <p class="font-bold">Jurnal Harian</p>
                         <p class="text-xs text-dwali-light">Ceritakan harimu</p>
                     </div>
 
-                    <!-- Curhat -->
                     <div @click="view='student-curhat'" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center col-span-2">
                         <div class="text-5xl mb-2">💬</div>
                         <p class="font-bold">Kontak Curhat</p>
                         <p class="text-xs text-dwali-light">Ada keluhan atau cerita? Sampaikan ke walimu.</p>
                     </div>
 
-                    <!-- Riwayat Curhat -->
                     <div @click="view='student-riwayat'" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center col-span-2">
                         <div class="text-5xl mb-2">📬</div>
                         <p class="font-bold">Riwayat Curhatku</p>
@@ -352,7 +362,6 @@
                         </template>
                     </div>
 
-                    <!-- Options Section -->
                     <div class="border-t border-white/20 pt-4">
                         <template x-if="!curhatForm.untuk_siapa">
                             <div class="flex gap-2 justify-center flex-wrap">
@@ -446,7 +455,7 @@
                         <h2 class="text-2xl font-bold">Dashboard Wali Kelas</h2>
                         <p class="text-dwali-light">Total Siswa: <span x-text="getMyStudents().length"></span></p>
                     </div>
-                    <div class="flex gap-2 mt-4 md:mt-0">
+                    <div class="flex gap-2 mt-4 md:mt-0 flex-wrap">
                         <button @click="view='admin-curhat'" class="btn bg-dwali-yellow text-dwali-dark border-none">💬 Kotak Curhat</button>
                         <button @click="view='admin-laporan'" class="btn bg-dwali-light text-dwali-dark border-none">📊 Buat Laporan</button>
                         <button @click="view='admin-siswa'" class="btn glass text-white border-none">👥 Kelola Siswa</button>
@@ -505,15 +514,15 @@
                 <div class="glass p-6 rounded-3xl">
                     <h2 class="text-2xl font-bold mb-4">Kelola Siswa 👥</h2>
                     
-                    <div class="flex gap-2 mb-6">
-                        <input type="text" x-model="newStudent.name" placeholder="Nama Siswa" class="input input-bordered flex-1 bg-white/20 border-white/30">
+                    <div class="flex gap-2 mb-6 flex-wrap">
+                        <input type="text" x-model="newStudent.name" placeholder="Nama Siswa" class="input input-bordered flex-1 min-w-[150px] bg-white/20 border-white/30">
                         <input type="text" x-model="newStudent.nis" placeholder="NIS" class="input input-bordered w-32 bg-white/20 border-white/30">
                         <button @click="addStudent()" class="btn bg-dwali-success text-white border-none">Tambah</button>
                     </div>
 
                     <div class="space-y-2">
                         <template x-for="std in getMyStudents()">
-                            <div class="bg-white/10 p-3 rounded-xl flex justify-between items-center">
+                            <div class="bg-white/10 p-3 rounded-xl flex justify-between items-center flex-wrap gap-2">
                                 <div>
                                     <p class="font-bold" x-text="std.name"></p>
                                     <p class="text-xs text-dwali-light">NIS: <span x-text="std.nis"></span></p>
@@ -538,7 +547,7 @@
                     <div class="space-y-4">
                         <template x-for="ch in getAdminCurhats()">
                             <div class="bg-white/10 p-4 rounded-xl border-l-4" :class="ch.tingkat_darurat === 'Aku butuh bantuan sekarang' ? 'border-dwali-red' : (ch.tingkat_darurat === 'Aku butuh saran' ? 'border-dwali-yellow' : 'border-dwali-success')">
-                                <div class="flex justify-between items-start mb-2">
+                                <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
                                     <div>
                                         <p class="font-bold" x-text="getStudentName(ch.student_id)"></p>
                                         <p class="text-xs text-dwali-light" x-text="formatDate(ch.created_at)"></p>
@@ -555,8 +564,8 @@
                                     <p class="text-sm" x-text="ch.balasan"></p>
                                 </div>
 
-                                <div x-show="!ch.balasan" class="mt-3 flex gap-2">
-                                    <input type="text" x-model="replyText[ch.id]" placeholder="Tulis balasan..." class="input input-bordered flex-1 bg-white/20 border-white/30 input-sm">
+                                <div x-show="!ch.balasan" class="mt-3 flex gap-2 flex-wrap">
+                                    <input type="text" x-model="replyText[ch.id]" placeholder="Tulis balasan..." class="input input-bordered flex-1 min-w-[150px] bg-white/20 border-white/30 input-sm">
                                     <button @click="replyCurhat(ch.id)" class="btn btn-sm bg-dwali-yellow text-dwali-dark border-none">Kirim Balasan</button>
                                 </div>
                             </div>
@@ -572,7 +581,7 @@
             <div class="space-y-4">
                 <button @click="view='admin-dashboard'" class="text-dwali-light hover:underline">&larr; Kembali</button>
                 <div class="glass p-6 rounded-3xl">
-                    <div class="flex justify-between items-center mb-4">
+                    <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
                         <h2 class="text-2xl font-bold">Laporan Kondisi Siswa 📊</h2>
                         <button @click="exportExcel()" class="btn bg-dwali-success text-white border-none">📥 Download Excel</button>
                     </div>
@@ -628,16 +637,34 @@
 <script>
 // ============ KONFIGURASI GOOGLE SHEETS ============
 // GANTI URL_INI dengan URL deployment Google Apps Script Anda
-const API_URL = 'https://script.google.com/macros/s/AKfycbzVJ9343frWD_7CM7UEymzvV3jUxW3NMgEa2UvJES7QwZOz0xOu1MiIQy45qLRzcW0k/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbyOR1N6rti1N5iMUGLFJOKRH7uRU4oBcDDdunhajL3RWhapsBgOZ2PkcbicgAZExaYf/exec';
 
 async function callAPI(action, data = {}) {
     try {
-        const response = await fetch(`${API_URL}?action=${action}&data=${JSON.stringify(data)}`);
+        const url = `${API_URL}?action=${action}&data=${encodeURIComponent(JSON.stringify(data))}`;
+        console.log('📤 Calling API:', action, data);
+        
+        const response = await fetch(url, {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'Accept': 'application/json',
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const result = await response.json();
-        if (!result.success) throw new Error(result.error || 'Terjadi kesalahan');
+        console.log('📥 API Response:', result);
+        
+        if (!result.success) {
+            throw new Error(result.error || 'Terjadi kesalahan');
+        }
         return result.data;
     } catch (error) {
-        console.error('API Error:', error);
+        console.error('❌ API Error:', error);
         throw error;
     }
 }
@@ -648,12 +675,12 @@ function dwaliApp() {
         currentUser: null,
         loginForm: { name: '', class: '', email: '', password: '' },
         
-        // Data cache untuk mengurangi panggilan API
+        // Data cache
         cachedStudents: [],
         cachedCurhats: [],
         cachedJurnals: [],
         cachedPotensi: [],
-        cachedGoodActions: [],
+        cachedPerbuatanBaik: [],
         cachedLaporan: [],
 
         // Forms
@@ -669,7 +696,6 @@ function dwaliApp() {
         toast: { show: false, msg: '' },
 
         init() {
-            // Cek apakah ada session tersimpan
             const savedUser = localStorage.getItem('dwali_user');
             if (savedUser) {
                 try {
@@ -688,7 +714,6 @@ function dwaliApp() {
             setTimeout(() => this.toast.show = false, 3000);
         },
 
-        // --- LOAD DATA ---
         async loadData() {
             if (!this.currentUser) return;
             try {
@@ -699,7 +724,7 @@ function dwaliApp() {
                     await this.loadMyJurnals();
                     await this.loadMyCurhats();
                     await this.loadPotensi();
-                    await this.loadGoodActions();
+                    await this.loadPerbuatanBaik();
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -717,10 +742,10 @@ function dwaliApp() {
                 this.currentUser = result;
                 localStorage.setItem('dwali_user', JSON.stringify(result));
                 this.view = 'student-dashboard';
-                this.showToast('Login berhasil!');
-                this.loadData();
+                this.showToast('✅ Login berhasil!');
+                await this.loadData();
             } catch (error) {
-                alert(error.message || 'Nama, Kelas atau Password salah!');
+                alert('❌ ' + (error.message || 'Nama, Kelas atau Password salah!'));
             }
         },
 
@@ -734,10 +759,10 @@ function dwaliApp() {
                 localStorage.setItem('dwali_user', JSON.stringify(result));
                 this.view = 'admin-dashboard';
                 this.initLaporanForm();
-                this.showToast('Selamat datang, Wali!');
-                this.loadData();
+                this.showToast('✅ Selamat datang, Wali!');
+                await this.loadData();
             } catch (error) {
-                alert(error.message || 'Email atau Password Wali salah!');
+                alert('❌ ' + (error.message || 'Email atau Password Wali salah!'));
             }
         },
 
@@ -751,7 +776,7 @@ function dwaliApp() {
             this.cachedCurhats = [];
         },
 
-        // --- FEATURE 1: PETA POTENSI ---
+        // --- PETA POTENSI ---
         async savePotensi() {
             try {
                 await callAPI('savePotensi', {
@@ -760,16 +785,27 @@ function dwaliApp() {
                 });
                 this.currentUser.is_potensi_filled = true;
                 localStorage.setItem('dwali_user', JSON.stringify(this.currentUser));
-                this.showToast('Peta Potensi tersimpan! 🗺️');
+                this.showToast('✅ Peta Potensi tersimpan! 🗺️');
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
-        // --- FEATURE 2: PERBUATAN BAIK ---
+        async loadPotensi() {
+            try {
+                const result = await callAPI('getPotensi', {
+                    student_id: this.currentUser.id
+                });
+                this.cachedPotensi = result || [];
+            } catch (error) {
+                console.error('Error loading potensi:', error);
+            }
+        },
+
+        // --- PERBUATAN BAIK ---
         openGoodAction() {
             if (this.hasDoneGoodToday()) {
-                this.showToast('Kamu sudah mengisi perbuatan baik hari ini. Hebat! 🌟');
+                this.showToast('🌟 Kamu sudah mengisi perbuatan baik hari ini. Hebat!');
                 return;
             }
             this.modalGoodAction = true;
@@ -777,7 +813,7 @@ function dwaliApp() {
 
         hasDoneGoodToday() {
             const today = new Date().toISOString().split('T')[0];
-            return this.cachedGoodActions.some(p => p.student_id === this.currentUser.id && p.date === today);
+            return this.cachedPerbuatanBaik.some(p => p.student_id === this.currentUser.id && p.date === today);
         },
 
         async submitGoodAction(action) {
@@ -789,22 +825,27 @@ function dwaliApp() {
                     date: today
                 });
                 this.modalGoodAction = false;
-                this.cachedGoodActions.push({ student_id: this.currentUser.id, action, date: today });
+                this.cachedPerbuatanBaik.push({ student_id: this.currentUser.id, action, date: today });
                 const responses = ['🌟 Good Job! Kamu hebat!', '💪 Luar biasa! Pertahankan ya!', '😇 Kamu anak baik!'];
                 this.showToast(responses[Math.floor(Math.random() * responses.length)]);
+                await this.loadPerbuatanBaik();
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
-        async loadGoodActions() {
-            // Untuk saat ini, kita load dari API
+        async loadPerbuatanBaik() {
             try {
-                // Data perbuatan baik disimpan di cache
-            } catch (e) {}
+                const result = await callAPI('getPerbuatanBaik', {
+                    student_id: this.currentUser.id
+                });
+                this.cachedPerbuatanBaik = result || [];
+            } catch (error) {
+                console.error('Error loading perbuatan baik:', error);
+            }
         },
 
-        // --- FEATURE 3: CURHAT ---
+        // --- CURHAT ---
         setCurhat(field, value) {
             this.curhatForm[field] = value;
         },
@@ -822,23 +863,13 @@ function dwaliApp() {
                 this.tempCerita = '';
                 this.showToast('✅ Terima kasih sudah curhat, sabar ya menunggu balasan dari Wali.');
                 setTimeout(() => this.view = 'student-dashboard', 3000);
+                await this.loadMyCurhats();
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
         async getMyCurhats() {
-            if (this.cachedCurhats.length === 0 && this.currentUser) {
-                try {
-                    const result = await callAPI('getCurhats', {
-                        student_id: this.currentUser.id
-                    });
-                    this.cachedCurhats = result || [];
-                } catch (error) {
-                    console.error('Error loading curhats:', error);
-                    return [];
-                }
-            }
             return this.cachedCurhats.filter(c => c.student_id === this.currentUser.id).sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
         },
 
@@ -853,7 +884,7 @@ function dwaliApp() {
             }
         },
 
-        // --- FEATURE 4: JURNAL ---
+        // --- JURNAL ---
         async saveJurnal() {
             if (!this.jurnalForm.perasaan || !this.jurnalForm.cerita) {
                 return alert('Lengkapi perasaan dan cerita');
@@ -866,9 +897,10 @@ function dwaliApp() {
                     date: today
                 });
                 this.jurnalForm = { perasaan: '', cerita: '' };
-                this.showToast('Jurnal harian tersimpan! 📔');
+                this.showToast('📔 Jurnal harian tersimpan!');
+                await this.loadMyJurnals();
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
@@ -877,8 +909,14 @@ function dwaliApp() {
         },
 
         async loadMyJurnals() {
-            // Untuk jurnal, kita simpan di cache lokal dulu
-            // Nanti bisa diintegrasikan dengan API
+            try {
+                const result = await callAPI('getJurnals', {
+                    student_id: this.currentUser.id
+                });
+                this.cachedJurnals = result || [];
+            } catch (error) {
+                console.error('Error loading jurnals:', error);
+            }
         },
 
         // --- ADMIN: SISWA ---
@@ -911,20 +949,20 @@ function dwaliApp() {
                     class: this.currentUser.class
                 });
                 this.newStudent = { name: '', nis: '' };
-                this.showToast('Siswa berhasil ditambahkan!');
+                this.showToast('✅ Siswa berhasil ditambahkan!');
                 await this.loadStudents();
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
         async resetPassword(id) {
-            if (!confirm('Reset password siswa ke default (51sw@qu)?')) return;
+            if (!confirm('Reset password siswa ke default (siswa123)?')) return;
             try {
                 await callAPI('resetPassword', { student_id: id });
-                this.showToast('Password direset!');
+                this.showToast('✅ Password direset!');
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
@@ -932,10 +970,10 @@ function dwaliApp() {
             if (!confirm('Yakin hapus siswa ini?')) return;
             try {
                 await callAPI('deleteStudent', { student_id: id });
-                this.showToast('Siswa dihapus.');
+                this.showToast('✅ Siswa dihapus.');
                 await this.loadStudents();
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
@@ -979,10 +1017,10 @@ function dwaliApp() {
                     balasan_at: new Date().toISOString()
                 });
                 this.replyText[curhatId] = '';
-                this.showToast('Balasan terkirim!');
+                this.showToast('✅ Balasan terkirim!');
                 await this.loadCurhats();
             } catch (error) {
-                alert(error.message);
+                alert('❌ ' + error.message);
             }
         },
 
@@ -997,7 +1035,7 @@ function dwaliApp() {
         initLaporanForm() {
             this.getMyStudents().forEach(std => {
                 if (!this.laporanForm[std.id]) {
-                    this.laporanForm[std.id] = { nilai_akademik: 0, sikap: 'Baik', catatan_khusus: '' };
+                    this.laporanForm[std.id] = { nilai_akademik: 70, sikap: 'Baik', catatan_khusus: '' };
                 }
             });
         },
@@ -1006,7 +1044,7 @@ function dwaliApp() {
             let data = [];
             this.getMyStudents().forEach(std => {
                 const potensi = this.cachedPotensi.find(p => p.student_id === std.id) || {};
-                const baik = this.cachedGoodActions.filter(p => p.student_id === std.id).length;
+                const baik = this.cachedPerbuatanBaik.filter(p => p.student_id === std.id).length;
                 const jurnal = this.cachedJurnals.filter(j => j.student_id === std.id).length;
                 const laporan = this.laporanForm[std.id] || {};
 
@@ -1034,15 +1072,12 @@ function dwaliApp() {
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "Laporan Siswa");
             XLSX.writeFile(wb, "Laporan_DWali.xlsx");
-            this.showToast('Excel berhasil diunduh! 📥');
-        },
-
-        async loadPotensi() {
-            // Implementasi untuk load potensi dari API
+            this.showToast('📥 Excel berhasil diunduh!');
         },
 
         // --- HELPER ---
         formatDate(dateStr) {
+            if (!dateStr) return '-';
             const d = new Date(dateStr);
             return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
         }
