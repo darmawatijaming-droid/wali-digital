@@ -1,1448 +1,856 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>D'WALI - Digital Wali</title>
-
-    <!-- Tailwind + DaisyUI + Alpine.js -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'dwali-dark': '#0f3d2e',
-                        'dwali-green': '#166534',
-                        'dwali-light': '#a7f3d0',
-                        'dwali-yellow': '#facc15',
-                        'dwali-red': '#ef4444',
-                        'dwali-success': '#22c55e',
-                    },
-                    fontFamily: { 'jakarta': ['Plus Jakarta Sans', 'sans-serif'] }
-                }
-            }
-        };
-    </script>
-
-    <style>
-        * {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        body {
-            background-color: #0f3d2e;
-            background-image: url('https://images.unsplash.com/photo-1497486751825-1233686d5d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=1740&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        .glass {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-        .glass-dark {
-            background: rgba(15, 61, 46, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        .chat-bubble-bot {
-            background: rgba(255, 255, 255, 0.18);
-            color: #fff;
-            border-radius: 16px 16px 16px 4px;
-        }
-        .chat-bubble-user {
-            background: #facc15;
-            color: #0f3d2e;
-            border-radius: 16px 16px 4px 16px;
-        }
-        ::-webkit-scrollbar {
-            width: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #a7f3d0;
-            border-radius: 10px;
-        }
-        
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.1);
-            border-top: 4px solid #facc15;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 0.8s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease;
-        }
-        @keyframes fadeIn {
-            0% { opacity: 0; transform: translateY(10px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 4px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 12px;
-        }
-        .progress-bar .fill {
-            height: 100%;
-            background: linear-gradient(90deg, #facc15, #a7f3d0);
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-        
-        /* Debug console */
-        .debug-console {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.9);
-            color: #0f0;
-            font-family: monospace;
-            font-size: 11px;
-            padding: 8px 12px;
-            max-height: 150px;
-            overflow-y: auto;
-            z-index: 9999;
-            display: none;
-        }
-        .debug-console.active {
-            display: block;
-        }
-        .debug-console .log-entry {
-            opacity: 0.8;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 2px 0;
-        }
-        .debug-console .log-entry.error {
-            color: #ff4444;
-        }
-        .debug-console .log-entry.success {
-            color: #44ff44;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Wali Digital</title>
+  <!-- Tailwind + DaisyUI + Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@2.51.1/dist/full.css" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    body { background: linear-gradient(145deg, #e0f0ff 0%, #d9c9ff 100%); min-height: 100vh; padding-bottom: 80px; }
+    .bg-glass { background: rgba(255,255,255,0.4); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.25); }
+    .card-glass { background: rgba(255,255,255,0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-radius: 32px; box-shadow: 0 8px 32px rgba(0,0,0,0.06); border: 1px solid rgba(255,255,255,0.5); }
+    .btn-primary-custom { background: #facc15; color: #1e293b; border: none; font-weight: 600; }
+    .btn-primary-custom:hover { background: #fde047; }
+    .btn-outline-custom { border: 1.5px solid #818cf8; color: #4338ca; }
+    .motivation-box { background: rgba(255,255,255,0.3); border-radius: 40px; padding: 0.5rem 1rem; backdrop-filter: blur(4px); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-top: 1px solid rgba(255,255,255,0.6); display: flex; justify-content: space-around; padding: 10px 0; z-index: 50; border-radius: 32px 32px 0 0; box-shadow: 0 -6px 20px rgba(0,0,0,0.04); }
+    .nav-btn { display: flex; flex-direction: column; align-items: center; font-size: 12px; color: #475569; transition: 0.2s; background: transparent; border: none; padding: 4px 12px; border-radius: 30px; }
+    .nav-btn i { font-size: 24px; margin-bottom: 2px; }
+    .nav-btn.active { color: #4f46e5; font-weight: 600; background: rgba(79,70,229,0.08); }
+    .modal-box { border-radius: 32px; background: rgba(255,255,255,0.9); backdrop-filter: blur(16px); }
+    .bubble { max-width: 85%; padding: 12px 16px; border-radius: 20px; margin: 6px 0; word-wrap: break-word; }
+    .bubble-left { background: #e9e4ff; align-self: flex-start; border-bottom-left-radius: 6px; }
+    .bubble-right { background: #b7c9ff; align-self: flex-end; border-bottom-right-radius: 6px; }
+    .chat-container { display: flex; flex-direction: column; }
+    .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+    .connection-status { position: fixed; top: 10px; right: 10px; z-index: 100; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.8); backdrop-filter: blur(8px); }
+    .connection-status.online { color: #059669; border: 1px solid #34d399; }
+    .connection-status.offline { color: #dc2626; border: 1px solid #fca5a5; }
+  </style>
 </head>
+<body class="p-4 max-w-lg mx-auto relative">
 
-<body>
+<!-- Connection Status -->
+<div id="connectionStatus" class="connection-status online">
+  <i class="fas fa-wifi mr-1"></i> <span id="statusText">Online</span>
+</div>
 
-    <!-- DEBUG CONSOLE -->
-    <div id="debugConsole" class="debug-console">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
-            <span style="color:#fff;font-weight:bold;">🐛 DEBUG LOG</span>
-            <button onclick="document.getElementById('debugConsole').classList.toggle('active')" style="background:none;border:none;color:#fff;cursor:pointer;">✕</button>
+<!-- APP WRAPPER -->
+<div id="app" class="space-y-5">
+
+  <!-- Header / Greeting -->
+  <div class="flex justify-between items-center">
+    <div>
+      <span class="text-xs font-semibold text-indigo-700 bg-white/40 px-3 py-1 rounded-full backdrop-blur-sm">Wali Digital</span>
+      <h1 class="text-2xl font-bold text-slate-800 mt-1">Halo, <span id="userNameDisplay">Siswa</span> 👋</h1>
+    </div>
+    <div class="text-right">
+      <div class="text-xs text-slate-600" id="dateDisplay">Senin, 11 Jul 2026</div>
+      <div class="text-2xl font-mono font-bold text-indigo-800" id="clockDisplay">12:00</div>
+    </div>
+  </div>
+
+  <!-- Motivasi random -->
+  <div class="motivation-box text-center text-sm text-slate-700 italic">
+    <i class="fas fa-quote-left mr-1 text-indigo-300"></i> <span id="motivationText">Jadilah versi terbaik dari dirimu hari ini.</span>
+  </div>
+
+  <!-- DASHBOARD / HOME -->
+  <div id="mainContent" class="space-y-5">
+
+    <!-- Peta Potensi -->
+    <div id="potensiCard" class="card-glass p-5 space-y-3">
+      <div class="flex items-center gap-2"><i class="fas fa-map-signs text-indigo-500"></i><span class="font-bold">Peta Potensi</span></div>
+      <div id="potensiForm">
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <div><label class="block text-xs font-medium">Minat</label><select id="minat" class="select select-bordered select-sm w-full bg-white/70"><option>Olahraga</option><option>Seni</option><option>Sains</option><option>Teknologi</option><option>Bahasa</option><option>Lainnya</option></select></div>
+          <div><label class="block text-xs font-medium">Gaya Belajar</label><select id="gayaBelajar" class="select select-bordered select-sm w-full bg-white/70"><option>Visual</option><option>Auditori</option><option>Kinestetik</option><option>Baca/Tulis</option></select></div>
         </div>
-        <div id="debugLogs"></div>
+        <div><label class="block text-xs font-medium">Cita-cita</label><input id="citaCita" type="text" placeholder="Cita-citamu" class="input input-bordered input-sm w-full bg-white/70"></div>
+        <div><label class="block text-xs font-medium">Kekuatan Karakter</label><select id="karakter" class="select select-bordered select-sm w-full bg-white/70"><option>Pemberani</option><option>Baik Hati</option><option>Kreatif</option><option>Pantang Menyerah</option><option>Disiplin</option><option>Pemimpin</option><option>Jujur</option></select></div>
+        <div><label class="block text-xs font-medium">Ekstrakurikuler</label><input id="ekskul" type="text" placeholder="Kegiatan ekstra" class="input input-bordered input-sm w-full bg-white/70"></div>
+        <button id="simpanPotensi" class="btn btn-primary-custom btn-sm w-full mt-2"><i class="fas fa-save mr-1"></i> Simpan Peta Potensi</button>
+      </div>
+      <div id="potensiDone" class="hidden text-emerald-600 font-semibold"><i class="fas fa-check-circle"></i> ✅ Peta Potensi Sudah Diisi</div>
     </div>
 
-    <div x-data="dwaliApp()" x-init="init()" class="min-h-screen flex flex-col text-white">
-
-        <!-- HEADER -->
-        <header class="glass-dark px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-lg">
-            <div class="flex items-center gap-2 cursor-pointer" @click="goHome()">
-                <svg class="h-7 w-7 text-dwali-yellow" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l9-5-9-5-9 5 9 5z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                </svg>
-                <h1 class="text-xl md:text-2xl font-extrabold tracking-wide">D'WALI</h1>
-            </div>
-            <div x-show="currentUser" class="flex items-center gap-3">
-                <div class="text-right text-sm hidden sm:block">
-                    <p class="font-bold" x-text="currentUser?.name"></p>
-                    <p class="text-xs text-dwali-light" x-text="currentUser?.role === 'admin' ? 'Wali Kelas' : 'Siswa - ' + currentUser?.class"></p>
-                </div>
-                <button @click="logout()" class="btn btn-xs sm:btn-sm btn-error btn-outline text-white border-white/20">Logout</button>
-            </div>
-        </header>
-
-        <!-- MAIN -->
-        <main class="flex-1 p-4 md:p-8 max-w-5xl mx-auto w-full">
-
-            <!-- LOADING -->
-            <div x-show="isLoading" class="flex flex-col items-center justify-center min-h-[60vh]">
-                <div class="spinner"></div>
-                <p class="text-dwali-light mt-4 text-sm" x-text="loadingMessage"></p>
-                <div class="progress-bar w-64">
-                    <div class="fill" :style="'width: ' + loadingProgress + '%'"></div>
-                </div>
-                <p class="text-xs text-dwali-light/50 mt-2" x-text="loadingProgress + '%'"></p>
-            </div>
-
-            <!-- ============ LOGIN ============ -->
-            <template x-if="view === 'login' && !isLoading">
-                <div class="flex items-center justify-center min-h-[80vh] fade-in">
-                    <div class="glass p-8 rounded-3xl w-full max-w-md text-center shadow-2xl">
-                        <h2 class="text-3xl font-extrabold mb-2">Selamat Datang</h2>
-                        <p class="text-dwali-light mb-6">Silakan masuk untuk melanjutkan</p>
-                        <div class="flex flex-col gap-3">
-                            <button @click="navigateTo('student-login')" class="btn btn-block text-white border-dwali-light bg-dwali-green hover:bg-dwali-dark">Login sebagai Siswa</button>
-                            <button @click="navigateTo('admin-login')" class="btn btn-block text-dwali-dark bg-dwali-yellow hover:bg-yellow-400 border-yellow-400">Login sebagai Wali Kelas</button>
-                        </div>
-                        <div class="mt-6 text-xs text-dwali-light/70">
-                            <p class="font-bold text-dwali-yellow">🔑 Akun Demo:</p>
-                            <p>Siswa: Ahmad Fauzi | Kelas: 7A | Pass: siswa123</p>
-                            <p>Wali: admin@dwali.com | Pass: admin123</p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ STUDENT LOGIN ============ -->
-            <template x-if="view === 'student-login' && !isLoading">
-                <div class="flex items-center justify-center min-h-[80vh] fade-in">
-                    <div class="glass p-8 rounded-3xl w-full max-w-md shadow-2xl">
-                        <h2 class="text-2xl font-bold mb-4 text-center">Login Siswa</h2>
-                        <form @submit.prevent="studentLogin()" class="space-y-4">
-                            <input type="text" x-model="loginForm.name" placeholder="Nama Siswa" class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 border-white/30" required />
-                            <input type="text" x-model="loginForm.class" placeholder="Kelas (cth: 7A)" class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 border-white/30" required />
-                            <input type="password" x-model="loginForm.password" placeholder="Password" class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 border-white/30" required />
-                            <button type="submit" class="btn btn-block bg-dwali-yellow text-dwali-dark border-none hover:bg-yellow-400">Masuk</button>
-                            <button type="button" @click="navigateTo('login')" class="text-xs text-dwali-light hover:underline w-full">&larr; Kembali</button>
-                        </form>
-                        <div class="mt-4 text-xs text-dwali-light/70 text-center">
-                            <p class="font-bold text-dwali-yellow">📝 Contoh Akun:</p>
-                            <p>Ahmad Fauzi, Budi Santoso, Citra Dewi, dll</p>
-                            <p>Kelas: 7A | Password: siswa123</p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ ADMIN LOGIN ============ -->
-            <template x-if="view === 'admin-login' && !isLoading">
-                <div class="flex items-center justify-center min-h-[80vh] fade-in">
-                    <div class="glass p-8 rounded-3xl w-full max-w-md shadow-2xl">
-                        <h2 class="text-2xl font-bold mb-4 text-center">Login Wali Kelas</h2>
-                        <form @submit.prevent="adminLogin()" class="space-y-4">
-                            <input type="email" x-model="loginForm.email" placeholder="Email Wali" class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 border-white/30" required />
-                            <input type="password" x-model="loginForm.password" placeholder="Password" class="input input-bordered w-full bg-white/20 text-white placeholder-gray-300 border-white/30" required />
-                            <button type="submit" class="btn btn-block bg-dwali-yellow text-dwali-dark border-none hover:bg-yellow-400">Masuk</button>
-                            <button type="button" @click="navigateTo('login')" class="text-xs text-dwali-light hover:underline w-full">&larr; Kembali</button>
-                        </form>
-                        <div class="mt-4 text-xs text-dwali-light/70 text-center">
-                            <p class="font-bold text-dwali-yellow">📝 Contoh Akun:</p>
-                            <p>Email: admin@dwali.com | Pass: admin123</p>
-                            <p>Email: wali@dwali.com | Pass: wali123</p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ STUDENT: PETA POTENSI ============ -->
-            <template x-if="currentUser?.role === 'student' && !currentUser.is_potensi_filled && view === 'student-dashboard' && !isLoading">
-                <div class="glass p-6 rounded-3xl max-w-2xl mx-auto fade-in">
-                    <h2 class="text-2xl font-bold mb-2">Peta Potensi Siswa 🗺️</h2>
-                    <p class="text-dwali-light mb-6">Lengkapi data berikut 1 kali saja. Ini akan membantu walimu memahamimu lebih baik.</p>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="label text-white">Minat</label>
-                            <select x-model="potensiForm.minat" class="select select-bordered w-full bg-white/20 border-white/30">
-                                <option class="bg-dwali-dark" value="Olahraga">Olahraga</option>
-                                <option class="bg-dwali-dark" value="Seni">Seni</option>
-                                <option class="bg-dwali-dark" value="Sains">Sains</option>
-                                <option class="bg-dwali-dark" value="Teknologi">Teknologi</option>
-                                <option class="bg-dwali-dark" value="Bahasa">Bahasa</option>
-                                <option class="bg-dwali-dark" value="Lainnya">Lainnya</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="label text-white">Gaya Belajar</label>
-                            <select x-model="potensiForm.gaya_belajar" class="select select-bordered w-full bg-white/20 border-white/30">
-                                <option class="bg-dwali-dark" value="Visual">Visual</option>
-                                <option class="bg-dwali-dark" value="Auditori">Auditori</option>
-                                <option class="bg-dwali-dark" value="Kinestetik">Kinestetik</option>
-                                <option class="bg-dwali-dark" value="Baca/Tulis">Baca/Tulis</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="label text-white">Cita-cita</label>
-                            <textarea x-model="potensiForm.cita_cita" class="textarea textarea-bordered w-full bg-white/20 border-white/30" placeholder="Aku ingin menjadi..."></textarea>
-                        </div>
-                        <div>
-                            <label class="label text-white">Kekuatan Karakter</label>
-                            <select x-model="potensiForm.kekuatan_karakter" class="select select-bordered w-full bg-white/20 border-white/30">
-                                <option class="bg-dwali-dark" value="Pemberani">Pemberani</option>
-                                <option class="bg-dwali-dark" value="Baik Hati">Baik Hati</option>
-                                <option class="bg-dwali-dark" value="Kreatif">Kreatif</option>
-                                <option class="bg-dwali-dark" value="Pantang Menyerah">Pantang Menyerah</option>
-                                <option class="bg-dwali-dark" value="Disiplin">Disiplin</option>
-                                <option class="bg-dwali-dark" value="Pemimpin">Pemimpin</option>
-                                <option class="bg-dwali-dark" value="Jujur">Jujur</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="label text-white">Ekstrakurikuler</label>
-                            <input type="text" x-model="potensiForm.ekstrakurikuler" class="input input-bordered w-full bg-white/20 border-white/30" placeholder="cth: Pramuka, Futsal" />
-                        </div>
-                        <button @click="savePotensi()" class="btn btn-block bg-dwali-success text-white border-none hover:bg-green-600 mt-4">Simpan Peta Potensi</button>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ STUDENT DASHBOARD ============ -->
-            <template x-if="currentUser?.role === 'student' && currentUser.is_potensi_filled && view === 'student-dashboard' && !isLoading">
-                <div class="space-y-6 fade-in">
-                    <div class="glass p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center">
-                        <div>
-                            <h2 class="text-2xl font-bold">Halo, <span x-text="currentUser.name"></span>! 👋</h2>
-                            <p class="text-dwali-light">Kelas <span x-text="currentUser.class"></span></p>
-                        </div>
-                        <div class="mt-4 md:mt-0 text-center glass-dark p-3 rounded-xl">
-                            <p class="text-xs text-dwali-light">Status Peta Potensi</p>
-                            <p class="font-bold text-dwali-success">✅ Sudah Diisi</p>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
-                        <div @click="openGoodAction()" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center">
-                            <div class="text-5xl mb-2">⭐</div>
-                            <p class="font-bold">Perbuatan Baik</p>
-                            <p class="text-xs text-dwali-light" x-text="hasDoneGoodToday() ? '✔️ Sudah isi hari ini' : 'Klik untuk isi'"></p>
-                        </div>
-                        <div @click="navigateTo('student-jurnal')" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center">
-                            <div class="text-5xl mb-2">📔</div>
-                            <p class="font-bold">Jurnal Harian</p>
-                            <p class="text-xs text-dwali-light">Ceritakan harimu</p>
-                        </div>
-                        <div @click="navigateTo('student-curhat')" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center col-span-2">
-                            <div class="text-5xl mb-2">💬</div>
-                            <p class="font-bold">Kontak Curhat</p>
-                            <p class="text-xs text-dwali-light">Ada keluhan atau cerita? Sampaikan ke walimu.</p>
-                        </div>
-                        <div @click="navigateTo('student-riwayat')" class="glass p-6 rounded-3xl flex flex-col items-center justify-center cursor-pointer hover:scale-105 transition-transform text-center col-span-2">
-                            <div class="text-5xl mb-2">📬</div>
-                            <p class="font-bold">Riwayat Curhatku</p>
-                            <p class="text-xs text-dwali-light">Cek balasan dari wali</p>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ MODAL PERBUATAN BAIK ============ -->
-            <template x-if="modalGoodAction">
-                <div class="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4" @click.self="modalGoodAction=false">
-                    <div class="glass-dark p-6 rounded-3xl w-full max-w-md fade-in">
-                        <h3 class="text-xl font-bold mb-4 text-center">Pilih Perbuatan Baikmu 🌟</h3>
-                        <div class="space-y-2">
-                            <template x-for="act in goodActions">
-                                <button @click="submitGoodAction(act)" class="btn btn-block glass text-white hover:bg-dwali-green border-none justify-start text-left">
-                                    <span x-text="act"></span>
-                                </button>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ STUDENT: JURNAL ============ -->
-            <template x-if="view === 'student-jurnal' && !isLoading">
-                <div class="space-y-4 fade-in">
-                    <button @click="goBack()" class="text-dwali-light hover:underline">&larr; Kembali</button>
-                    <div class="glass p-6 rounded-3xl">
-                        <h2 class="text-2xl font-bold mb-4">Jurnal Harian 📔</h2>
-                        <label class="label text-white">Bagaimana perasaanmu hari ini?</label>
-                        <div class="flex gap-2 mb-4 text-4xl">
-                            <template x-for="m in ['😊','😐','😢','😡','😴']">
-                                <button @click="jurnalForm.perasaan = m" :class="jurnalForm.perasaan === m ? 'bg-dwali-yellow scale-110' : 'bg-white/20'" class="p-2 rounded-xl transition-transform">
-                                    <span x-text="m"></span>
-                                </button>
-                            </template>
-                        </div>
-                        <label class="label text-white">Ceritakan harimu...</label>
-                        <textarea x-model="jurnalForm.cerita" class="textarea textarea-bordered w-full bg-white/20 border-white/30 mb-4" rows="4"></textarea>
-                        <button @click="saveJurnal()" class="btn btn-block bg-dwali-success text-white border-none">Simpan Jurnal</button>
-                    </div>
-                    <div class="glass p-6 rounded-3xl">
-                        <h3 class="font-bold mb-3">Riwayat Jurnal</h3>
-                        <div class="space-y-3 max-h-96 overflow-y-auto">
-                            <template x-for="jrn in getMyJurnals()">
-                                <div class="bg-white/10 p-3 rounded-xl">
-                                    <div class="flex justify-between text-xs text-dwali-light mb-1">
-                                        <span x-text="formatDate(jrn.date)"></span>
-                                        <span x-text="jrn.perasaan"></span>
-                                    </div>
-                                    <p x-text="jrn.cerita" class="text-sm"></p>
-                                </div>
-                            </template>
-                            <div x-show="getMyJurnals().length === 0" class="text-center text-dwali-light py-4">Belum ada jurnal.</div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ STUDENT: CURHAT ============ -->
-            <template x-if="view === 'student-curhat' && !isLoading">
-                <div class="space-y-4 fade-in">
-                    <button @click="goBack()" class="text-dwali-light hover:underline">&larr; Kembali</button>
-                    <div class="glass p-6 rounded-3xl min-h-[60vh] flex flex-col">
-                        <h2 class="text-xl font-bold mb-4 text-center">Kontak Curhat 💬</h2>
-                        <div class="flex-1 space-y-3 overflow-y-auto mb-4">
-                            <div class="chat chat-start">
-                                <div class="chat-bubble-bot chat-bubble">Halo, aku di sini untuk mendengarkan. Siapakah kamu?</div>
-                            </div>
-                            <template x-if="curhatForm.untuk_siapa">
-                                <div class="chat chat-end"><div class="chat-bubble-user chat-bubble" x-text="curhatForm.untuk_siapa"></div></div>
-                            </template>
-                            <template x-if="curhatForm.untuk_siapa && !curhatForm.kategori">
-                                <div class="chat chat-start"><div class="chat-bubble-bot chat-bubble">Kategori, apakah ini masalah di rumah atau di sekolah?</div></div>
-                            </template>
-                            <template x-if="curhatForm.kategori">
-                                <div class="chat chat-end"><div class="chat-bubble-user chat-bubble" x-text="curhatForm.kategori"></div></div>
-                            </template>
-                            <template x-if="curhatForm.kategori && !curhatForm.sub_kategori">
-                                <div class="chat chat-start"><div class="chat-bubble-bot chat-bubble" x-text="curhatForm.kategori === 'Rumah' ? 'Masalah di rumah?' : 'Masalah di sekolah?'"></div></div>
-                            </template>
-                            <template x-if="curhatForm.sub_kategori">
-                                <div class="chat chat-end"><div class="chat-bubble-user chat-bubble" x-text="curhatForm.sub_kategori"></div></div>
-                            </template>
-                            <template x-if="curhatForm.sub_kategori && !curhatForm.tingkat_darurat">
-                                <div class="chat chat-start"><div class="chat-bubble-bot chat-bubble">Tingkat Darurat?</div></div>
-                            </template>
-                            <template x-if="curhatForm.tingkat_darurat">
-                                <div class="chat chat-end"><div class="chat-bubble-user chat-bubble" x-text="curhatForm.tingkat_darurat"></div></div>
-                            </template>
-                            <template x-if="curhatForm.tingkat_darurat && !curhatForm.cerita">
-                                <div class="chat chat-start"><div class="chat-bubble-bot chat-bubble">Masalahnya apa? Ceritakan bebas ya.</div></div>
-                            </template>
-                            <template x-if="curhatForm.tingkat_darurat === 'Aku butuh bantuan sekarang'">
-                                <div class="chat chat-start">
-                                    <div class="chat-bubble bg-dwali-red/80 chat-bubble">⚠️ Kami akan segera menghubungimu! Tetap tenang ya.</div>
-                                </div>
-                            </template>
-                        </div>
-
-                        <div class="border-t border-white/20 pt-4">
-                            <template x-if="!curhatForm.untuk_siapa">
-                                <div class="flex gap-2 justify-center flex-wrap">
-                                    <button @click="setCurhat('untuk_siapa','Aku sendiri')" class="btn btn-sm bg-dwali-yellow text-dwali-dark">Aku sendiri</button>
-                                    <button @click="setCurhat('untuk_siapa','Aku curhat untuk temanku')" class="btn btn-sm bg-dwali-light text-dwali-dark">Curhat untuk temanku</button>
-                                </div>
-                            </template>
-                            <template x-if="curhatForm.untuk_siapa && !curhatForm.kategori">
-                                <div class="flex gap-2 justify-center">
-                                    <button @click="setCurhat('kategori','Rumah')" class="btn btn-sm bg-dwali-yellow text-dwali-dark">Rumah</button>
-                                    <button @click="setCurhat('kategori','Sekolah')" class="btn btn-sm bg-dwali-light text-dwali-dark">Sekolah</button>
-                                </div>
-                            </template>
-                            <template x-if="curhatForm.kategori === 'Rumah' && !curhatForm.sub_kategori">
-                                <div class="flex gap-2 justify-center flex-wrap">
-                                    <button @click="setCurhat('sub_kategori','Orang tua')" class="btn btn-sm glass text-white">Orang tua</button>
-                                    <button @click="setCurhat('sub_kategori','Saudara')" class="btn btn-sm glass text-white">Saudara</button>
-                                    <button @click="setCurhat('sub_kategori','Keuangan')" class="btn btn-sm glass text-white">Keuangan</button>
-                                    <button @click="setCurhat('sub_kategori','Lainnya')" class="btn btn-sm glass text-white">Lainnya</button>
-                                </div>
-                            </template>
-                            <template x-if="curhatForm.kategori === 'Sekolah' && !curhatForm.sub_kategori">
-                                <div class="flex gap-2 justify-center flex-wrap">
-                                    <button @click="setCurhat('sub_kategori','Perundungan')" class="btn btn-sm glass text-white">Perundungan</button>
-                                    <button @click="setCurhat('sub_kategori','Pelajaran')" class="btn btn-sm glass text-white">Pelajaran</button>
-                                    <button @click="setCurhat('sub_kategori','Teman')" class="btn btn-sm glass text-white">Teman</button>
-                                    <button @click="setCurhat('sub_kategori','Guru')" class="btn btn-sm glass text-white">Guru</button>
-                                    <button @click="setCurhat('sub_kategori','Lainnya')" class="btn btn-sm glass text-white">Lainnya</button>
-                                </div>
-                            </template>
-                            <template x-if="curhatForm.sub_kategori && !curhatForm.tingkat_darurat">
-                                <div class="flex gap-2 justify-center flex-wrap">
-                                    <button @click="setCurhat('tingkat_darurat','Aku cuma mau cerita')" class="btn btn-sm bg-dwali-success text-white">Cuma mau cerita</button>
-                                    <button @click="setCurhat('tingkat_darurat','Aku butuh saran')" class="btn btn-sm bg-dwali-yellow text-dwali-dark">Butuh saran</button>
-                                    <button @click="setCurhat('tingkat_darurat','Aku butuh bantuan sekarang')" class="btn btn-sm bg-dwali-red text-white">Butuh bantuan sekarang!</button>
-                                </div>
-                            </template>
-                            <template x-if="curhatForm.tingkat_darurat && !curhatForm.cerita">
-                                <div class="space-y-2">
-                                    <textarea x-model="tempCerita" class="textarea textarea-bordered w-full bg-white/20 border-white/30" rows="3" placeholder="Tulis cerita disini..."></textarea>
-                                    <button @click="submitCerita()" class="btn btn-block bg-dwali-success text-white border-none">Kirim Curhatan</button>
-                                </div>
-                            </template>
-                            <template x-if="curhatForm.cerita">
-                                <div class="text-center text-dwali-success font-bold">✅ Terima kasih sudah curhat, sabar ya menunggu balasan dari Wali.</div>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ STUDENT: RIWAYAT CURHAT ============ -->
-            <template x-if="view === 'student-riwayat' && !isLoading">
-                <div class="space-y-4 fade-in">
-                    <button @click="goBack()" class="text-dwali-light hover:underline">&larr; Kembali</button>
-                    <div class="glass p-6 rounded-3xl">
-                        <h2 class="text-2xl font-bold mb-4">Riwayat Curhatku 📬</h2>
-                        <div class="space-y-3">
-                            <template x-for="ch in getMyCurhats()">
-                                <div class="bg-white/10 p-4 rounded-xl">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-xs text-dwali-light" x-text="formatDate(ch.created_at)"></span>
-                                        <span :class="ch.balasan ? 'bg-dwali-success/50' : 'bg-dwali-yellow/50'" class="px-2 py-1 rounded-full text-xs font-bold" x-text="ch.balasan ? 'Sudah Dibalas' : 'Menunggu Balasan'"></span>
-                                    </div>
-                                    <p class="text-sm mb-2 opacity-80" x-text="ch.cerita"></p>
-                                    <div x-show="ch.balasan" class="mt-2 bg-dwali-dark/50 p-3 rounded-lg border-l-4 border-dwali-yellow">
-                                        <p class="text-xs font-bold text-dwali-yellow">Balasan Wali:</p>
-                                        <p class="text-sm" x-text="ch.balasan"></p>
-                                    </div>
-                                </div>
-                            </template>
-                            <div x-show="getMyCurhats().length === 0" class="text-center text-dwali-light py-4">Belum ada riwayat curhat.</div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ ADMIN DASHBOARD ============ -->
-            <template x-if="currentUser?.role === 'admin' && view === 'admin-dashboard' && !isLoading">
-                <div class="space-y-6 fade-in">
-                    <div class="glass p-6 rounded-3xl flex flex-col md:flex-row justify-between items-center">
-                        <div>
-                            <h2 class="text-2xl font-bold">Dashboard Wali Kelas</h2>
-                            <p class="text-dwali-light">Total Siswa: <span x-text="getMyStudents().length"></span></p>
-                        </div>
-                        <div class="flex gap-2 mt-4 md:mt-0 flex-wrap">
-                            <button @click="navigateTo('admin-curhat')" class="btn bg-dwali-yellow text-dwali-dark border-none">💬 Kotak Curhat</button>
-                            <button @click="navigateTo('admin-laporan')" class="btn bg-dwali-light text-dwali-dark border-none">📊 Buat Laporan</button>
-                            <button @click="navigateTo('admin-siswa')" class="btn glass text-white border-none">👥 Kelola Siswa</button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="glass p-4 rounded-2xl flex items-center gap-4">
-                            <div class="w-4 h-4 rounded-full bg-dwali-red"></div>
-                            <div>
-                                <p class="text-2xl font-bold" x-text="countCurhatByStatus('emergency')"></p>
-                                <p class="text-xs text-dwali-light">Curhat Darurat</p>
-                            </div>
-                        </div>
-                        <div class="glass p-4 rounded-2xl flex items-center gap-4">
-                            <div class="w-4 h-4 rounded-full bg-dwali-yellow"></div>
-                            <div>
-                                <p class="text-2xl font-bold" x-text="countCurhatByStatus('normal')"></p>
-                                <p class="text-xs text-dwali-light">Curhat Biasa</p>
-                            </div>
-                        </div>
-                        <div class="glass p-4 rounded-2xl flex items-center gap-4">
-                            <div class="w-4 h-4 rounded-full bg-dwali-success"></div>
-                            <div>
-                                <p class="text-2xl font-bold" x-text="getMyStudents().length"></p>
-                                <p class="text-xs text-dwali-light">Total Siswa</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="glass p-6 rounded-3xl">
-                        <h3 class="font-bold mb-4">Daftar Siswa</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <template x-for="std in getMyStudents()">
-                                <div class="bg-white/10 p-4 rounded-xl flex items-center justify-between">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-3 h-3 rounded-full" :class="getStudentStatusColor(std.id)"></div>
-                                        <div>
-                                            <p class="font-bold" x-text="std.name"></p>
-                                            <p class="text-xs text-dwali-light" x-text="std.nis"></p>
-                                        </div>
-                                    </div>
-                                    <button @click="navigateTo('admin-curhat')" class="btn btn-xs glass text-white">Detail</button>
-                                </div>
-                            </template>
-                            <div x-show="getMyStudents().length === 0" class="text-center text-dwali-light py-4 col-span-2">Belum ada siswa.</div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ ADMIN: KELOLA SISWA ============ -->
-            <template x-if="view === 'admin-siswa' && !isLoading">
-                <div class="space-y-4 fade-in">
-                    <button @click="goBack()" class="text-dwali-light hover:underline">&larr; Kembali</button>
-                    <div class="glass p-6 rounded-3xl">
-                        <h2 class="text-2xl font-bold mb-4">Kelola Siswa 👥</h2>
-                        <div class="flex gap-2 mb-6 flex-wrap">
-                            <input type="text" x-model="newStudent.name" placeholder="Nama Siswa" class="input input-bordered flex-1 min-w-[150px] bg-white/20 border-white/30" />
-                            <input type="text" x-model="newStudent.nis" placeholder="NIS" class="input input-bordered w-32 bg-white/20 border-white/30" />
-                            <button @click="addStudent()" class="btn bg-dwali-success text-white border-none">Tambah</button>
-                        </div>
-                        <div class="space-y-2">
-                            <template x-for="std in getMyStudents()">
-                                <div class="bg-white/10 p-3 rounded-xl flex justify-between items-center flex-wrap gap-2">
-                                    <div>
-                                        <p class="font-bold" x-text="std.name"></p>
-                                        <p class="text-xs text-dwali-light">NIS: <span x-text="std.nis"></span></p>
-                                    </div>
-                                    <div class="flex gap-2">
-                                        <button @click="resetPassword(std.id)" class="btn btn-xs btn-warning text-white">Reset Pass</button>
-                                        <button @click="deleteStudent(std.id)" class="btn btn-xs btn-error text-white">Hapus</button>
-                                    </div>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ ADMIN: CURHAT INBOX ============ -->
-            <template x-if="view === 'admin-curhat' && !isLoading">
-                <div class="space-y-4 fade-in">
-                    <button @click="goBack()" class="text-dwali-light hover:underline">&larr; Kembali</button>
-                    <div class="glass p-6 rounded-3xl">
-                        <h2 class="text-2xl font-bold mb-4">Kotak Curhat Masuk 💬</h2>
-                        <div class="space-y-4">
-                            <template x-for="ch in getAdminCurhats()">
-                                <div class="bg-white/10 p-4 rounded-xl border-l-4" :class="ch.tingkat_darurat === 'Aku butuh bantuan sekarang' ? 'border-dwali-red' : (ch.tingkat_darurat === 'Aku butuh saran' ? 'border-dwali-yellow' : 'border-dwali-success')">
-                                    <div class="flex justify-between items-start mb-2 flex-wrap gap-2">
-                                        <div>
-                                            <p class="font-bold" x-text="getStudentName(ch.student_id)"></p>
-                                            <p class="text-xs text-dwali-light" x-text="formatDate(ch.created_at)"></p>
-                                        </div>
-                                        <span class="text-xs px-2 py-1 rounded-full" :class="ch.tingkat_darurat === 'Aku butuh bantuan sekarang' ? 'bg-dwali-red' : (ch.tingkat_darurat === 'Aku butuh saran' ? 'bg-dwali-yellow text-dwali-dark' : 'bg-dwali-success')" x-text="ch.tingkat_darurat"></span>
-                                    </div>
-                                    <div class="text-sm mb-3 opacity-90">
-                                        <p><span class="font-bold">Kategori:</span> <span x-text="ch.kategori"></span> - <span x-text="ch.sub_kategori"></span></p>
-                                        <p class="mt-1 p-2 bg-black/20 rounded"><span class="font-bold">Cerita:</span> <span x-text="ch.cerita"></span></p>
-                                    </div>
-                                    <div x-show="ch.balasan" class="bg-dwali-dark/50 p-3 rounded-lg mt-2">
-                                        <p class="text-xs font-bold text-dwali-yellow">Balasan Kamu:</p>
-                                        <p class="text-sm" x-text="ch.balasan"></p>
-                                    </div>
-                                    <div x-show="!ch.balasan" class="mt-3 flex gap-2 flex-wrap">
-                                        <input type="text" x-model="replyText[ch.id]" placeholder="Tulis balasan..." class="input input-bordered flex-1 min-w-[150px] bg-white/20 border-white/30 input-sm" />
-                                        <button @click="replyCurhat(ch.id)" class="btn btn-sm bg-dwali-yellow text-dwali-dark border-none">Kirim Balasan</button>
-                                    </div>
-                                </div>
-                            </template>
-                            <div x-show="getAdminCurhats().length === 0" class="text-center text-dwali-light py-4">Tidak ada curhat masuk.</div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <!-- ============ ADMIN: LAPORAN ============ -->
-            <template x-if="view === 'admin-laporan' && !isLoading">
-                <div class="space-y-4 fade-in">
-                    <button @click="goBack()" class="text-dwali-light hover:underline">&larr; Kembali</button>
-                    <div class="glass p-6 rounded-3xl">
-                        <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
-                            <h2 class="text-2xl font-bold">Laporan Kondisi Siswa 📊</h2>
-                            <button @click="exportExcel()" class="btn bg-dwali-success text-white border-none">📥 Download Excel</button>
-                        </div>
-                        <div class="overflow-x-auto">
-                            <table class="table w-full">
-                                <thead>
-                                    <tr class="text-dwali-light">
-                                        <th>Nama</th>
-                                        <th>Nilai</th>
-                                        <th>Sikap</th>
-                                        <th>Catatan</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template x-for="std in getMyStudents()">
-                                        <tr>
-                                            <td class="font-bold" x-text="std.name"></td>
-                                            <td>
-                                                <input type="number" min="0" max="100" x-model="laporanForm[std.id].nilai_akademik" class="input input-bordered w-20 bg-white/20 border-white/30 input-sm" />
-                                            </td>
-                                            <td>
-                                                <select x-model="laporanForm[std.id].sikap" class="select select-bordered bg-white/20 border-white/30 select-sm">
-                                                    <option class="bg-dwali-dark" value="Sangat Baik">Sangat Baik</option>
-                                                    <option class="bg-dwali-dark" value="Baik">Baik</option>
-                                                    <option class="bg-dwali-dark" value="Cukup">Cukup</option>
-                                                    <option class="bg-dwali-dark" value="Kurang">Kurang</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" x-model="laporanForm[std.id].catatan_khusus" class="input input-bordered w-full max-w-xs bg-white/20 border-white/30 input-sm" />
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-        </main>
-
-        <!-- TOAST -->
-        <div x-show="toast.show" x-transition class="fixed bottom-10 left-1/2 -translate-x-1/2 z-50">
-            <div class="glass-dark text-white px-6 py-3 rounded-full shadow-lg border border-dwali-yellow">
-                <span x-text="toast.msg"></span>
-            </div>
-        </div>
-
+    <!-- Fitur Tombol Aksi -->
+    <div class="grid grid-cols-2 gap-3">
+      <div class="card-glass p-4 text-center cursor-pointer hover:shadow-lg transition" onclick="openModal('perbuatanBaikModal')">
+        <i class="fas fa-star text-3xl text-yellow-400"></i>
+        <div class="font-bold text-sm mt-1">Perbuatan Baik</div>
+        <div id="perbuatanStatus" class="text-xs text-slate-500">Klik untuk catat</div>
+      </div>
+      <div class="card-glass p-4 text-center cursor-pointer hover:shadow-lg transition" onclick="openModal('curhatModal')">
+        <i class="fas fa-comment-dots text-3xl text-indigo-400"></i>
+        <div class="font-bold text-sm mt-1">Curhat</div>
+        <div class="text-xs text-slate-500">Ceritakan</div>
+      </div>
+      <div class="card-glass p-4 text-center cursor-pointer hover:shadow-lg transition" onclick="openModal('jurnalModal')">
+        <i class="fas fa-book-open text-3xl text-cyan-400"></i>
+        <div class="font-bold text-sm mt-1">Jurnal Harian</div>
+        <div class="text-xs text-slate-500">Catat perasaan</div>
+      </div>
+      <div class="card-glass p-4 text-center cursor-pointer hover:shadow-lg transition" onclick="showRiwayat()">
+        <i class="fas fa-history text-3xl text-purple-400"></i>
+        <div class="font-bold text-sm mt-1">Riwayat Curhat</div>
+        <div class="text-xs text-slate-500">Balasan</div>
+      </div>
     </div>
 
-    <script>
-        // ============================================================
-        // DEBUG LOG
-        // ============================================================
-        function debugLog(message, type = 'info') {
-            const container = document.getElementById('debugLogs');
-            if (!container) return;
-            const entry = document.createElement('div');
-            entry.className = 'log-entry ' + type;
-            const time = new Date().toLocaleTimeString();
-            entry.textContent = `[${time}] ${message}`;
-            container.appendChild(entry);
-            container.scrollTop = container.scrollHeight;
-            console.log(`🐛 [${type}]`, message);
-        }
+    <!-- Preview / Recent -->
+    <div class="card-glass p-4">
+      <div class="flex justify-between"><span class="font-bold"><i class="fas fa-clock mr-1"></i> Aktivitas Terakhir</span><span class="text-xs text-slate-400">hari ini</span></div>
+      <div id="recentActivity" class="text-sm text-slate-600 mt-1">Belum ada aktivitas.</div>
+    </div>
 
-        // Tampilkan debug console dengan shortcut Ctrl+Shift+D
-        document.addEventListener('keydown', (e) => {
-            if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-                document.getElementById('debugConsole').classList.toggle('active');
-                e.preventDefault();
-            }
-        });
+  </div>
 
-        // ============================================================
-        // KONFIGURASI API
-        // ============================================================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbyOR1N6rti1N5iMUGLFJOKRH7uRU4oBcDDdunhajL3RWhapsBgOZ2PkcbicgAZExaYf/exec';
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" onclick="navigateTo('home')"><i class="fas fa-home"></i><span>Beranda</span></button>
+    <button class="nav-btn" onclick="navigateTo('curhat')"><i class="fas fa-comment"></i><span>Curhat</span></button>
+    <button class="nav-btn" onclick="navigateTo('jurnal')"><i class="fas fa-pen"></i><span>Jurnal</span></button>
+    <button class="nav-btn" onclick="navigateTo('profil')"><i class="fas fa-user"></i><span>Profil</span></button>
+  </div>
+</div>
 
-        async function callAPI(action, data = {}, retries = 2) {
-            debugLog(`📤 Memanggil API: ${action}`, 'info');
-            let lastError;
-            
-            for (let i = 0; i < retries; i++) {
-                try {
-                    const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), 15000);
-                    
-                    const url = `${API_URL}?action=${action}&data=${encodeURIComponent(JSON.stringify(data))}`;
-                    debugLog(`📡 Request ke: ${url.substring(0, 100)}...`, 'info');
-                    
-                    const res = await fetch(url, {
-                        method: 'GET',
-                        mode: 'cors',
-                        headers: { 'Accept': 'application/json' },
-                        signal: controller.signal
-                    });
-                    
-                    clearTimeout(timeoutId);
-                    
-                    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                    const json = await res.json();
-                    debugLog(`📥 Response: ${JSON.stringify(json).substring(0, 200)}`, json.success ? 'success' : 'error');
-                    
-                    if (!json.success) throw new Error(json.error || 'Gagal memuat data');
-                    return json.data;
-                } catch (e) {
-                    lastError = e;
-                    debugLog(`⚠️ Attempt ${i+1} gagal: ${e.message}`, 'error');
-                    if (i < retries - 1) {
-                        await new Promise(r => setTimeout(r, 1000 * (i + 1)));
-                    }
-                }
-            }
-            throw lastError || new Error('Gagal terhubung ke server');
-        }
+<!-- MODAL PERBUATAN BAIK -->
+<input type="checkbox" id="perbuatanBaikModal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box relative bg-white/90 backdrop-blur-md">
+    <label for="perbuatanBaikModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <h3 class="font-bold text-lg"><i class="fas fa-star text-yellow-400 mr-2"></i>Perbuatan Baik Hari Ini</h3>
+    <div class="grid grid-cols-2 gap-2 mt-4">
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku membantu teman')">🤝 Aku membantu teman</button>
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku berbagi makanan')">🍱 Berbagi makanan</button>
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku menjaga kebersihan')">🧹 Menjaga kebersihan</button>
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku berkata jujur')">💬 Jujur</button>
+    </div>
+    <div class="mt-3"><input id="perbuatanLain" placeholder="Lainnya..." class="input input-bordered w-full bg-white/70 input-sm"/><button class="btn btn-primary-custom btn-sm mt-1 w-full" onclick="catatPerbuatan(document.getElementById('perbuatanLain').value || 'Lainnya')">Catat</button></div>
+    <div id="perbuatanFeedback" class="mt-3 text-center font-semibold text-indigo-600"></div>
+  </div>
+</div>
 
-        // ============================================================
-        // DATA DUMMY (Fallback jika API offline)
-        // ============================================================
-        const DUMMY_DATA = {
-            students: [
-                { id: 's_001', nis: '2024001', name: 'Ahmad Fauzi', password: 'siswa123', wali_id: 'admin_1', class: '7A',
-                    is_potensi_filled: 'false' },
-                { id: 's_002', nis: '2024002', name: 'Budi Santoso', password: 'siswa123', wali_id: 'admin_1', class: '7A',
-                    is_potensi_filled: 'false' },
-                { id: 's_003', nis: '2024003', name: 'Citra Dewi', password: 'siswa123', wali_id: 'admin_1', class: '7A',
-                    is_potensi_filled: 'false' }
-            ],
-            users: [
-                { id: 'admin_1', email: 'admin@dwali.com', password: 'admin123', name: 'Bapak Ahmad Wali Kelas 7A',
-                    role: 'admin', class: '7A' }
-            ],
-            curhats: [],
-            jurnals: [],
-            potensi: [],
-            perbuatanBaik: []
-        };
+<!-- MODAL CURHAT -->
+<input type="checkbox" id="curhatModal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box relative bg-white/90 backdrop-blur-md max-w-md">
+    <label for="curhatModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <h3 class="font-bold text-lg"><i class="fas fa-comment-dots text-indigo-400 mr-2"></i>Curhat</h3>
+    <div id="curhatFlow" class="chat-container mt-3 space-y-1"></div>
+    <div id="curhatOptions" class="flex flex-wrap gap-2 mt-2"></div>
+    <div id="curhatTextArea" class="hidden mt-2"><textarea id="curhatCerita" class="textarea textarea-bordered w-full bg-white/70" placeholder="Ceritakan..." rows="2"></textarea><button id="curhatSubmit" class="btn btn-primary-custom btn-sm mt-1 w-full">Kirim Curhat</button></div>
+    <div id="curhatResult" class="text-emerald-600 font-semibold mt-2 hidden"><i class="fas fa-check-circle"></i> ✅ Terima kasih sudah curhat, sabar ya menunggu balasan dari Wali.</div>
+  </div>
+</div>
 
-        // ============================================================
-        // ALPINE APP
-        // ============================================================
-        function dwaliApp() {
-            return {
-                // State
-                view: 'login',
-                currentUser: null,
-                loginForm: { name: '', class: '', email: '', password: '' },
-                isLoading: false,
-                loadingMessage: 'Memuat data...',
-                loadingProgress: 0,
-                navHistory: [],
-                useDummyData: false,
+<!-- MODAL JURNAL -->
+<input type="checkbox" id="jurnalModal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box bg-white/90 backdrop-blur-md">
+    <label for="jurnalModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <h3 class="font-bold text-lg"><i class="fas fa-book-open text-cyan-400 mr-2"></i>Jurnal Harian</h3>
+    <div class="mt-3">
+      <label class="block text-sm">Bagaimana perasaanmu hari ini?</label>
+      <div class="flex gap-3 text-2xl my-2">
+        <span class="cursor-pointer" onclick="pilihEmoji('😊')">😊</span>
+        <span class="cursor-pointer" onclick="pilihEmoji('😐')">😐</span>
+        <span class="cursor-pointer" onclick="pilihEmoji('😢')">😢</span>
+        <span class="cursor-pointer" onclick="pilihEmoji('😡')">😡</span>
+        <span class="cursor-pointer" onclick="pilihEmoji('😴')">😴</span>
+      </div>
+      <input id="jurnalEmoji" type="hidden" value="😊">
+      <textarea id="jurnalCerita" class="textarea textarea-bordered w-full bg-white/70" placeholder="Ceritakan harimu..." rows="2"></textarea>
+      <button onclick="simpanJurnal()" class="btn btn-primary-custom btn-sm w-full mt-2"><i class="fas fa-save mr-1"></i> Simpan Jurnal</button>
+      <div id="jurnalFeedback" class="text-emerald-600 text-sm mt-1"></div>
+    </div>
+    <div class="mt-3 text-xs text-slate-500">📅 Riwayat jurnal</div>
+    <div id="miniJurnal" class="text-xs space-y-1 max-h-32 overflow-y-auto"></div>
+  </div>
+</div>
 
-                // Cache data
-                cachedStudents: [],
-                cachedCurhats: [],
-                cachedJurnals: [],
-                cachedPotensi: [],
-                cachedPerbuatanBaik: [],
+<!-- MODAL RIWAYAT CURHAT -->
+<div id="riwayatPanel" class="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 hidden" onclick="if(event.target===this) closeRiwayat()">
+  <div class="bg-white/90 backdrop-blur-md rounded-3xl p-5 max-w-sm w-full max-h-[80vh] overflow-y-auto">
+    <div class="flex justify-between"><span class="font-bold"><i class="fas fa-history mr-2"></i>Riwayat Curhat</span><button onclick="closeRiwayat()" class="btn btn-sm btn-ghost">✕</button></div>
+    <div id="riwayatList" class="space-y-2 mt-2 text-sm"></div>
+  </div>
+</div>
 
-                // Forms
-                potensiForm: { minat: 'Olahraga', gaya_belajar: 'Visual', cita_cita: '', kekuatan_karakter: 'Pemberani',
-                    ekstrakurikuler: '' },
-                jurnalForm: { perasaan: '', cerita: '' },
-                curhatForm: { untuk_siapa: '', kategori: '', sub_kategori: '', tingkat_darurat: '', cerita: '' },
-                tempCerita: '',
-                modalGoodAction: false,
-                goodActions: ['Aku membantu teman', 'Aku berbagi makanan', 'Aku menjaga kebersihan', 'Aku berkata jujur',
-                    'Lainnya'
-                ],
-                newStudent: { name: '', nis: '' },
-                replyText: {},
-                laporanForm: {},
-                toast: { show: false, msg: '' },
+<script>
+// ============================================================
+// KONFIGURASI
+// ============================================================
+const CONFIG = {
+  // Ganti dengan URL Web App dari Google Apps Script
+  API_URL: 'https://script.google.com/macros/s/AKfycbx2tHnCcAtj92JxUtik0KFWrkdaBiQduW-cgV2GEJVJ6D4nWnjJpYBg0hBw9weaIV6I/exec',
+  USE_API: true, // Set false untuk hanya pakai Local Storage
+  STORAGE_KEY: 'waliDigitalData'
+};
 
-                // ------------------------------------------------------
-                // INIT
-                // ------------------------------------------------------
-                init() {
-                    debugLog('🚀 App initialized', 'success');
-                    
-                    // Browser back/forward
-                    window.addEventListener('popstate', (e) => {
-                        debugLog(`📍 Popstate: ${e.state?.view || 'none'}`, 'info');
-                        if (e.state?.view) {
-                            this.view = e.state.view;
-                            if (this.currentUser) this.loadData();
-                        } else if (this.currentUser) {
-                            this.goHome();
-                        } else {
-                            this.view = 'login';
-                        }
-                    });
+// ============================================================
+// DATA STORE (Local Storage + API Sync)
+// ============================================================
+class DataStore {
+  constructor() {
+    this.data = this.loadFromStorage();
+    this.isOnline = false;
+    this.pendingSync = [];
+    this.init();
+  }
 
-                    const saved = localStorage.getItem('dwali_user');
-                    if (saved) {
-                        try {
-                            this.currentUser = JSON.parse(saved);
-                            const v = localStorage.getItem('dwali_view') ||
-                                (this.currentUser.role === 'admin' ? 'admin-dashboard' : 'student-dashboard');
-                            this.view = v;
-                            debugLog(`👤 User ditemukan: ${this.currentUser.name}`, 'success');
-                            setTimeout(() => this.loadData(), 100);
-                        } catch (_) {
-                            localStorage.removeItem('dwali_user');
-                            debugLog('⚠️ Gagal parse user data', 'error');
-                        }
-                    } else {
-                        debugLog('👤 Tidak ada user tersimpan', 'info');
-                    }
-                },
+  init() {
+    this.checkConnection();
+    setInterval(() => this.checkConnection(), 30000);
+    this.loadFromStorage();
+  }
 
-                // ------------------------------------------------------
-                // NAVIGASI
-                // ------------------------------------------------------
-                navigateTo(view) {
-                    debugLog(`🔀 Navigasi ke: ${view}`, 'info');
-                    this.navHistory.push(this.view);
-                    this.view = view;
-                    history.pushState({ view }, '', `#${view}`);
-                    localStorage.setItem('dwali_view', view);
-                    if (this.currentUser) {
-                        setTimeout(() => this.loadData(), 50);
-                    }
-                },
+  checkConnection() {
+    fetch(CONFIG.API_URL + '?action=ping', { method: 'GET', mode: 'no-cors' })
+      .then(() => {
+        this.isOnline = true;
+        this.updateStatusUI(true);
+        this.syncPending();
+      })
+      .catch(() => {
+        this.isOnline = false;
+        this.updateStatusUI(false);
+      });
+  }
 
-                goBack() {
-                    debugLog(`🔙 Kembali dari: ${this.view}`, 'info');
-                    if (this.navHistory.length) {
-                        const prev = this.navHistory.pop();
-                        this.view = prev;
-                        history.back();
-                    } else {
-                        this.goHome();
-                    }
-                },
+  updateStatusUI(online) {
+    const el = document.getElementById('connectionStatus');
+    const text = document.getElementById('statusText');
+    if (online) {
+      el.className = 'connection-status online';
+      text.textContent = 'Online';
+      document.getElementById('statusText').textContent = 'Online';
+    } else {
+      el.className = 'connection-status offline';
+      text.textContent = 'Offline (Local)';
+      document.getElementById('statusText').textContent = 'Offline (Local)';
+    }
+  }
 
-                goHome() {
-                    debugLog('🏠 Kembali ke home', 'info');
-                    if (!this.currentUser) {
-                        this.view = 'login';
-                        history.pushState({ view: 'login' }, '', '#login');
-                        return;
-                    }
-                    const home = this.currentUser.role === 'admin' ? 'admin-dashboard' : 'student-dashboard';
-                    this.navHistory = [];
-                    this.view = home;
-                    history.pushState({ view: home }, '', `#${home}`);
-                    localStorage.setItem('dwali_view', home);
-                    this.loadData();
-                },
+  loadFromStorage() {
+    try {
+      const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        // Ensure all collections exist
+        if (!parsed.students) parsed.students = [];
+        if (!parsed.potensi) parsed.potensi = [];
+        if (!parsed.perbuatanBaik) parsed.perbuatanBaik = [];
+        if (!parsed.curhat) parsed.curhat = [];
+        if (!parsed.jurnal) parsed.jurnal = [];
+        if (!parsed.laporan) parsed.laporan = [];
+        if (!parsed.users) parsed.users = [];
+        return parsed;
+      }
+    } catch (e) {
+      console.warn('Error loading from storage:', e);
+    }
+    return this.getDefaultData();
+  }
 
-                showToast(msg) {
-                    debugLog(`💬 Toast: ${msg}`, 'success');
-                    this.toast.msg = msg;
-                    this.toast.show = true;
-                    clearTimeout(this._toastTimer);
-                    this._toastTimer = setTimeout(() => this.toast.show = false, 3000);
-                },
+  getDefaultData() {
+    return {
+      students: [
+        { id: 'stu_1', nis: '2026001', name: 'Ahmad Fauzi', password: '51sw@qu', wali_id: 'wali_1', class: '7A', is_potensi_filled: false, created_at: new Date().toISOString() }
+      ],
+      potensi: [],
+      perbuatanBaik: [],
+      curhat: [],
+      jurnal: [],
+      laporan: [],
+      users: [
+        { id: 'admin_1', email: 'admin@walidigital.com', password: 'd4Rm@app', role: 'super_admin', name: 'Admin Super', class: '-', created_at: new Date().toISOString() },
+        { id: 'wali_1', email: 'wali@walidigital.com', password: 'd4Rm@app', role: 'wali', name: 'Wali Kelas 7A', class: '7A', created_at: new Date().toISOString() }
+      ]
+    };
+  }
 
-                // ------------------------------------------------------
-                // LOAD DATA
-                // ------------------------------------------------------
-                async loadData() {
-                    if (!this.currentUser || this.isLoading) return;
-                    
-                    this.isLoading = true;
-                    this.loadingProgress = 0;
-                    this.loadingMessage = 'Menghubungi server...';
-                    debugLog('📂 Memulai loading data...', 'info');
-                    
-                    try {
-                        const tasks = [];
-                        let totalTasks = 0;
-                        
-                        if (this.currentUser.role === 'admin') {
-                            tasks.push(
-                                { fn: this.loadStudents.bind(this), name: 'Memuat data siswa' },
-                                { fn: this.loadCurhats.bind(this), name: 'Memuat data curhat' }
-                            );
-                            totalTasks = 2;
-                        } else {
-                            tasks.push(
-                                { fn: this.loadMyJurnals.bind(this), name: 'Memuat jurnal' },
-                                { fn: this.loadMyCurhats.bind(this), name: 'Memuat curhat' },
-                                { fn: this.loadPotensi.bind(this), name: 'Memuat potensi' },
-                                { fn: this.loadPerbuatanBaik.bind(this), name: 'Memuat perbuatan baik' }
-                            );
-                            totalTasks = 4;
-                        }
-                        
-                        let completed = 0;
-                        for (const task of tasks) {
-                            this.loadingMessage = task.name + '...';
-                            try {
-                                await task.fn();
-                                completed++;
-                                this.loadingProgress = Math.round((completed / totalTasks) * 100);
-                                debugLog(`✅ ${task.name} selesai (${completed}/${totalTasks})`, 'success');
-                            } catch (e) {
-                                debugLog(`❌ ${task.name} gagal: ${e.message}`, 'error');
-                                // Tetap lanjut ke task berikutnya
-                                completed++;
-                                this.loadingProgress = Math.round((completed / totalTasks) * 100);
-                            }
-                        }
-                        
-                        this.loadingProgress = 100;
-                        this.loadingMessage = 'Selesai! ✅';
-                        debugLog('✅ Semua data selesai dimuat!', 'success');
-                        
-                        await new Promise(r => setTimeout(r, 300));
-                        
-                    } catch (e) {
-                        debugLog(`❌ Load error: ${e.message}`, 'error');
-                        this.showToast('⚠️ ' + (e.message || 'Gagal memuat data'));
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+  saveToStorage() {
+    try {
+      localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(this.data));
+    } catch (e) {
+      console.warn('Error saving to storage:', e);
+    }
+  }
 
-                // ------------------------------------------------------
-                // AUTH
-                // ------------------------------------------------------
-                async studentLogin() {
-                    this.isLoading = true;
-                    this.loadingMessage = 'Memverifikasi akun...';
-                    this.loadingProgress = 30;
-                    debugLog(`🔐 Login siswa: ${this.loginForm.name} (${this.loginForm.class})`, 'info');
-                    
-                    try {
-                        let result;
-                        try {
-                            result = await callAPI('loginStudent', {
-                                name: this.loginForm.name,
-                                class: this.loginForm.class,
-                                password: this.loginForm.password
-                            });
-                            this.useDummyData = false;
-                        } catch (apiError) {
-                            debugLog(`⚠️ API error, mencoba dummy data: ${apiError.message}`, 'error');
-                            // Coba cari di dummy data
-                            const dummy = DUMMY_DATA.students.find(s => 
-                                s.name.toLowerCase() === this.loginForm.name.toLowerCase() &&
-                                s.class.toLowerCase() === this.loginForm.class.toLowerCase() &&
-                                s.password === this.loginForm.password
-                            );
-                            if (dummy) {
-                                result = dummy;
-                                this.useDummyData = true;
-                                debugLog('✅ Login dengan dummy data berhasil', 'success');
-                            } else {
-                                throw new Error('Akun tidak ditemukan di dummy data');
-                            }
-                        }
-                        
-                        this.loadingProgress = 70;
-                        this.currentUser = result;
-                        localStorage.setItem('dwali_user', JSON.stringify(result));
-                        this.loadingProgress = 100;
-                        this.loadingMessage = 'Login berhasil!';
-                        await new Promise(r => setTimeout(r, 300));
-                        this.navigateTo('student-dashboard');
-                        this.showToast('✅ Login berhasil!');
-                        debugLog(`✅ Login berhasil: ${result.name}`, 'success');
-                    } catch (e) {
-                        debugLog(`❌ Login gagal: ${e.message}`, 'error');
-                        alert('❌ ' + (e.message || 'Nama/Kelas/Password salah!'));
-                        this.isLoading = false;
-                    }
-                },
+  // ============ STUDENTS ============
+  getStudents(waliId = null) {
+    if (waliId) {
+      return this.data.students.filter(s => s.wali_id === waliId);
+    }
+    return this.data.students;
+  }
 
-                async adminLogin() {
-                    this.isLoading = true;
-                    this.loadingMessage = 'Memverifikasi akun...';
-                    this.loadingProgress = 30;
-                    debugLog(`🔐 Login admin: ${this.loginForm.email}`, 'info');
-                    
-                    try {
-                        let result;
-                        try {
-                            result = await callAPI('loginAdmin', {
-                                email: this.loginForm.email,
-                                password: this.loginForm.password
-                            });
-                            this.useDummyData = false;
-                        } catch (apiError) {
-                            debugLog(`⚠️ API error, mencoba dummy data: ${apiError.message}`, 'error');
-                            const dummy = DUMMY_DATA.users.find(u => 
-                                u.email === this.loginForm.email &&
-                                u.password === this.loginForm.password &&
-                                u.role === 'admin'
-                            );
-                            if (dummy) {
-                                result = dummy;
-                                this.useDummyData = true;
-                                debugLog('✅ Login admin dengan dummy data berhasil', 'success');
-                            } else {
-                                throw new Error('Akun admin tidak ditemukan');
-                            }
-                        }
-                        
-                        this.loadingProgress = 70;
-                        this.currentUser = result;
-                        localStorage.setItem('dwali_user', JSON.stringify(result));
-                        this.initLaporanForm();
-                        this.loadingProgress = 100;
-                        this.loadingMessage = 'Login berhasil!';
-                        await new Promise(r => setTimeout(r, 300));
-                        this.navigateTo('admin-dashboard');
-                        this.showToast('✅ Selamat datang, Wali!');
-                        debugLog(`✅ Login admin berhasil: ${result.name}`, 'success');
-                    } catch (e) {
-                        debugLog(`❌ Login admin gagal: ${e.message}`, 'error');
-                        alert('❌ ' + (e.message || 'Email/Password salah!'));
-                        this.isLoading = false;
-                    }
-                },
+  getStudent(id) {
+    return this.data.students.find(s => s.id === id);
+  }
 
-                logout() {
-                    if (!confirm('Yakin mau logout?')) return;
-                    debugLog('👋 Logout', 'info');
-                    this.currentUser = null;
-                    this.view = 'login';
-                    this.navHistory = [];
-                    localStorage.removeItem('dwali_user');
-                    localStorage.removeItem('dwali_view');
-                    this.cachedStudents = [];
-                    this.cachedCurhats = [];
-                    history.pushState({ view: 'login' }, '', '#login');
-                    this.showToast('👋 Logout berhasil');
-                },
+  getStudentByNIS(nis) {
+    return this.data.students.find(s => s.nis === nis);
+  }
 
-                // ------------------------------------------------------
-                // PETA POTENSI
-                // ------------------------------------------------------
-                async savePotensi() {
-                    this.isLoading = true;
-                    this.loadingMessage = 'Menyimpan peta potensi...';
-                    debugLog('💾 Menyimpan potensi...', 'info');
-                    try {
-                        await callAPI('savePotensi', { student_id: this.currentUser.id, ...this.potensiForm });
-                        this.currentUser.is_potensi_filled = 'true';
-                        localStorage.setItem('dwali_user', JSON.stringify(this.currentUser));
-                        this.showToast('✅ Peta Potensi tersimpan! 🗺️');
-                        await this.loadData();
-                    } catch (e) {
-                        debugLog(`❌ Gagal simpan potensi: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+  addStudent(student) {
+    if (this.getStudentByNIS(student.nis)) {
+      return { success: false, error: 'NIS sudah terdaftar' };
+    }
+    const newStudent = {
+      id: 'stu_' + Date.now(),
+      ...student,
+      is_potensi_filled: false,
+      created_at: new Date().toISOString()
+    };
+    this.data.students.push(newStudent);
+    this.saveToStorage();
+    this.syncToAPI('addStudent', newStudent);
+    return { success: true, id: newStudent.id };
+  }
 
-                async loadPotensi() {
-                    try {
-                        if (this.useDummyData) {
-                            this.cachedPotensi = [];
-                            return;
-                        }
-                        this.cachedPotensi = await callAPI('getPotensi', { student_id: this.currentUser.id }) || [];
-                    } catch (_) { this.cachedPotensi = []; }
-                },
+  updateStudent(id, field, value) {
+    const student = this.getStudent(id);
+    if (!student) return { success: false, error: 'Siswa tidak ditemukan' };
+    student[field] = value;
+    this.saveToStorage();
+    this.syncToAPI('updateStudent', { id, field, value });
+    return { success: true };
+  }
 
-                // ------------------------------------------------------
-                // PERBUATAN BAIK
-                // ------------------------------------------------------
-                openGoodAction() {
-                    if (this.hasDoneGoodToday()) {
-                        this.showToast('🌟 Kamu sudah mengisi perbuatan baik hari ini. Hebat!');
-                        return;
-                    }
-                    this.modalGoodAction = true;
-                },
+  // ============ POTENSI ============
+  getPotensi(studentId) {
+    return this.data.potensi.find(p => p.student_id === studentId);
+  }
 
-                hasDoneGoodToday() {
-                    const today = new Date().toISOString().split('T')[0];
-                    return this.cachedPerbuatanBaik.some(p => p.student_id === this.currentUser.id && p.date === today);
-                },
+  savePotensi(potensi) {
+    const existing = this.getPotensi(potensi.student_id);
+    if (existing) {
+      Object.assign(existing, potensi);
+      existing.updated_at = new Date().toISOString();
+    } else {
+      potensi.id = 'pot_' + Date.now();
+      potensi.updated_at = new Date().toISOString();
+      this.data.potensi.push(potensi);
+    }
+    // Update student status
+    const student = this.getStudent(potensi.student_id);
+    if (student) {
+      student.is_potensi_filled = true;
+    }
+    this.saveToStorage();
+    this.syncToAPI('savePotensi', potensi);
+    return { success: true };
+  }
 
-                async submitGoodAction(action) {
-                    const today = new Date().toISOString().split('T')[0];
-                    this.isLoading = true;
-                    this.loadingMessage = 'Menyimpan perbuatan baik...';
-                    debugLog(`⭐ Menyimpan perbuatan baik: ${action}`, 'info');
-                    try {
-                        await callAPI('savePerbuatanBaik', { student_id: this.currentUser.id, action, date: today });
-                        this.modalGoodAction = false;
-                        this.cachedPerbuatanBaik.push({ student_id: this.currentUser.id, action, date: today });
-                        const msgs = ['🌟 Good Job! Kamu hebat!', '💪 Luar biasa! Pertahankan!', '😇 Kamu anak baik!'];
-                        this.showToast(msgs[Math.floor(Math.random() * msgs.length)]);
-                        await this.loadPerbuatanBaik();
-                    } catch (e) {
-                        debugLog(`❌ Gagal simpan perbuatan baik: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+  // ============ PERBUATAN BAIK ============
+  getPerbuatanHariIni(studentId) {
+    const today = new Date().toISOString().split('T')[0];
+    return this.data.perbuatanBaik.find(p => 
+      p.student_id === studentId && p.date === today
+    );
+  }
 
-                async loadPerbuatanBaik() {
-                    try {
-                        if (this.useDummyData) {
-                            this.cachedPerbuatanBaik = [];
-                            return;
-                        }
-                        this.cachedPerbuatanBaik = await callAPI('getPerbuatanBaik', { student_id: this.currentUser
-                            .id }) || [];
-                    } catch (_) { this.cachedPerbuatanBaik = []; }
-                },
+  addPerbuatanBaik(studentId, action) {
+    if (this.getPerbuatanHariIni(studentId)) {
+      return { success: false, error: 'Sudah mencatat perbuatan baik hari ini' };
+    }
+    const perbuatan = {
+      id: 'pb_' + Date.now(),
+      student_id: studentId,
+      action: action,
+      date: new Date().toISOString().split('T')[0],
+      created_at: new Date().toISOString()
+    };
+    this.data.perbuatanBaik.push(perbuatan);
+    this.saveToStorage();
+    this.syncToAPI('addPerbuatanBaik', perbuatan);
+    return { success: true, id: perbuatan.id };
+  }
 
-                // ------------------------------------------------------
-                // CURHAT
-                // ------------------------------------------------------
-                setCurhat(field, value) {
-                    this.curhatForm[field] = value;
-                },
+  countPerbuatanBaik(studentId) {
+    return this.data.perbuatanBaik.filter(p => p.student_id === studentId).length;
+  }
 
-                async submitCerita() {
-                    if (!this.tempCerita.trim()) return alert('Cerita tidak boleh kosong');
-                    this.curhatForm.cerita = this.tempCerita;
-                    this.isLoading = true;
-                    this.loadingMessage = 'Mengirim curhat...';
-                    debugLog('💬 Mengirim curhat...', 'info');
-                    try {
-                        await callAPI('saveCurhat', {
-                            id: 'c' + Date.now(),
-                            student_id: this.currentUser.id,
-                            ...this.curhatForm,
-                            created_at: new Date().toISOString()
-                        });
-                        this.tempCerita = '';
-                        this.showToast('✅ Terima kasih sudah curhat.');
-                        setTimeout(() => this.goHome(), 2500);
-                        await this.loadMyCurhats();
-                    } catch (e) {
-                        debugLog(`❌ Gagal kirim curhat: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+  // ============ CURHAT ============
+  getCurhat(studentId = null) {
+    if (studentId) {
+      return this.data.curhat.filter(c => c.student_id === studentId);
+    }
+    return this.data.curhat;
+  }
 
-                getMyCurhats() {
-                    return (this.cachedCurhats || []).filter(c => c.student_id === this.currentUser.id)
-                        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                },
+  addCurhat(curhat) {
+    const newCurhat = {
+      id: 'cur_' + Date.now(),
+      ...curhat,
+      is_read: false,
+      balasan: '',
+      balasan_at: null,
+      created_at: new Date().toISOString()
+    };
+    this.data.curhat.push(newCurhat);
+    this.saveToStorage();
+    this.syncToAPI('addCurhat', newCurhat);
+    return { success: true, id: newCurhat.id };
+  }
 
-                async loadMyCurhats() {
-                    try {
-                        if (this.useDummyData) {
-                            this.cachedCurhats = [];
-                            return;
-                        }
-                        this.cachedCurhats = await callAPI('getCurhats', { student_id: this.currentUser.id }) || [];
-                    } catch (_) { this.cachedCurhats = []; }
-                },
+  replyCurhat(id, balasan) {
+    const curhat = this.data.curhat.find(c => c.id === id);
+    if (!curhat) return { success: false, error: 'Curhat tidak ditemukan' };
+    curhat.balasan = balasan;
+    curhat.balasan_at = new Date().toISOString();
+    curhat.is_read = true;
+    this.saveToStorage();
+    this.syncToAPI('replyCurhat', { id, balasan });
+    return { success: true };
+  }
 
-                // ------------------------------------------------------
-                // JURNAL
-                // ------------------------------------------------------
-                async saveJurnal() {
-                    if (!this.jurnalForm.perasaan || !this.jurnalForm.cerita) {
-                        return alert('Lengkapi perasaan dan cerita');
-                    }
-                    const today = new Date().toISOString().split('T')[0];
-                    this.isLoading = true;
-                    this.loadingMessage = 'Menyimpan jurnal...';
-                    debugLog('📔 Menyimpan jurnal...', 'info');
-                    try {
-                        await callAPI('saveJurnal', { student_id: this.currentUser.id, ...this.jurnalForm, date: today });
-                        this.jurnalForm = { perasaan: '', cerita: '' };
-                        this.showToast('📔 Jurnal harian tersimpan!');
-                        await this.loadMyJurnals();
-                    } catch (e) {
-                        debugLog(`❌ Gagal simpan jurnal: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+  // ============ JURNAL ============
+  getJurnal(studentId) {
+    return this.data.jurnal.filter(j => j.student_id === studentId);
+  }
 
-                getMyJurnals() {
-                    return (this.cachedJurnals || []).filter(j => j.student_id === this.currentUser.id)
-                        .sort((a, b) => new Date(b.date) - new Date(a.date));
-                },
+  addJurnal(jurnal) {
+    const newJurnal = {
+      id: 'jrn_' + Date.now(),
+      ...jurnal,
+      date: new Date().toISOString().split('T')[0],
+      created_at: new Date().toISOString()
+    };
+    this.data.jurnal.push(newJurnal);
+    this.saveToStorage();
+    this.syncToAPI('addJurnal', newJurnal);
+    return { success: true };
+  }
 
-                async loadMyJurnals() {
-                    try {
-                        if (this.useDummyData) {
-                            this.cachedJurnals = [];
-                            return;
-                        }
-                        this.cachedJurnals = await callAPI('getJurnals', { student_id: this.currentUser.id }) || [];
-                    } catch (_) { this.cachedJurnals = []; }
-                },
+  // ============ SYNC TO API ============
+  syncToAPI(action, data) {
+    if (!this.isOnline || !CONFIG.USE_API) {
+      this.pendingSync.push({ action, data });
+      return;
+    }
 
-                // ------------------------------------------------------
-                // ADMIN: SISWA
-                // ------------------------------------------------------
-                getMyStudents() {
-                    if (!this.currentUser) return [];
-                    return (this.cachedStudents || []).filter(s => s.wali_id === this.currentUser.id);
-                },
+    const params = new URLSearchParams({ action, ...data });
+    fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
+      .catch(err => {
+        console.warn('Sync failed, will retry later:', err);
+        this.pendingSync.push({ action, data });
+      });
+  }
 
-                async loadStudents() {
-                    if (!this.currentUser) return;
-                    try {
-                        if (this.useDummyData) {
-                            this.cachedStudents = DUMMY_DATA.students.filter(s => s.wali_id === this.currentUser.id);
-                            this.initLaporanForm();
-                            return;
-                        }
-                        this.cachedStudents = await callAPI('getStudents', { wali_id: this.currentUser.id }) || [];
-                        this.initLaporanForm();
-                    } catch (_) { 
-                        this.cachedStudents = DUMMY_DATA.students.filter(s => s.wali_id === this.currentUser.id);
-                        this.initLaporanForm();
-                    }
-                },
+  syncPending() {
+    if (!this.isOnline || this.pendingSync.length === 0) return;
+    
+    const batch = [...this.pendingSync];
+    this.pendingSync = [];
+    
+    batch.forEach(({ action, data }) => {
+      this.syncToAPI(action, data);
+    });
+  }
 
-                async addStudent() {
-                    if (!this.newStudent.name || !this.newStudent.nis) return alert('Nama dan NIS wajib diisi');
-                    this.isLoading = true;
-                    this.loadingMessage = 'Menambahkan siswa...';
-                    debugLog(`👥 Menambah siswa: ${this.newStudent.name}`, 'info');
-                    try {
-                        await callAPI('addStudent', {
-                            id: 's' + Date.now(),
-                            nis: this.newStudent.nis,
-                            name: this.newStudent.name,
-                            wali_id: this.currentUser.id,
-                            class: this.currentUser.class
-                        });
-                        this.newStudent = { name: '', nis: '' };
-                        this.showToast('✅ Siswa berhasil ditambahkan!');
-                        await this.loadStudents();
-                    } catch (e) {
-                        debugLog(`❌ Gagal tambah siswa: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+  // ============ EXPORT ============
+  exportLaporan(waliId, periode) {
+    const students = this.getStudents(waliId);
+    const laporan = students.map(s => {
+      const potensi = this.getPotensi(s.id);
+      const perbuatanCount = this.countPerbuatanBaik(s.id);
+      const jurnalList = this.getJurnal(s.id);
+      const laporanKondisi = this.data.laporan.find(l => l.student_id === s.id && l.periode === periode);
+      
+      return {
+        nis: s.nis,
+        name: s.name,
+        class: s.class,
+        minat: potensi?.minat || '-',
+        gaya_belajar: potensi?.gaya_belajar || '-',
+        cita_cita: potensi?.cita_cita || '-',
+        kekuatan_karakter: potensi?.kekuatan_karakter || '-',
+        ekstrakurikuler: potensi?.ekstrakurikuler || '-',
+        nilai_akademik: laporanKondisi?.nilai_akademik || '-',
+        sikap: laporanKondisi?.sikap || '-',
+        catatan_khusus: laporanKondisi?.catatan_khusus || '-',
+        total_perbuatan_baik: perbuatanCount,
+        jurnal_terakhir: jurnalList.length > 0 ? jurnalList[jurnalList.length - 1].cerita : '-'
+      };
+    });
+    
+    this.syncToAPI('exportLaporan', { waliId, periode, data: JSON.stringify(laporan) });
+    return laporan;
+  }
+}
 
-                async resetPassword(id) {
-                    if (!confirm('Reset password siswa ke default (siswa123)?')) return;
-                    this.isLoading = true;
-                    this.loadingMessage = 'Mereset password...';
-                    debugLog('🔑 Reset password siswa', 'info');
-                    try {
-                        await callAPI('resetPassword', { student_id: id });
-                        this.showToast('✅ Password direset!');
-                    } catch (e) {
-                        debugLog(`❌ Gagal reset password: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+// ============================================================
+// INISIALISASI
+// ============================================================
+const store = new DataStore();
+let currentStudent = store.getStudent('stu_1'); // Default student for demo
+let curhatStep = 0;
+let curhatAnswers = {};
+let perbuatanToday = false;
 
-                async deleteStudent(id) {
-                    if (!confirm('Yakin hapus siswa ini?')) return;
-                    this.isLoading = true;
-                    this.loadingMessage = 'Menghapus siswa...';
-                    debugLog('🗑️ Menghapus siswa', 'info');
-                    try {
-                        await callAPI('deleteStudent', { student_id: id });
-                        this.showToast('✅ Siswa dihapus.');
-                        await this.loadStudents();
-                    } catch (e) {
-                        debugLog(`❌ Gagal hapus siswa: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+// ============================================================
+// FUNGSI UI
+// ============================================================
+const quotes = [
+  "Jadilah versi terbaik dari dirimu hari ini.","Kesuksesan dimulai dari langkah kecil.",
+  "Yakinlah pada kemampuanmu.","Belajar dari kegagalan adalah awal kesuksesan.",
+  "Hari ini lebih baik dari kemarin.","Teruslah melangkah meski lambat.",
+  "Kebaikan kecil berdampak besar.","Jangan bandingkan dirimu dengan orang lain.",
+  "Percayalah pada proses.","Berani mencoba adalah kunci.",
+  "Jadilah matahari untuk orang lain.","Sabar dan syukur adalah kekuatan.",
+  "Mimpi besar memerlukan aksi besar.","Jangan menyerah sebelum mencoba.",
+  "Hari ini adalah anugerah.","Setiap orang memiliki kelebihan.",
+  "Fokus pada hal yang bisa kamu kontrol.","Senyum adalah sedekah.",
+  "Kamu lebih kuat dari yang kamu kira.","Bersyukur membawa kebahagiaan."
+];
 
-                getStudentStatusColor(id) {
-                    const curhats = (this.cachedCurhats || []).filter(c => c.student_id === id && !c.balasan);
-                    if (curhats.some(c => c.tingkat_darurat === 'Aku butuh bantuan sekarang')) return 'bg-dwali-red';
-                    if (curhats.length) return 'bg-dwali-yellow';
-                    return 'bg-dwali-success';
-                },
+function init() {
+  // Update user info
+  if (currentStudent) {
+    document.getElementById('userNameDisplay').textContent = currentStudent.name;
+  }
+  
+  // Date & Time
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+  
+  // Motivation
+  document.getElementById('motivationText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+  
+  // Check potensi
+  updatePotensiStatus();
+  
+  // Check perbuatan hari ini
+  updatePerbuatanStatus();
+  
+  // Load jurnal
+  renderMiniJurnal();
+  
+  // Load riwayat
+  loadRiwayat();
+}
 
-                // ------------------------------------------------------
-                // ADMIN: CURHAT
-                // ------------------------------------------------------
-                getAdminCurhats() {
-                    const ids = this.getMyStudents().map(s => s.id);
-                    return (this.cachedCurhats || []).filter(c => ids.includes(c.student_id))
-                        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-                },
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById('dateDisplay').textContent = now.toLocaleDateString('id-ID', { 
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' 
+  });
+  document.getElementById('clockDisplay').textContent = now.toLocaleTimeString('id-ID', { 
+    hour: '2-digit', minute: '2-digit' 
+  });
+}
 
-                async loadCurhats() {
-                    if (!this.currentUser) return;
-                    try {
-                        if (this.useDummyData) {
-                            this.cachedCurhats = [];
-                            return;
-                        }
-                        this.cachedCurhats = await callAPI('getCurhats', { wali_id: this.currentUser.id }) || [];
-                    } catch (_) { this.cachedCurhats = []; }
-                },
+function navigateTo(page) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (page === 'home') {
+    document.querySelector('.nav-btn:nth-child(1)').classList.add('active');
+    document.getElementById('mainContent').style.display = 'block';
+  } else {
+    alert('Navigasi ke ' + page + ' (simulasi)');
+  }
+}
 
-                getStudentName(id) {
-                    const s = this.cachedStudents.find(st => st.id === id);
-                    return s ? s.name : 'Unknown';
-                },
+// ============================================================
+// POTENSI
+// ============================================================
+function updatePotensiStatus() {
+  if (currentStudent && currentStudent.is_potensi_filled) {
+    document.getElementById('potensiForm').classList.add('hidden');
+    document.getElementById('potensiDone').classList.remove('hidden');
+  } else {
+    document.getElementById('potensiForm').classList.remove('hidden');
+    document.getElementById('potensiDone').classList.add('hidden');
+  }
+}
 
-                async replyCurhat(curhatId) {
-                    const reply = this.replyText[curhatId];
-                    if (!reply) return alert('Balasan tidak boleh kosong');
-                    this.isLoading = true;
-                    this.loadingMessage = 'Mengirim balasan...';
-                    debugLog('💬 Mengirim balasan curhat', 'info');
-                    try {
-                        await callAPI('replyCurhat', { curhat_id: curhatId, balasan: reply, balasan_at: new Date()
-                                .toISOString() });
-                        this.replyText[curhatId] = '';
-                        this.showToast('✅ Balasan terkirim!');
-                        await this.loadCurhats();
-                    } catch (e) {
-                        debugLog(`❌ Gagal kirim balasan: ${e.message}`, 'error');
-                        alert('❌ ' + e.message);
-                    } finally {
-                        this.isLoading = false;
-                    }
-                },
+document.getElementById('simpanPotensi')?.addEventListener('click', function() {
+  if (!currentStudent) return;
+  
+  const potensi = {
+    student_id: currentStudent.id,
+    minat: document.getElementById('minat').value,
+    gaya_belajar: document.getElementById('gayaBelajar').value,
+    cita_cita: document.getElementById('citaCita').value || 'Belum diisi',
+    kekuatan_karakter: document.getElementById('karakter').value,
+    ekstrakurikuler: document.getElementById('ekskul').value || '-'
+  };
+  
+  const result = store.savePotensi(potensi);
+  if (result.success) {
+    currentStudent = store.getStudent(currentStudent.id);
+    updatePotensiStatus();
+    document.getElementById('recentActivity').innerHTML = '🗺️ Peta Potensi berhasil disimpan!';
+    alert('✅ Peta Potensi berhasil disimpan!');
+  }
+});
 
-                countCurhatByStatus(type) {
-                    const list = this.getAdminCurhats().filter(c => !c.balasan);
-                    if (type === 'emergency') return list.filter(c => c.tingkat_darurat === 'Aku butuh bantuan sekarang')
-                        .length;
-                    if (type === 'normal') return list.filter(c => c.tingkat_darurat !== 'Aku butuh bantuan sekarang')
-                        .length;
-                    return 0;
-                },
+// ============================================================
+// PERBUATAN BAIK
+// ============================================================
+function updatePerbuatanStatus() {
+  if (!currentStudent) return;
+  const pb = store.getPerbuatanHariIni(currentStudent.id);
+  const el = document.getElementById('perbuatanStatus');
+  if (pb) {
+    el.innerHTML = '✔️ Sudah';
+    el.className = 'text-xs text-emerald-600 font-semibold';
+    perbuatanToday = true;
+  } else {
+    el.innerHTML = 'Klik untuk catat';
+    el.className = 'text-xs text-slate-500';
+    perbuatanToday = false;
+  }
+}
 
-                // ------------------------------------------------------
-                // ADMIN: LAPORAN
-                // ------------------------------------------------------
-                initLaporanForm() {
-                    this.getMyStudents().forEach(std => {
-                        if (!this.laporanForm[std.id]) {
-                            this.laporanForm[std.id] = { nilai_akademik: 70, sikap: 'Baik', catatan_khusus: '' };
-                        }
-                    });
-                },
+function catatPerbuatan(action) {
+  if (!currentStudent) return;
+  if (perbuatanToday) {
+    alert('✔️ Hari ini sudah mencatat perbuatan baik. Besok lagi ya!');
+    return;
+  }
+  
+  const result = store.addPerbuatanBaik(currentStudent.id, action);
+  if (result.success) {
+    const feedbacks = ['🌟 Good Job! Kamu hebat!', '💪 Luar biasa! Pertahankan ya!', '😇 Kamu anak baik!'];
+    document.getElementById('perbuatanFeedback').innerHTML = feedbacks[Math.floor(Math.random() * feedbacks.length)];
+    perbuatanToday = true;
+    updatePerbuatanStatus();
+    document.getElementById('recentActivity').innerHTML = `⭐ Perbuatan baik: "${action}" ✅`;
+    document.getElementById('perbuatanLain').value = '';
+    setTimeout(() => {
+      document.getElementById('perbuatanBaikModal').checked = false;
+    }, 2000);
+  } else {
+    alert(result.error);
+  }
+}
 
-                exportExcel() {
-                    debugLog('📊 Export Excel', 'info');
-                    const data = [];
-                    this.getMyStudents().forEach(std => {
-                        const pot = this.cachedPotensi.find(p => p.student_id === std.id) || {};
-                        const baik = this.cachedPerbuatanBaik.filter(p => p.student_id === std.id).length;
-                        const jrnl = this.cachedJurnals.filter(j => j.student_id === std.id).length;
-                        const lap = this.laporanForm[std.id] || {};
-                        data.push({
-                            'NIS': std.nis,
-                            'Nama Siswa': std.name,
-                            'Kelas': std.class,
-                            'Minat': pot.minat || '-',
-                            'Gaya Belajar': pot.gaya_belajar || '-',
-                            'Cita-cita': pot.cita_cita || '-',
-                            'Kekuatan Karakter': pot.kekuatan_karakter || '-',
-                            'Ekstrakurikuler': pot.ekstrakurikuler || '-',
-                            'Nilai Akademik': lap.nilai_akademik || 0,
-                            'Sikap': lap.sikap || '-',
-                            'Catatan Khusus': lap.catatan_khusus || '-',
-                            'Total Perbuatan Baik': baik,
-                            'Total Jurnal': jrnl
-                        });
-                    });
-                    const ws = XLSX.utils.json_to_sheet(data);
-                    ws['!cols'] = Object.keys(data[0] || {}).map(() => ({ wpx: 120 }));
-                    const wb = XLSX.utils.book_new();
-                    XLSX.utils.book_append_sheet(wb, ws, 'Laporan Siswa');
-                    XLSX.writeFile(wb, 'Laporan_DWali.xlsx');
-                    this.showToast('📥 Excel berhasil diunduh!');
-                },
+// ============================================================
+// CURHAT
+// ============================================================
+function initCurhat() {
+  curhatStep = 0;
+  curhatAnswers = {};
+  document.getElementById('curhatResult').classList.add('hidden');
+  document.getElementById('curhatTextArea').classList.add('hidden');
+  document.getElementById('curhatOptions').innerHTML = '';
+  document.getElementById('curhatFlow').innerHTML = '';
+  showCurhatQuestion();
+}
 
-                // ------------------------------------------------------
-                // HELPER
-                // ------------------------------------------------------
-                formatDate(dateStr) {
-                    if (!dateStr) return '-';
-                    const d = new Date(dateStr);
-                    return d.toLocaleDateString('id-ID', {
-                        day: '2-digit',
-                        month: 'short',
-                        year: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                    });
-                }
-            };
-        }
-    </script>
+function showCurhatQuestion() {
+  const flow = document.getElementById('curhatFlow');
+  const opts = document.getElementById('curhatOptions');
+  opts.innerHTML = '';
+  let question = '', options = [];
+
+  if (curhatStep === 0) {
+    question = 'Siapakah kamu?';
+    options = ['Aku sendiri', 'Aku curhat untuk temanku'];
+  } else if (curhatStep === 1) {
+    question = 'Kategori, apakah ini masalah di rumah atau di sekolah?';
+    options = ['Rumah', 'Sekolah'];
+  } else if (curhatStep === 2) {
+    if (curhatAnswers.kategori === 'Rumah') {
+      question = 'Masalah di rumah?';
+      options = ['Orang tua', 'Saudara', 'Keuangan', 'Lainnya'];
+    } else {
+      question = 'Masalah di sekolah?';
+      options = ['Perundungan', 'Pelajaran', 'Teman', 'Guru', 'Lainnya'];
+    }
+  } else if (curhatStep === 3) {
+    question = 'Tingkat Darurat';
+    options = ['Aku cuma mau cerita', 'Aku butuh saran', 'Aku butuh bantuan sekarang'];
+  } else if (curhatStep === 4) {
+    flow.innerHTML += `<div class="bubble bubble-left">Masalahnya apa? (ceritakan dengan bebas)</div>`;
+    document.getElementById('curhatTextArea').classList.remove('hidden');
+    document.getElementById('curhatSubmit').onclick = submitCurhat;
+    return;
+  }
+
+  flow.innerHTML += `<div class="bubble bubble-left">${question}</div>`;
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'btn btn-outline btn-sm m-1';
+    btn.innerText = opt;
+    btn.onclick = () => {
+      if (curhatStep === 0) curhatAnswers.siapa = opt;
+      else if (curhatStep === 1) curhatAnswers.kategori = opt;
+      else if (curhatStep === 2) curhatAnswers.sub = opt;
+      else if (curhatStep === 3) curhatAnswers.darurat = opt;
+      curhatStep++;
+      showCurhatQuestion();
+    };
+    opts.appendChild(btn);
+  });
+}
+
+function submitCurhat() {
+  if (!currentStudent) return;
+  
+  const cerita = document.getElementById('curhatCerita').value.trim() || 'Tidak ada cerita';
+  const curhatData = {
+    student_id: currentStudent.id,
+    untuk_siapa: curhatAnswers.siapa || 'Aku sendiri',
+    kategori: curhatAnswers.kategori || 'Sekolah',
+    sub_kategori: curhatAnswers.sub || 'Lainnya',
+    tingkat_darurat: curhatAnswers.darurat || 'Aku cuma mau cerita',
+    cerita: cerita
+  };
+  
+  const result = store.addCurhat(curhatData);
+  if (result.success) {
+    document.getElementById('curhatTextArea').classList.add('hidden');
+    document.getElementById('curhatResult').classList.remove('hidden');
+    document.getElementById('recentActivity').innerHTML = `💬 Curhat terkirim: "${cerita.substring(0, 30)}..."`;
+    
+    if (curhatAnswers.darurat === 'Aku butuh bantuan sekarang') {
+      alert('⚠️ Kami akan segera menghubungimu! Tetap tenang ya.');
+    }
+    
+    loadRiwayat();
+    setTimeout(() => {
+      document.getElementById('curhatModal').checked = false;
+    }, 2500);
+  }
+}
+
+// ============================================================
+// JURNAL
+// ============================================================
+function pilihEmoji(emoji) {
+  document.getElementById('jurnalEmoji').value = emoji;
+}
+
+function simpanJurnal() {
+  if (!currentStudent) return;
+  
+  const emoji = document.getElementById('jurnalEmoji').value;
+  const cerita = document.getElementById('jurnalCerita').value.trim() || 'Hari ini biasa saja.';
+  
+  const result = store.addJurnal({
+    student_id: currentStudent.id,
+    perasaan: emoji,
+    cerita: cerita
+  });
+  
+  if (result.success) {
+    document.getElementById('jurnalFeedback').innerHTML = '✅ Jurnal tersimpan!';
+    document.getElementById('recentActivity').innerHTML = `📖 Jurnal: ${cerita.substring(0, 20)}...`;
+    renderMiniJurnal();
+    document.getElementById('jurnalCerita').value = '';
+    setTimeout(() => {
+      document.getElementById('jurnalModal').checked = false;
+      document.getElementById('jurnalFeedback').innerHTML = '';
+    }, 1500);
+  }
+}
+
+function renderMiniJurnal() {
+  if (!currentStudent) return;
+  const jurnalList = store.getJurnal(currentStudent.id);
+  const container = document.getElementById('miniJurnal');
+  if (jurnalList.length === 0) {
+    container.innerHTML = '<div class="text-slate-400">Belum ada jurnal.</div>';
+    return;
+  }
+  container.innerHTML = jurnalList.slice(-3).reverse().map(j => 
+    `<div>${j.perasaan} ${j.date}: ${j.cerita.substring(0, 25)}...</div>`
+  ).join('');
+}
+
+// ============================================================
+// RIWAYAT CURHAT
+// ============================================================
+function loadRiwayat() {
+  if (!currentStudent) return;
+  const curhatList = store.getCurhat(currentStudent.id);
+  const list = document.getElementById('riwayatList');
+  
+  if (curhatList.length === 0) {
+    list.innerHTML = '<div class="text-slate-400">Belum ada curhat.</div>';
+    return;
+  }
+  
+  list.innerHTML = curhatList.map(c => {
+    const status = c.balasan ? '✅ Sudah Dibalas' : '⏳ Menunggu Balasan';
+    const balasan = c.balasan ? `<div class="text-xs bg-indigo-50 p-1 rounded mt-1">Balasan: ${c.balasan}</div>` : '';
+    return `<div class="border-b border-slate-200 py-2">
+      <b>${c.untuk_siapa || 'Siswa'}</b> ${new Date(c.created_at).toLocaleString()}
+      <span class="text-xs ${c.balasan ? 'text-emerald-600' : 'text-amber-500'}">${status}</span>
+      <div class="text-xs">${c.cerita?.substring(0, 60)}</div>
+      ${balasan}
+    </div>`;
+  }).join('');
+}
+
+function showRiwayat() {
+  loadRiwayat();
+  document.getElementById('riwayatPanel').classList.remove('hidden');
+}
+
+function closeRiwayat() {
+  document.getElementById('riwayatPanel').classList.add('hidden');
+}
+
+function openModal(id) {
+  document.getElementById(id).checked = true;
+  if (id === 'curhatModal') initCurhat();
+}
+
+// ============================================================
+// ADMIN FUNCTIONS (untuk demo)
+// ============================================================
+function loginAsAdmin() {
+  const email = prompt('Email Admin:');
+  const password = prompt('Password:');
+  if (email === 'admin@walidigital.com' && password === 'd4Rm@app') {
+    alert('Login Admin berhasil!');
+    // Tampilkan admin panel (sederhana)
+    showAdminPanel();
+  } else {
+    alert('Login gagal!');
+  }
+}
+
+function showAdminPanel() {
+  const students = store.getStudents('wali_1');
+  let msg = '===== ADMIN PANEL =====\n';
+  msg += 'Total Siswa: ' + students.length + '\n\n';
+  students.forEach((s, i) => {
+    const curhat = store.getCurhat(s.id);
+    const unread = curhat.filter(c => !c.is_read).length;
+    msg += `${i+1}. ${s.name} (${s.nis}) - ${s.class}\n`;
+    msg += `   Curhat belum dibaca: ${unread}\n`;
+    const potensi = store.getPotensi(s.id);
+    if (potensi) {
+      msg += `   Potensi: ${potensi.minat} | ${potensi.gaya_belajar}\n`;
+    }
+    msg += '\n';
+  });
+  alert(msg);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', init);
+
+// Tambahkan menu admin di console
+console.log('Wali Digital v2.0 - Loaded');
+console.log('Gunakan loginAsAdmin() untuk login admin');
+console.log('Data tersimpan di Local Storage dan sync ke Google Sheets');
+</script>
 
 </body>
 </html>
