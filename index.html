@@ -43,7 +43,6 @@
       position: relative;
     }
 
-    /* ========== BACKGROUND ATMOSPHERE ========== */
     body::before {
       content: '';
       position: fixed;
@@ -92,7 +91,6 @@
     #connectionStatus, #loginPage, #studentDashboard, #waliDashboard, #adminDashboard,
     .modal, .modal-box, #riwayatPanel { position: relative; z-index: 10; }
 
-    /* ========== GLASS CARDS ========== */
     .card-glass {
       background: var(--bg-card);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
@@ -113,7 +111,6 @@
       border: var(--border-glow);
     }
 
-    /* ========== BUTTONS ========== */
     .btn-primary-custom {
       background: linear-gradient(135deg, var(--purple-primary), #6d28d9);
       color: #fff; border: none; font-weight: 700;
@@ -125,24 +122,6 @@
       background: linear-gradient(135deg, var(--purple-bright), #7c3aed);
       box-shadow: 0 0 38px rgba(139, 92, 246, 0.45), 0 6px 20px rgba(0,0,0,0.2);
       transform: translateY(-1px);
-    }
-    .btn-danger-custom {
-      background: linear-gradient(135deg, var(--red-primary), #dc2626);
-      color: white; border: none; font-weight: 700;
-      box-shadow: 0 0 20px var(--red-glow); transition: all 0.3s;
-    }
-    .btn-danger-custom:hover {
-      background: linear-gradient(135deg, var(--red-bright), #ef4444);
-      box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
-    }
-    .btn-success-custom {
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white; border: none; font-weight: 700;
-      box-shadow: 0 0 20px rgba(34, 197, 94, 0.25); transition: all 0.3s;
-    }
-    .btn-success-custom:hover {
-      background: linear-gradient(135deg, #4ade80, #22c55e);
-      box-shadow: 0 0 30px rgba(34, 197, 94, 0.4);
     }
 
     .btn-ghost { color: var(--text-secondary); }
@@ -161,7 +140,6 @@
       color: #fff !important;
     }
 
-    /* ========== INPUTS ========== */
     .input, .select, .textarea {
       background: rgba(0, 20, 80, 0.55) !important;
       border-color: rgba(139, 92, 246, 0.2) !important;
@@ -178,7 +156,6 @@
     .label-text { color: var(--text-secondary) !important; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.3px; }
     select option { background: #002266; color: #fff; }
 
-    /* ========== BOTTOM NAV ========== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: rgba(0, 20, 80, 0.75);
@@ -204,7 +181,6 @@
     .nav-btn.active i { filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.6)); }
     .nav-btn:hover:not(.active) { color: var(--text-secondary); background: rgba(139, 92, 246, 0.08); }
 
-    /* ========== MODALS ========== */
     .modal-box {
       border-radius: 24px !important;
       background: rgba(0, 18, 70, 0.92) !important;
@@ -224,24 +200,32 @@
     }
     .modal-action .btn-ghost { color: var(--text-muted); border: 1px solid rgba(139, 92, 246, 0.15); }
 
-    /* ========== CHAT BUBBLES ========== */
     .bubble {
-      max-width: 85%; padding: 12px 16px; border-radius: 18px;
-      margin: 6px 0; word-wrap: break-word; font-size: 0.875rem; line-height: 1.5;
+      max-width: 85%; padding: 10px 14px; border-radius: 16px;
+      margin: 4px 0; word-wrap: break-word; font-size: 0.85rem; line-height: 1.5;
     }
     .bubble-left {
       background: rgba(139, 92, 246, 0.18);
       border: 1px solid rgba(139, 92, 246, 0.2);
-      align-self: flex-start; border-bottom-left-radius: 6px; color: #fff;
+      align-self: flex-start; border-bottom-left-radius: 4px; color: #fff;
     }
     .bubble-right {
       background: rgba(0, 112, 255, 0.2);
       border: 1px solid rgba(0, 112, 255, 0.25);
-      align-self: flex-end; border-bottom-right-radius: 6px; color: #fff;
+      align-self: flex-end; border-bottom-right-radius: 4px; color: #fff;
     }
-    .chat-container { display: flex; flex-direction: column; }
+    .bubble-wali {
+      background: rgba(139, 92, 246, 0.25);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      align-self: flex-start; border-bottom-left-radius: 4px; color: #fff;
+    }
+    .bubble-siswa {
+      background: rgba(0, 187, 255, 0.15);
+      border: 1px solid rgba(0, 187, 255, 0.2);
+      align-self: flex-end; border-bottom-right-radius: 4px; color: #fff;
+    }
+    .chat-container { display: flex; flex-direction: column; max-height: 400px; overflow-y: auto; padding: 8px 4px; }
 
-    /* ========== STATUS ========== */
     .connection-status {
       position: fixed; top: 12px; right: 12px; z-index: 100;
       padding: 5px 14px; border-radius: 20px; font-size: 11px;
@@ -265,11 +249,9 @@
     .status-yellow { background: rgba(250, 204, 21, 0.2); color: #fde047; border: 1px solid rgba(250, 204, 21, 0.25); }
     .status-green { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.25); }
 
-    /* ========== LOGIN ========== */
     .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .login-box { max-width: 420px; width: 100%; }
 
-    /* ========== STUDENT CARD ========== */
     .student-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
     .student-card:hover {
       transform: translateY(-4px) scale(1.01);
@@ -277,7 +259,6 @@
       border-color: rgba(139, 92, 246, 0.45);
     }
 
-    /* ========== TABS ========== */
     .tab-active {
       border-bottom: 3px solid var(--purple-bright) !important;
       color: #fff !important;
@@ -285,7 +266,6 @@
       text-shadow: 0 0 8px var(--purple-glow);
     }
 
-    /* ========== REPORT ========== */
     .report-section {
       background: rgba(0, 25, 90, 0.5); border-radius: 16px;
       padding: 16px; margin-top: 12px; border: var(--border-glow);
@@ -296,7 +276,6 @@
     }
     .report-item:last-child { border-bottom: none; }
 
-    /* ========== ANIMATIONS ========== */
     .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(15px); }
@@ -321,7 +300,6 @@
     .glow-icon { filter: drop-shadow(0 0 8px currentColor); transition: all 0.3s; }
     .glow-icon:hover { filter: drop-shadow(0 0 16px currentColor); transform: scale(1.1); }
 
-    /* ========== MOTIVATION BOX ========== */
     .motivation-box {
       background: rgba(139, 92, 246, 0.1);
       border: 1px solid rgba(139, 92, 246, 0.15);
@@ -337,7 +315,6 @@
       0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; }
     }
 
-    /* ========== SCROLLBAR ========== */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
     ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 10px; }
@@ -353,7 +330,6 @@
       box-shadow: 0 0 70px rgba(139, 92, 246, 0.12), 0 25px 60px rgba(0, 0, 0, 0.3) !important;
     }
 
-    /* ========== ICON COLOR CLASSES ========== */
     .icon-purple { color: var(--purple-bright); filter: drop-shadow(0 0 10px var(--purple-glow)); }
     .icon-red { color: var(--red-bright); filter: drop-shadow(0 0 10px var(--red-glow)); }
     .icon-blue { color: var(--blue-cyan); filter: drop-shadow(0 0 10px rgba(0,187,255,0.4)); }
@@ -361,7 +337,6 @@
     .icon-green { color: #4ade80; filter: drop-shadow(0 0 10px rgba(74,222,128,0.4)); }
     .icon-white { color: #fff; filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
 
-    /* ========== BADGE ========== */
     .futuristic-badge {
       background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(239, 68, 68, 0.15));
       border: 1px solid rgba(139, 92, 246, 0.25);
@@ -369,7 +344,6 @@
       letter-spacing: 0.5px; font-size: 0.7rem; text-transform: uppercase;
     }
 
-    /* ========== STAT CARDS ========== */
     .stat-card { position: relative; overflow: hidden; }
     .stat-card::after {
       content: ''; position: absolute; bottom: 0; left: 0; right: 0;
@@ -381,10 +355,50 @@
     .stat-card.stat-purple::after { background: linear-gradient(90deg, var(--purple-primary), transparent); }
 
     .bg-indigo-50 { background: rgba(139, 92, 246, 0.08) !important; }
-
-    /* Admin Dashboard specific */
     .wali-card { transition: all 0.3s; cursor: pointer; }
     .wali-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2); }
+
+    .curhat-message {
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin: 4px 0;
+      max-width: 85%;
+      word-wrap: break-word;
+    }
+    .curhat-message-siswa {
+      background: rgba(0, 112, 255, 0.15);
+      border: 1px solid rgba(0, 112, 255, 0.2);
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .curhat-message-wali {
+      background: rgba(139, 92, 246, 0.2);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .curhat-message-sistem {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      align-self: center;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      max-width: 90%;
+    }
+    .message-time {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+      text-align: right;
+    }
+    .message-sender {
+      font-size: 0.65rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+    .message-sender-siswa { color: var(--blue-cyan); }
+    .message-sender-wali { color: var(--purple-bright); }
   </style>
 </head>
 <body>
@@ -559,7 +573,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- DASHBOARD WALI KELAS (SAMA SEPERTI SEBELUMNYA) -->
+<!-- DASHBOARD WALI KELAS -->
 <!-- ============================================================ -->
 <div id="waliDashboard" class="p-4 max-w-lg mx-auto hidden" style="padding-bottom: 80px;">
   <div class="flex justify-between items-center fade-in">
@@ -617,7 +631,7 @@
 
   <div id="tabLaporanContent" class="mt-4 hidden">
     <div class="flex justify-between items-center mb-3">
-      <h3 class="font-bold"><i class="fas fa-chart-bar icon-green mr-2"></i> Laporan Per Siswa</h3>
+      <h3 class="font-bold"><i class="fas fa-chart-bar icon-green mr-2"></i> Laporan Lengkap Siswa</h3>
       <button onclick="exportLaporan()" class="btn btn-success-custom btn-sm">
         <i class="fas fa-file-excel mr-1"></i> Export Excel
       </button>
@@ -627,7 +641,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- DASHBOARD ADMIN SUPER (BARU) -->
+<!-- DASHBOARD ADMIN SUPER -->
 <!-- ============================================================ -->
 <div id="adminDashboard" class="p-4 max-w-lg mx-auto hidden" style="padding-bottom: 80px;">
   <div class="flex justify-between items-center fade-in">
@@ -641,7 +655,6 @@
     <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-bright);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
   </div>
 
-  <!-- Stats -->
   <div class="grid grid-cols-3 gap-3 mt-4 fade-in">
     <div class="card-glass p-3 text-center stat-card stat-blue">
       <div class="text-2xl font-bold" style="color: var(--blue-cyan); text-shadow: 0 0 18px rgba(0,187,255,0.4);" id="totalWali">0</div>
@@ -657,7 +670,6 @@
     </div>
   </div>
 
-  <!-- Tabs -->
   <div class="flex gap-2 mt-5 border-b" style="border-color: rgba(139, 92, 246, 0.12) !important;">
     <button id="adminTabWali" class="px-4 py-2 text-sm font-medium tab-active" onclick="switchAdminTab('wali')">
       <i class="fas fa-chalkboard-teacher mr-1"></i> Kelola Wali
@@ -670,7 +682,6 @@
     </button>
   </div>
 
-  <!-- Tab Content: Kelola Wali -->
   <div id="adminTabWaliContent" class="mt-4 fade-in">
     <div class="flex justify-between items-center mb-3">
       <h3 class="font-bold"><i class="fas fa-user-plus icon-green mr-2"></i> Daftar Wali Kelas</h3>
@@ -681,13 +692,11 @@
     <div id="waliList" class="space-y-2"></div>
   </div>
 
-  <!-- Tab Content: Semua Siswa -->
   <div id="adminTabSiswaContent" class="mt-4 hidden">
     <h3 class="font-bold"><i class="fas fa-address-book icon-purple mr-2"></i> Semua Siswa</h3>
     <div id="allStudentsList" class="space-y-2 mt-3"></div>
   </div>
 
-  <!-- Tab Content: Statistik -->
   <div id="adminTabStatistikContent" class="mt-4 hidden">
     <h3 class="font-bold"><i class="fas fa-chart-pie icon-blue mr-2"></i> Statistik Sekolah</h3>
     <div id="statistikContent" class="space-y-3 mt-3"></div>
@@ -695,7 +704,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- MODAL-MODAL (SAMA SEPERTI SEBELUMNYA + TAMBAHAN UNTUK ADMIN) -->
+<!-- MODAL-MODAL -->
 <!-- ============================================================ -->
 
 <!-- MODAL DETAIL SISWA -->
@@ -764,7 +773,9 @@
   </div>
 </div>
 
-<!-- MODAL CURHAT -->
+<!-- ============================================================ -->
+<!-- MODAL CURHAT (DIPERBAIKI) -->
+<!-- ============================================================ -->
 <input type="checkbox" id="curhatModal" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box relative max-w-md">
@@ -772,8 +783,20 @@
     <h3 class="font-bold text-lg"><i class="fas fa-comment-dots icon-purple mr-2"></i>Curhat</h3>
     <div id="curhatFlow" class="chat-container mt-3 space-y-1"></div>
     <div id="curhatOptions" class="flex flex-wrap gap-2 mt-2"></div>
-    <div id="curhatTextArea" class="hidden mt-2"><textarea id="curhatCerita" class="textarea textarea-bordered w-full" placeholder="Ceritakan..." rows="2"></textarea><button id="curhatSubmit" class="btn btn-primary-custom btn-sm mt-2 w-full"><i class="fas fa-paper-plane mr-1"></i> Kirim Curhat</button></div>
+    <div id="curhatTextArea" class="hidden mt-2">
+      <textarea id="curhatCerita" class="textarea textarea-bordered w-full" placeholder="Ceritakan..." rows="2"></textarea>
+      <button id="curhatSubmit" class="btn btn-primary-custom btn-sm mt-2 w-full"><i class="fas fa-paper-plane mr-1"></i> Kirim Curhat</button>
+    </div>
     <div id="curhatResult" class="font-semibold mt-2 hidden" style="color: #4ade80; text-shadow: 0 0 10px rgba(74,222,128,0.3);"><i class="fas fa-check-circle"></i> Terima kasih sudah curhat, sabar ya menunggu balasan dari Wali.</div>
+    <!-- Area untuk balasan berlapis -->
+    <div id="curhatReplyArea" class="hidden mt-3">
+      <div class="divider text-xs" style="color: var(--text-muted);">💬 Balas</div>
+      <div id="curhatReplies" class="space-y-2 max-h-60 overflow-y-auto"></div>
+      <div class="flex gap-2 mt-2">
+        <input id="curhatReplyInput" type="text" class="input input-bordered flex-1 input-sm" placeholder="Tulis balasan..." />
+        <button id="curhatReplyButton" onclick="sendCurhatReply()" class="btn btn-primary-custom btn-sm"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -802,11 +825,13 @@
   </div>
 </div>
 
-<!-- MODAL RIWAYAT CURHAT -->
+<!-- ============================================================ -->
+<!-- MODAL RIWAYAT CURHAT (DIPERBAIKI) -->
+<!-- ============================================================ -->
 <div id="riwayatPanel" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,30,0.5); backdrop-filter: blur(8px);" onclick="if(event.target===this) closeRiwayat()">
   <div class="rounded-3xl p-5 max-w-sm w-full max-h-[80vh] overflow-y-auto" style="background: rgba(0, 18, 70, 0.92); backdrop-filter: blur(24px); border: var(--border-glow); box-shadow: 0 0 70px rgba(139, 92, 246, 0.12), 0 25px 60px rgba(0, 0, 0, 0.3);">
     <div class="flex justify-between"><span class="font-bold"><i class="fas fa-history icon-red mr-2"></i>Riwayat Curhat</span><button onclick="closeRiwayat()" class="btn btn-sm btn-ghost">✕</button></div>
-    <div id="riwayatList" class="space-y-2 mt-3 text-sm"></div>
+    <div id="riwayatList" class="space-y-3 mt-3 text-sm"></div>
   </div>
 </div>
 
@@ -851,7 +876,7 @@
   </div>
 </div>
 
-<!-- MODAL TAMBAH WALI (BARU UNTUK ADMIN) -->
+<!-- MODAL TAMBAH WALI -->
 <input type="checkbox" id="tambahWaliModal" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box">
@@ -892,7 +917,7 @@
   </div>
 </div>
 
-<!-- MODAL BALAS CURHAT -->
+<!-- MODAL BALAS CURHAT (WALI) -->
 <input type="checkbox" id="balasCurhatModal" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box">
@@ -900,6 +925,10 @@
     <h3 class="font-bold text-lg"><i class="fas fa-reply icon-purple mr-2"></i>Balas Curhat</h3>
     <div class="mt-3">
       <div class="p-3 rounded-lg text-sm" style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.15);" id="curhatDetail"></div>
+      
+      <!-- Riwayat Balasan -->
+      <div id="curhatDetailReplies" class="mt-3 space-y-2 max-h-40 overflow-y-auto"></div>
+      
       <textarea id="balasanText" class="textarea textarea-bordered w-full mt-3" rows="3" placeholder="Tulis balasan..."></textarea>
       <button onclick="kirimBalasan()" class="btn btn-primary-custom w-full mt-2"><i class="fas fa-paper-plane mr-2"></i> Kirim Balasan</button>
     </div>
@@ -907,7 +936,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- JAVASCRIPT - DENGAN FITUR ADMIN SUPER -->
+<!-- JAVASCRIPT -->
 <!-- ============================================================ -->
 <script>
 // ============================================================
@@ -971,6 +1000,7 @@ class DataStore {
         if (!p.potensi) p.potensi = [];
         if (!p.perbuatanBaik) p.perbuatanBaik = [];
         if (!p.curhat) p.curhat = [];
+        if (!p.curhatReplies) p.curhatReplies = [];
         if (!p.jurnal) p.jurnal = [];
         if (!p.laporan) p.laporan = [];
         if (!p.users) p.users = [];
@@ -995,8 +1025,9 @@ class DataStore {
         { id: 'pb_1', student_id: 'stu_1', action: 'Aku membantu teman mengerjakan PR', date: new Date().toISOString().split('T')[0], created_at: new Date().toISOString() }
       ],
       curhat: [
-        { id: 'cur_1', student_id: 'stu_1', untuk_siapa: 'Aku sendiri', kategori: 'Sekolah', sub_kategori: 'Pelajaran', tingkat_darurat: 'Aku butuh bantuan sekarang', cerita: 'Saya kesulitan dengan matematika', is_read: false, balasan: '', balasan_at: null, created_at: new Date().toISOString() }
+        { id: 'cur_1', student_id: 'stu_1', untuk_siapa: 'Aku sendiri', kategori: 'Sekolah', sub_kategori: 'Pelajaran', tingkat_darurat: 'Aku butuh bantuan sekarang', cerita: 'Saya kesulitan dengan matematika', is_read: false, created_at: new Date().toISOString() }
       ],
+      curhatReplies: [],
       jurnal: [
         { id: 'jrn_1', student_id: 'stu_1', emoji: '😊', cerita: 'Hari ini saya belajar matematika dengan semangat!', date: new Date().toISOString().split('T')[0], created_at: new Date().toISOString() }
       ],
@@ -1071,6 +1102,7 @@ class DataStore {
     this.data.potensi = this.data.potensi.filter(p => p.student_id !== id);
     this.data.perbuatanBaik = this.data.perbuatanBaik.filter(p => p.student_id !== id);
     this.data.curhat = this.data.curhat.filter(c => c.student_id !== id);
+    this.data.curhatReplies = this.data.curhatReplies.filter(r => r.student_id !== id);
     this.data.jurnal = this.data.jurnal.filter(j => j.student_id !== id);
     this.data.laporan = this.data.laporan.filter(l => l.student_id !== id);
     this.data.students.splice(index, 1);
@@ -1162,8 +1194,6 @@ class DataStore {
       id: 'cur_' + Date.now(),
       ...curhat,
       is_read: false,
-      balasan: '',
-      balasan_at: null,
       created_at: new Date().toISOString()
     };
     this.data.curhat.push(newCurhat);
@@ -1172,17 +1202,32 @@ class DataStore {
     return { success: true, id: newCurhat.id };
   }
   
-  replyCurhat(id, balasan) {
-    const curhat = this.data.curhat.find(c => c.id === id);
-    if (!curhat) {
-      return { success: false, error: 'Curhat tidak ditemukan' };
+  // ============ CURHAT REPLIES ============
+  getCurhatReplies(curhatId) {
+    return this.data.curhatReplies.filter(r => r.curhat_id === curhatId);
+  }
+  
+  addCurhatReply(curhatId, studentId, sender, senderName, message, isWali = false) {
+    const reply = {
+      id: 'rep_' + Date.now(),
+      curhat_id: curhatId,
+      student_id: studentId,
+      sender: sender,
+      sender_name: senderName,
+      message: message,
+      is_wali: isWali,
+      created_at: new Date().toISOString()
+    };
+    this.data.curhatReplies.push(reply);
+    
+    if (isWali) {
+      const curhat = this.data.curhat.find(c => c.id === curhatId);
+      if (curhat) curhat.is_read = true;
     }
-    curhat.balasan = balasan;
-    curhat.balasan_at = new Date().toISOString();
-    curhat.is_read = true;
+    
     this.saveToStorage();
-    this.syncToAPI('replyCurhat', { id, balasan });
-    return { success: true };
+    this.syncToAPI('addCurhatReply', reply);
+    return { success: true, id: reply.id };
   }
   
   // ============ JURNAL ============
@@ -1208,7 +1253,7 @@ class DataStore {
     return list.length > 0 ? list[list.length - 1] : null;
   }
   
-  // ============ USERS (DIPERBAIKI UNTUK ADMIN) ============
+  // ============ USERS ============
   getUsers(role = null) {
     if (role) {
       return this.data.users.filter(u => u.role === role);
@@ -1225,7 +1270,6 @@ class DataStore {
   }
   
   addUser(user) {
-    // Cek duplikat email
     if (this.getUserByEmail(user.email)) {
       return { success: false, error: 'Email sudah terdaftar' };
     }
@@ -1241,7 +1285,6 @@ class DataStore {
   }
   
   deleteUser(id) {
-    // Jangan hapus admin super
     const user = this.getUser(id);
     if (user && user.role === 'super_admin') {
       return { success: false, error: 'Tidak bisa menghapus Admin Super' };
@@ -1297,6 +1340,7 @@ let perbuatanToday = false;
 let selectedCurhatId = null;
 let detailStudentId = null;
 let loginRole = 'student';
+let currentCurhatId = null;
 
 // ============================================================
 // LOGIN FUNCTIONS
@@ -1458,7 +1502,7 @@ function logout() {
 }
 
 // ============================================================
-// STUDENT DASHBOARD FUNCTIONS (SAMA SEPERTI SEBELUMNYA)
+// STUDENT DASHBOARD FUNCTIONS
 // ============================================================
 const quotes = [
   "Jadilah versi terbaik dari dirimu hari ini.",
@@ -1520,7 +1564,20 @@ function navigateTo(page) {
 
 function openModal(id) {
   document.getElementById(id).checked = true;
-  if (id === 'curhatModal') initCurhat();
+  if (id === 'curhatModal') {
+    // Reset curhat flow
+    curhatStep = 0;
+    curhatAnswers = {};
+    currentCurhatId = null;
+    document.getElementById('curhatResult').classList.add('hidden');
+    document.getElementById('curhatTextArea').classList.add('hidden');
+    document.getElementById('curhatReplyArea').classList.add('hidden');
+    document.getElementById('curhatOptions').innerHTML = '';
+    document.getElementById('curhatFlow').innerHTML = '';
+    document.getElementById('curhatReplies').innerHTML = '';
+    document.getElementById('curhatReplyInput').value = '';
+    showCurhatQuestion();
+  }
 }
 
 // ============================================================
@@ -1599,18 +1656,8 @@ function catatPerbuatan(action) {
 }
 
 // ============================================================
-// CURHAT
+// CURHAT (DIPERBAIKI)
 // ============================================================
-function initCurhat() {
-  curhatStep = 0;
-  curhatAnswers = {};
-  document.getElementById('curhatResult').classList.add('hidden');
-  document.getElementById('curhatTextArea').classList.add('hidden');
-  document.getElementById('curhatOptions').innerHTML = '';
-  document.getElementById('curhatFlow').innerHTML = '';
-  showCurhatQuestion();
-}
-
 function showCurhatQuestion() {
   const flow = document.getElementById('curhatFlow');
   const opts = document.getElementById('curhatOptions');
@@ -1646,7 +1693,7 @@ function showCurhatQuestion() {
     const btn = document.createElement('button');
     btn.className = 'btn btn-outline btn-sm m-1';
     btn.innerText = opt;
-    btn.onclick = () => {
+    btn.onclick = function() {
       if (curhatStep === 0) curhatAnswers.siapa = opt;
       else if (curhatStep === 1) curhatAnswers.kategori = opt;
       else if (curhatStep === 2) curhatAnswers.sub = opt;
@@ -1673,6 +1720,7 @@ function submitCurhat() {
   
   const result = store.addCurhat(curhatData);
   if (result.success) {
+    currentCurhatId = result.id;
     document.getElementById('curhatTextArea').classList.add('hidden');
     document.getElementById('curhatResult').classList.remove('hidden');
     document.getElementById('recentActivity').innerHTML = '💬 Curhat terkirim: "' + cerita.substring(0, 30) + '..."';
@@ -1681,10 +1729,90 @@ function submitCurhat() {
       alert('⚠️ Kami akan segera menghubungimu! Tetap tenang ya.');
     }
     
+    // Tampilkan area balasan setelah beberapa detik
+    setTimeout(function() {
+      document.getElementById('curhatResult').classList.add('hidden');
+      document.getElementById('curhatReplyArea').classList.remove('hidden');
+      renderCurhatReplies(currentCurhatId);
+    }, 2000);
+    
     loadRiwayat();
-    setTimeout(() => {
-      document.getElementById('curhatModal').checked = false;
-    }, 2500);
+  }
+}
+
+function renderCurhatReplies(curhatId) {
+  const replies = store.getCurhatReplies(curhatId);
+  const container = document.getElementById('curhatReplies');
+  
+  if (!container) return;
+  
+  if (replies.length === 0) {
+    container.innerHTML = '<div class="text-xs text-slate-400 text-center">Belum ada balasan. Tunggu balasan dari Wali ya 😊</div>';
+    return;
+  }
+  
+  container.innerHTML = replies.map(function(r) {
+    const isWali = r.is_wali;
+    const senderName = isWali ? '👨‍🏫 ' + r.sender_name : '👤 ' + r.sender_name;
+    const time = new Date(r.created_at).toLocaleString('id-ID');
+    return `
+      <div class="curhat-message ${isWali ? 'curhat-message-wali' : 'curhat-message-siswa'}">
+        <div class="message-sender ${isWali ? 'message-sender-wali' : 'message-sender-siswa'}">${senderName}</div>
+        <div>${r.message}</div>
+        <div class="message-time">${time}</div>
+      </div>
+    `;
+  }).join('');
+  
+  // Scroll ke bawah
+  container.scrollTop = container.scrollHeight;
+}
+
+function sendCurhatReply() {
+  // Cek apakah user sudah login
+  if (!currentStudent && !currentWali) {
+    alert('Silakan login terlebih dahulu');
+    return;
+  }
+  
+  const input = document.getElementById('curhatReplyInput');
+  if (!input) return;
+  
+  const message = input.value.trim();
+  if (!message) {
+    alert('Tulis pesan terlebih dahulu');
+    return;
+  }
+  
+  let curhatId = currentCurhatId;
+  if (!curhatId) {
+    // Cari curhat terakhir siswa
+    const curhats = store.getCurhat(currentStudent ? currentStudent.id : null);
+    if (curhats.length > 0) {
+      curhatId = curhats[curhats.length - 1].id;
+    } else {
+      alert('Tidak ada curhat yang aktif');
+      return;
+    }
+  }
+  
+  const isWali = currentRole === 'wali';
+  const senderName = isWali ? currentWali.name : currentStudent.name;
+  const studentId = isWali ? currentWali.id : currentStudent.id;
+  
+  const result = store.addCurhatReply(curhatId, studentId, isWali ? 'wali' : 'student', senderName, message, isWali);
+  
+  if (result.success) {
+    input.value = '';
+    renderCurhatReplies(curhatId);
+    document.getElementById('recentActivity').innerHTML = '💬 Balasan terkirim: "' + message.substring(0, 30) + '..."';
+    
+    // Jika dari dashboard wali, refresh inbox
+    if (isWali) {
+      renderCurhatInbox();
+    }
+  } else {
+    alert('Gagal mengirim balasan: ' + (result.error || 'Unknown error'));
   }
 }
 
@@ -1693,7 +1821,7 @@ function submitCurhat() {
 // ============================================================
 function pilihEmoji(emoji) {
   document.getElementById('jurnalEmoji').value = emoji;
-  document.querySelectorAll('#jurnalModal .text-3xl span').forEach(s => {
+  document.querySelectorAll('#jurnalModal .text-3xl span').forEach(function(s) {
     s.style.transform = s.textContent.trim() === emoji ? 'scale(1.4)' : 'scale(1)';
     s.style.transition = 'transform 0.2s';
     s.style.filter = s.textContent.trim() === emoji ? 'drop-shadow(0 0 10px rgba(139,92,246,0.5))' : 'none';
@@ -1718,7 +1846,7 @@ function simpanJurnal() {
     renderMiniJurnal();
     document.getElementById('jurnalCerita').value = '';
     document.getElementById('jurnalEmoji').value = '😊';
-    setTimeout(() => {
+    setTimeout(function() {
       document.getElementById('jurnalModal').checked = false;
       document.getElementById('jurnalFeedback').innerHTML = '';
     }, 1500);
@@ -1733,19 +1861,19 @@ function renderMiniJurnal() {
     container.innerHTML = '<div class="text-slate-400">Belum ada jurnal.</div>';
     return;
   }
-  container.innerHTML = jurnalList.slice(-3).reverse().map(j =>
-    `<div class="flex gap-2 items-start p-1 border-b border-slate-700/20">
+  container.innerHTML = jurnalList.slice(-3).reverse().map(function(j) {
+    return `<div class="flex gap-2 items-start p-1 border-b border-slate-700/20">
       <span class="text-lg">${j.emoji || '📖'}</span>
       <div>
         <div class="text-slate-300">${j.cerita}</div>
         <div class="text-slate-500 text-xs">${new Date(j.created_at).toLocaleDateString('id-ID')}</div>
       </div>
-    </div>`
-  ).join('');
+    </div>`;
+  }).join('');
 }
 
 // ============================================================
-// RIWAYAT CURHAT
+// RIWAYAT CURHAT (DIPERBAIKI)
 // ============================================================
 function loadRiwayat() {
   if (!currentStudent) return;
@@ -1757,19 +1885,65 @@ function loadRiwayat() {
     return;
   }
   
-  list.innerHTML = curhatList.map(c => {
-    const status = c.balasan ? '✅ Sudah Dibalas' : '⏳ Menunggu Balasan';
-    const balasan = c.balasan ? `<div class="text-xs bg-purple-500/10 p-2 rounded mt-1 border border-purple-500/20">Balasan: ${c.balasan}</div>` : '';
-    return `<div class="border-b border-slate-700/20 py-2">
-      <div class="flex justify-between">
-        <span class="font-medium">${c.untuk_siapa || 'Siswa'}</span>
-        <span class="text-xs ${c.balasan ? 'text-emerald-400' : 'text-yellow-400'}">${status}</span>
+  list.innerHTML = curhatList.map(function(c) {
+    const replies = store.getCurhatReplies(c.id);
+    const lastReply = replies.length > 0 ? replies[replies.length - 1] : null;
+    const replyCount = replies.length;
+    
+    let statusText = '⏳ Menunggu Balasan';
+    let statusColor = 'text-yellow-400';
+    if (replyCount > 0) {
+      statusText = '💬 ' + replyCount + ' balasan';
+      statusColor = 'text-emerald-400';
+    }
+    
+    return `<div class="border-b border-slate-700/20 py-3">
+      <div class="flex justify-between items-start">
+        <div>
+          <div class="font-medium">${c.untuk_siapa || 'Siswa'}</div>
+          <div class="text-xs text-slate-400">${new Date(c.created_at).toLocaleString()}</div>
+        </div>
+        <span class="text-xs ${statusColor}">${statusText}</span>
       </div>
-      <div class="text-xs text-slate-400">${new Date(c.created_at).toLocaleString()}</div>
       <div class="text-sm mt-1">${c.cerita}</div>
-      ${balasan}
+      ${replyCount > 0 ? `
+        <div class="mt-2 text-xs text-slate-400">
+          <i class="fas fa-reply mr-1"></i> Balasan terakhir: ${lastReply ? lastReply.message.substring(0, 40) + (lastReply.message.length > 40 ? '...' : '') : ''}
+          <span class="block text-slate-500 text-xs mt-1">dari ${lastReply ? lastReply.sender_name : ''}</span>
+        </div>
+      ` : ''}
+      <button onclick="openCurhatDetail('${c.id}')" class="btn btn-primary-custom btn-xs mt-2">
+        <i class="fas fa-comment mr-1"></i> Lihat Diskusi
+      </button>
     </div>`;
   }).join('');
+}
+
+function openCurhatDetail(curhatId) {
+  currentCurhatId = curhatId;
+  const curhat = store.data.curhat.find(function(c) { return c.id === curhatId; });
+  if (!curhat) return;
+  
+  // Reset modal curhat
+  document.getElementById('curhatFlow').innerHTML = '';
+  document.getElementById('curhatOptions').innerHTML = '';
+  document.getElementById('curhatTextArea').classList.add('hidden');
+  document.getElementById('curhatResult').classList.add('hidden');
+  document.getElementById('curhatReplyArea').classList.remove('hidden');
+  
+  // Tampilkan curhat awal
+  const flow = document.getElementById('curhatFlow');
+  flow.innerHTML = `
+    <div class="bubble bubble-left">${curhat.cerita}</div>
+    <div class="text-xs text-slate-400 mt-1 ml-2">${new Date(curhat.created_at).toLocaleString()}</div>
+    <div class="text-xs mt-1 ml-2">
+      <span class="status-badge ${curhat.tingkat_darurat === 'Aku butuh bantuan sekarang' ? 'status-red' : 'status-yellow'}">${curhat.tingkat_darurat}</span>
+      <span class="ml-2 text-slate-400">${curhat.kategori} · ${curhat.sub_kategori}</span>
+    </div>
+  `;
+  
+  renderCurhatReplies(curhatId);
+  document.getElementById('curhatModal').checked = true;
 }
 
 function showRiwayat() {
@@ -1792,8 +1966,8 @@ function renderWaliDashboard() {
   
   const students = store.getStudents(currentWali.id);
   const curhatList = store.getCurhatByWali(currentWali.id);
-  const unread = curhatList.filter(c => !c.is_read);
-  const darurat = curhatList.filter(c => c.tingkat_darurat === 'Aku butuh bantuan sekarang' && !c.is_read);
+  const unread = curhatList.filter(function(c) { return !c.is_read; });
+  const darurat = curhatList.filter(function(c) { return c.tingkat_darurat === 'Aku butuh bantuan sekarang' && !c.is_read; });
   
   const totalSiswa = document.getElementById('totalSiswa');
   const curhatDarurat = document.getElementById('curhatDarurat');
@@ -1807,7 +1981,7 @@ function renderWaliDashboard() {
 }
 
 function switchWaliTab(tab) {
-  ['Siswa', 'Curhat', 'Laporan'].forEach(t => {
+  ['Siswa', 'Curhat', 'Laporan'].forEach(function(t) {
     const btn = document.getElementById('tab' + t);
     const content = document.getElementById('tab' + t + 'Content');
     const isActive = t.toLowerCase() === tab;
@@ -1843,16 +2017,16 @@ function renderStudentList() {
     return;
   }
   
-  list.innerHTML = students.map(s => {
+  list.innerHTML = students.map(function(s) {
     const curhatList = store.getCurhat(s.id);
-    const unread = curhatList.filter(c => !c.is_read).length;
-    const hasDarurat = curhatList.some(c => c.tingkat_darurat === 'Aku butuh bantuan sekarang' && !c.is_read);
+    const unread = curhatList.filter(function(c) { return !c.is_read; }).length;
+    const hasDarurat = curhatList.some(function(c) { return c.tingkat_darurat === 'Aku butuh bantuan sekarang' && !c.is_read; });
     
     let statusBadge = '<span class="status-badge status-green">Aktif</span>';
     if (hasDarurat) {
       statusBadge = '<span class="status-badge status-red"><i class="fas fa-exclamation-triangle mr-1"></i>Darurat</span>';
     } else if (unread > 0) {
-      statusBadge = `<span class="status-badge status-yellow">${unread} curhat</span>`;
+      statusBadge = '<span class="status-badge status-yellow">' + unread + ' curhat</span>';
     }
     
     return `
@@ -1899,10 +2073,12 @@ function renderCurhatInbox() {
   }
   
   inbox.innerHTML = [...curhatList]
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-    .map(c => {
+    .sort(function(a, b) { return new Date(b.created_at) - new Date(a.created_at); })
+    .map(function(c) {
       const student = store.getStudent(c.student_id);
       const isDarurat = c.tingkat_darurat === 'Aku butuh bantuan sekarang';
+      const replies = store.getCurhatReplies(c.id);
+      const replyCount = replies.length;
       
       return `
         <div class="card-glass p-3 cursor-pointer fade-in ${!c.is_read ? 'border-l-4 border-l-purple-500' : ''}" 
@@ -1923,15 +2099,20 @@ function renderCurhatInbox() {
             </div>
           </div>
           <div class="text-sm mt-1" style="color: var(--text-secondary);">${c.cerita}</div>
-          <div class="text-xs mt-1" style="color: var(--text-muted);">
-            <i class="fas fa-clock mr-1"></i>${new Date(c.created_at).toLocaleString('id-ID')}
+          <div class="flex justify-between items-center mt-1">
+            <div class="text-xs" style="color: var(--text-muted);">
+              <i class="fas fa-clock mr-1"></i>${new Date(c.created_at).toLocaleString('id-ID')}
+            </div>
+            ${replyCount > 0 ? '<span class="text-xs text-emerald-400"><i class="fas fa-reply mr-1"></i>' + replyCount + ' balasan</span>' : ''}
           </div>
-          ${c.balasan ? '<div class="text-xs mt-1 text-emerald-400"><i class="fas fa-reply mr-1"></i>Sudah dibalas</div>' : ''}
         </div>
       `;
     }).join('');
 }
 
+// ============================================================
+// LAPORAN LENGKAP
+// ============================================================
 function renderLaporanList() {
   if (!currentWali) return;
   
@@ -1948,11 +2129,21 @@ function renderLaporanList() {
     return;
   }
   
-  list.innerHTML = students.map(s => {
+  list.innerHTML = students.map(function(s) {
     const potensi = store.getPotensi(s.id);
     const totalBaik = store.countPerbuatanBaik(s.id);
+    const perbuatanList = store.getPerbuatanBaik(s.id);
     const jurnalList = store.getJurnal(s.id);
     const curhatList = store.getCurhat(s.id);
+    const totalReplies = curhatList.reduce(function(sum, c) { return sum + store.getCurhatReplies(c.id).length; }, 0);
+    
+    // Ringkasan aktivitas terbaru
+    const allActivities = [];
+    perbuatanList.forEach(function(p) { allActivities.push({ type: 'perbuatan', data: p, date: p.created_at }); });
+    jurnalList.forEach(function(j) { allActivities.push({ type: 'jurnal', data: j, date: j.created_at }); });
+    curhatList.forEach(function(c) { allActivities.push({ type: 'curhat', data: c, date: c.created_at }); });
+    allActivities.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+    const recentActivities = allActivities.slice(0, 5);
     
     return `
       <div class="report-section fade-in">
@@ -1962,22 +2153,52 @@ function renderLaporanList() {
           </div>
           <i class="fas fa-chevron-right text-xs" style="color: var(--text-muted);"></i>
         </div>
-        <div class="report-item">
-          <span style="color: var(--text-muted);"><i class="fas fa-compass mr-1"></i>Peta Potensi</span>
-          <span>${potensi ? '<span class="text-emerald-400"><i class="fas fa-check-circle"></i> Sudah</span>' : '<span class="text-red-400"><i class="fas fa-times-circle"></i> Belum</span>'}</span>
+        
+        <div class="grid grid-cols-2 gap-2 mt-2">
+          <div class="bg-slate-800/30 p-2 rounded-lg text-center">
+            <div class="text-lg font-bold text-yellow-400">${totalBaik}</div>
+            <div class="text-xs text-slate-400">Perbuatan Baik</div>
+          </div>
+          <div class="bg-slate-800/30 p-2 rounded-lg text-center">
+            <div class="text-lg font-bold text-blue-400">${jurnalList.length}</div>
+            <div class="text-xs text-slate-400">Jurnal</div>
+          </div>
+          <div class="bg-slate-800/30 p-2 rounded-lg text-center">
+            <div class="text-lg font-bold text-purple-400">${curhatList.length}</div>
+            <div class="text-xs text-slate-400">Curhat</div>
+          </div>
+          <div class="bg-slate-800/30 p-2 rounded-lg text-center">
+            <div class="text-lg font-bold text-emerald-400">${totalReplies}</div>
+            <div class="text-xs text-slate-400">Balasan Curhat</div>
+          </div>
         </div>
-        <div class="report-item">
-          <span style="color: var(--text-muted);"><i class="fas fa-star mr-1"></i>Perbuatan Baik</span>
-          <span style="color: #fde047;">${totalBaik} kali</span>
-        </div>
-        <div class="report-item">
-          <span style="color: var(--text-muted);"><i class="fas fa-book mr-1"></i>Jurnal</span>
-          <span style="color: var(--blue-cyan);">${jurnalList.length} kali</span>
-        </div>
-        <div class="report-item">
-          <span style="color: var(--text-muted);"><i class="fas fa-comment mr-1"></i>Curhat</span>
-          <span style="color: var(--purple-bright);">${curhatList.length} kali</span>
-        </div>
+        
+        ${potensi ? `
+          <div class="mt-2 text-xs text-slate-400">
+            <i class="fas fa-compass mr-1 icon-purple"></i> Potensi: ${potensi.minat} · ${potensi.gaya_belajar}
+          </div>
+        ` : ''}
+        
+        ${recentActivities.length > 0 ? `
+          <div class="mt-2">
+            <div class="text-xs text-slate-400 font-medium"><i class="fas fa-bolt mr-1 icon-yellow"></i> Aktivitas Terbaru:</div>
+            ${recentActivities.map(function(a) {
+              let icon = '📌';
+              let text = '';
+              if (a.type === 'perbuatan') {
+                icon = '⭐';
+                text = a.data.action;
+              } else if (a.type === 'jurnal') {
+                icon = '📖';
+                text = a.data.cerita;
+              } else if (a.type === 'curhat') {
+                icon = '💬';
+                text = a.data.cerita;
+              }
+              return '<div class="text-xs text-slate-400 mt-1">' + icon + ' ' + text.substring(0, 40) + (text.length > 40 ? '...' : '') + '</div>';
+            }).join('')}
+          </div>
+        ` : ''}
       </div>
     `;
   }).join('');
@@ -1987,22 +2208,27 @@ function exportLaporan() {
   if (!currentWali) return;
   
   const students = store.getStudents(currentWali.id);
-  let csv = 'Nama,NIS,Kelas,Peta Potensi,Perbuatan Baik,Jurnal,Curhat\n';
+  let csv = 'Nama,NIS,Kelas,Peta Potensi,Perbuatan Baik,Jurnal,Curhat,Balasan Curhat\n';
   
-  students.forEach(s => {
+  students.forEach(function(s) {
     const potensi = store.getPotensi(s.id);
-    csv += `"${s.name}","${s.nis}","${s.class}","${potensi ? 'Sudah' : 'Belum'}",${store.countPerbuatanBaik(s.id)},${store.getJurnal(s.id).length},${store.getCurhat(s.id).length}\n`;
+    const totalBaik = store.countPerbuatanBaik(s.id);
+    const jurnalList = store.getJurnal(s.id);
+    const curhatList = store.getCurhat(s.id);
+    const totalReplies = curhatList.reduce(function(sum, c) { return sum + store.getCurhatReplies(c.id).length; }, 0);
+    
+    csv += '"' + s.name + '","' + s.nis + '","' + s.class + '","' + (potensi ? 'Sudah' : 'Belum') + '",' + totalBaik + ',' + jurnalList.length + ',' + curhatList.length + ',' + totalReplies + '\n';
   });
   
   const blob = new Blob([csv], { type: 'text/csv' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = 'laporan_siswa_' + new Date().toISOString().split('T')[0] + '.csv';
+  a.download = 'laporan_lengkap_siswa_' + new Date().toISOString().split('T')[0] + '.csv';
   a.click();
   URL.revokeObjectURL(url);
   
-  alert('✅ Laporan berhasil diexport!');
+  alert('✅ Laporan lengkap berhasil diexport!');
 }
 
 // ============================================================
@@ -2034,6 +2260,7 @@ function showStudentDetail(id) {
   const totalBaik = store.countPerbuatanBaik(id);
   const jurnalList = store.getJurnal(id);
   const curhatList = store.getCurhat(id);
+  const totalReplies = curhatList.reduce(function(sum, c) { return sum + store.getCurhatReplies(c.id).length; }, 0);
   
   document.getElementById('dTotalBaik').textContent = totalBaik;
   document.getElementById('dTotalJurnal').textContent = jurnalList.length;
@@ -2041,7 +2268,7 @@ function showStudentDetail(id) {
   
   const jurnalTerakhir = jurnalList.length > 0 ? jurnalList[jurnalList.length - 1] : null;
   document.getElementById('dJurnalTerakhir').textContent = jurnalTerakhir ? 
-    `${jurnalTerakhir.emoji || '📖'} ${jurnalTerakhir.cerita}` : 
+    jurnalTerakhir.emoji + ' ' + jurnalTerakhir.cerita : 
     'Belum ada jurnal';
   
   const perbuatanTerakhir = store.getPerbuatanTerakhir(id);
@@ -2053,14 +2280,23 @@ function showStudentDetail(id) {
   if (curhatList.length === 0) {
     curhatContainer.innerHTML = '<div class="text-center text-slate-400">Belum ada curhat</div>';
   } else {
-    curhatContainer.innerHTML = curhatList.map(c => `
-      <div class="p-2 rounded-lg bg-slate-800/30 border border-slate-700/30">
-        <div class="text-xs text-slate-400">${new Date(c.created_at).toLocaleString('id-ID')}</div>
-        <div class="text-sm mt-1">${c.cerita}</div>
-        ${c.balasan ? `<div class="text-xs mt-1 text-emerald-400"><i class="fas fa-reply mr-1"></i>${c.balasan}</div>` : ''}
-        <div class="text-xs mt-1 ${c.balasan ? 'text-emerald-400' : 'text-yellow-400'}">${c.balasan ? '✅ Dibalas' : '⏳ Menunggu'}</div>
-      </div>
-    `).join('');
+    curhatContainer.innerHTML = curhatList.map(function(c) {
+      const replies = store.getCurhatReplies(c.id);
+      return `
+        <div class="p-2 rounded-lg bg-slate-800/30 border border-slate-700/30">
+          <div class="text-xs text-slate-400">${new Date(c.created_at).toLocaleString('id-ID')}</div>
+          <div class="text-sm mt-1">${c.cerita}</div>
+          ${replies.length > 0 ? `
+            <div class="mt-1 text-xs text-emerald-400">
+              <i class="fas fa-reply mr-1"></i> ${replies.length} balasan
+            </div>
+            <div class="text-xs text-slate-400 mt-1">
+              Terakhir: ${replies[replies.length - 1].message.substring(0, 40)}${replies[replies.length - 1].message.length > 40 ? '...' : ''}
+            </div>
+          ` : '<div class="text-xs text-yellow-400">⏳ Menunggu balasan</div>'}
+        </div>
+      `;
+    }).join('');
   }
   
   switchDetailTab('profil');
@@ -2068,7 +2304,7 @@ function showStudentDetail(id) {
 }
 
 function switchDetailTab(tab) {
-  ['Profil', 'Potensi', 'Aktivitas', 'Curhat'].forEach(t => {
+  ['Profil', 'Potensi', 'Aktivitas', 'Curhat'].forEach(function(t) {
     const content = document.getElementById('detail' + t);
     const btn = document.getElementById('detailTab' + t);
     const isActive = t.toLowerCase() === tab;
@@ -2079,7 +2315,7 @@ function switchDetailTab(tab) {
 }
 
 // ============================================================
-// TAMBAH SISWA (WALI)
+// TAMBAH SISWA
 // ============================================================
 function showTambahSiswa() {
   document.getElementById('siswaNIS').value = '';
@@ -2135,7 +2371,7 @@ function deleteStudentConfirm(id) {
   const student = store.getStudent(id);
   if (!student) { alert('❌ Siswa tidak ditemukan'); return; }
   
-  if (confirm(`Yakin ingin menghapus siswa "${student.name}" (NIS: ${student.nis})?\n\nData curhat, jurnal, dan perbuatan baik juga akan terhapus.`)) {
+  if (confirm('Yakin ingin menghapus siswa "' + student.name + '" (NIS: ' + student.nis + ')?\n\nData curhat, jurnal, dan perbuatan baik juga akan terhapus.')) {
     const result = store.deleteStudent(id);
     if (result.success) {
       alert('✅ Siswa berhasil dihapus!');
@@ -2153,11 +2389,11 @@ function deleteStudentConfirm(id) {
 }
 
 // ============================================================
-// BALAS CURHAT
+// BALAS CURHAT (WALI)
 // ============================================================
 function openBalasCurhat(id) {
   selectedCurhatId = id;
-  const curhat = store.data.curhat.find(x => x.id === id);
+  const curhat = store.data.curhat.find(function(x) { return x.id === id; });
   if (!curhat) return;
   
   const student = store.getStudent(curhat.student_id);
@@ -2168,6 +2404,27 @@ function openBalasCurhat(id) {
     <div class="mt-2 text-slate-300">${curhat.cerita}</div>
     <div class="text-xs mt-1 text-slate-400"><i class="fas fa-clock mr-1"></i>${new Date(curhat.created_at).toLocaleString('id-ID')}</div>
   `;
+  
+  // Tampilkan riwayat balasan
+  const replies = store.getCurhatReplies(id);
+  const repliesContainer = document.getElementById('curhatDetailReplies');
+  if (replies.length === 0) {
+    repliesContainer.innerHTML = '<div class="text-xs text-slate-400 text-center">Belum ada balasan</div>';
+  } else {
+    repliesContainer.innerHTML = replies.map(function(r) {
+      const isWali = r.is_wali;
+      const senderName = isWali ? '👨‍🏫 ' + r.sender_name : '👤 ' + r.sender_name;
+      const time = new Date(r.created_at).toLocaleString('id-ID');
+      return `
+        <div class="p-2 rounded-lg ${isWali ? 'bg-purple-500/10 border border-purple-500/20' : 'bg-blue-500/10 border border-blue-500/20'}">
+          <div class="text-xs font-medium ${isWali ? 'text-purple-400' : 'text-blue-400'}">${senderName}</div>
+          <div class="text-sm">${r.message}</div>
+          <div class="text-xs text-slate-400">${time}</div>
+        </div>
+      `;
+    }).join('');
+  }
+  
   document.getElementById('balasanText').value = '';
   document.getElementById('balasCurhatModal').checked = true;
 }
@@ -2176,30 +2433,38 @@ function kirimBalasan() {
   const balasan = document.getElementById('balasanText').value.trim();
   if (!balasan) { alert('❌ Mohon tulis balasan'); return; }
   
-  const result = store.replyCurhat(selectedCurhatId, balasan);
+  const curhat = store.data.curhat.find(function(x) { return x.id === selectedCurhatId; });
+  if (!curhat) { alert('❌ Curhat tidak ditemukan'); return; }
+  
+  // Tambahkan balasan sebagai reply
+  const result = store.addCurhatReply(
+    selectedCurhatId,
+    curhat.student_id,
+    'wali',
+    currentWali.name,
+    balasan,
+    true
+  );
+  
   if (result.success) {
     alert('✅ Balasan terkirim!');
     document.getElementById('balasCurhatModal').checked = false;
-    if (currentRole === 'wali') {
-      renderCurhatInbox();
-      renderWaliDashboard();
-    } else if (currentRole === 'admin') {
-      renderAdminDashboard();
-    }
+    renderCurhatInbox();
+    renderWaliDashboard();
   } else {
     alert('❌ ' + result.error);
   }
 }
 
 // ============================================================
-// ADMIN DASHBOARD FUNCTIONS (BARU)
+// ADMIN DASHBOARD FUNCTIONS
 // ============================================================
 function renderAdminDashboard() {
   if (!currentUser || currentUser.role !== 'super_admin') return;
   
   const allStudents = store.getStudents();
   const allUsers = store.getUsers();
-  const waliUsers = allUsers.filter(u => u.role === 'wali');
+  const waliUsers = allUsers.filter(function(u) { return u.role === 'wali'; });
   const allCurhat = store.getCurhat();
   
   document.getElementById('totalWali').textContent = waliUsers.length;
@@ -2212,7 +2477,7 @@ function renderAdminDashboard() {
 }
 
 function switchAdminTab(tab) {
-  ['Wali', 'Siswa', 'Statistik'].forEach(t => {
+  ['Wali', 'Siswa', 'Statistik'].forEach(function(t) {
     const btn = document.getElementById('adminTab' + t);
     const content = document.getElementById('adminTab' + t + 'Content');
     const isActive = t.toLowerCase() === tab;
@@ -2239,7 +2504,7 @@ function renderWaliList() {
     return;
   }
   
-  list.innerHTML = waliUsers.map(w => {
+  list.innerHTML = waliUsers.map(function(w) {
     const siswaCount = store.getStudents(w.id).length;
     const curhatCount = store.getCurhatByWali(w.id).length;
     const unreadCount = store.getUnreadCurhat(w.id).length;
@@ -2253,7 +2518,8 @@ function renderWaliList() {
           <div>
             <div class="font-semibold text-sm">${w.name}</div>
             <div class="text-xs" style="color: var(--text-muted);">
-              <i class="fas fa-envelope mr-1"></i>${w.email}
+              <i class="fas fa-envelope mr-1"></i>${w.email} · 
+              <i class="fas fa-layer-group mr-1"></i>${w.class}
             </div>
           </div>
         </div>
@@ -2261,7 +2527,7 @@ function renderWaliList() {
           <span class="text-xs" style="color: var(--text-muted);">
             <i class="fas fa-users mr-1"></i>${siswaCount}
           </span>
-          ${unreadCount > 0 ? `<span class="status-badge status-yellow">${unreadCount} curhat</span>` : ''}
+          ${unreadCount > 0 ? '<span class="status-badge status-yellow">' + unreadCount + ' curhat</span>' : ''}
           <button onclick="event.stopPropagation(); deleteWaliConfirm('${w.id}')" 
                   class="btn btn-sm btn-ghost text-red-400 hover:text-red-300"
                   style="padding:4px 8px;">
@@ -2287,10 +2553,11 @@ function renderAllStudentsList() {
     return;
   }
   
-  list.innerHTML = allStudents.map(s => {
+  list.innerHTML = allStudents.map(function(s) {
     const wali = store.getUser(s.wali_id);
     const curhatList = store.getCurhat(s.id);
-    const unread = curhatList.filter(c => !c.is_read).length;
+    const unread = curhatList.filter(function(c) { return !c.is_read; }).length;
+    const replies = curhatList.reduce(function(sum, c) { return sum + store.getCurhatReplies(c.id).length; }, 0);
     
     return `
       <div class="student-card card-glass p-3 flex items-center justify-between fade-in">
@@ -2303,12 +2570,13 @@ function renderAllStudentsList() {
             <div class="text-xs" style="color: var(--text-muted);">
               <i class="fas fa-hashtag mr-1"></i>${s.nis} · 
               <i class="fas fa-layer-group ml-1 mr-1"></i>${s.class}
-              ${wali ? `· <i class="fas fa-chalkboard-teacher ml-1 mr-1"></i>${wali.name}` : ''}
+              ${wali ? '· <i class="fas fa-chalkboard-teacher ml-1 mr-1"></i>' + wali.name : ''}
             </div>
           </div>
         </div>
         <div class="flex items-center gap-2">
-          ${unread > 0 ? `<span class="status-badge status-yellow">${unread}</span>` : ''}
+          ${unread > 0 ? '<span class="status-badge status-yellow">' + unread + '</span>' : ''}
+          ${replies > 0 ? '<span class="text-xs text-emerald-400"><i class="fas fa-reply mr-1"></i>' + replies + '</span>' : ''}
           <button onclick="event.stopPropagation(); deleteStudentConfirm('${s.id}')" 
                   class="btn btn-sm btn-ghost text-red-400 hover:text-red-300"
                   style="padding:4px 8px;">
@@ -2326,16 +2594,16 @@ function renderStatistik() {
   const allCurhat = store.getCurhat();
   const allJurnal = store.data.jurnal;
   const allPerbuatan = store.data.perbuatanBaik;
+  const allReplies = store.data.curhatReplies;
   
-  // Statistik per kelas
   const classStats = {};
-  allStudents.forEach(s => {
+  allStudents.forEach(function(s) {
     if (!classStats[s.class]) classStats[s.class] = 0;
     classStats[s.class]++;
   });
   
   const curhatStats = {};
-  allCurhat.forEach(c => {
+  allCurhat.forEach(function(c) {
     if (!curhatStats[c.kategori]) curhatStats[c.kategori] = 0;
     curhatStats[c.kategori]++;
   });
@@ -2361,9 +2629,13 @@ function renderStatistik() {
           <div class="text-xl font-bold text-blue-400">${allJurnal.length}</div>
           <div class="text-xs text-slate-400">Total Jurnal</div>
         </div>
-        <div class="bg-slate-800/30 p-3 rounded-lg text-center col-span-2">
+        <div class="bg-slate-800/30 p-3 rounded-lg text-center">
           <div class="text-xl font-bold text-yellow-400">${allPerbuatan.length}</div>
           <div class="text-xs text-slate-400">Total Perbuatan Baik</div>
+        </div>
+        <div class="bg-slate-800/30 p-3 rounded-lg text-center">
+          <div class="text-xl font-bold text-purple-400">${allReplies.length}</div>
+          <div class="text-xs text-slate-400">Total Balasan Curhat</div>
         </div>
       </div>
     </div>
@@ -2373,12 +2645,12 @@ function renderStatistik() {
       <div class="space-y-2 mt-3">
         ${Object.keys(classStats).length === 0 ? 
           '<div class="text-slate-400 text-sm">Belum ada data</div>' :
-          Object.keys(classStats).sort().map(k => `
-            <div class="flex justify-between items-center bg-slate-800/20 p-2 rounded-lg">
-              <span class="text-sm">${k}</span>
-              <span class="text-sm font-bold text-blue-400">${classStats[k]} siswa</span>
-            </div>
-          `).join('')
+          Object.keys(classStats).sort().map(function(k) {
+            return '<div class="flex justify-between items-center bg-slate-800/20 p-2 rounded-lg">' +
+              '<span class="text-sm">' + k + '</span>' +
+              '<span class="text-sm font-bold text-blue-400">' + classStats[k] + ' siswa</span>' +
+            '</div>';
+          }).join('')
         }
       </div>
     </div>
@@ -2388,12 +2660,12 @@ function renderStatistik() {
       <div class="space-y-2 mt-3">
         ${Object.keys(curhatStats).length === 0 ? 
           '<div class="text-slate-400 text-sm">Belum ada curhat</div>' :
-          Object.keys(curhatStats).map(k => `
-            <div class="flex justify-between items-center bg-slate-800/20 p-2 rounded-lg">
-              <span class="text-sm">${k}</span>
-              <span class="text-sm font-bold text-purple-400">${curhatStats[k]} curhat</span>
-            </div>
-          `).join('')
+          Object.keys(curhatStats).map(function(k) {
+            return '<div class="flex justify-between items-center bg-slate-800/20 p-2 rounded-lg">' +
+              '<span class="text-sm">' + k + '</span>' +
+              '<span class="text-sm font-bold text-purple-400">' + curhatStats[k] + ' curhat</span>' +
+            '</div>';
+          }).join('')
         }
       </div>
     </div>
@@ -2421,7 +2693,6 @@ function tambahWali() {
   if (!email) { alert('❌ Mohon isi Email'); document.getElementById('waliEmailBaru').focus(); return; }
   if (!kelas) { alert('❌ Mohon isi Kelas'); document.getElementById('waliKelas').focus(); return; }
   
-  // Validasi email format
   if (!email.includes('@')) {
     alert('❌ Email tidak valid');
     document.getElementById('waliEmailBaru').focus();
@@ -2437,7 +2708,7 @@ function tambahWali() {
   });
   
   if (result.success) {
-    alert(`✅ Wali Kelas "${name}" berhasil ditambahkan!\n\nEmail: ${email}\nPassword: ${password}`);
+    alert('✅ Wali Kelas "' + name + '" berhasil ditambahkan!\n\nEmail: ' + email + '\nPassword: ' + password);
     document.getElementById('tambahWaliModal').checked = false;
     renderAdminDashboard();
     document.getElementById('waliNama').value = '';
@@ -2448,9 +2719,6 @@ function tambahWali() {
   }
 }
 
-// ============================================================
-// DELETE WALI (ADMIN)
-// ============================================================
 function deleteWaliConfirm(id) {
   if (!id) { alert('❌ Error: ID wali tidak valid'); return; }
   const wali = store.getUser(id);
@@ -2458,11 +2726,11 @@ function deleteWaliConfirm(id) {
   
   const siswaCount = store.getStudents(id).length;
   if (siswaCount > 0) {
-    alert(`❌ Tidak bisa menghapus "${wali.name}" karena masih memiliki ${siswaCount} siswa.\n\nHarap pindahkan atau hapus siswa terlebih dahulu.`);
+    alert('❌ Tidak bisa menghapus "' + wali.name + '" karena masih memiliki ' + siswaCount + ' siswa.\n\nHarap pindahkan atau hapus siswa terlebih dahulu.');
     return;
   }
   
-  if (confirm(`Yakin ingin menghapus Wali Kelas "${wali.name}" (${wali.email})?`)) {
+  if (confirm('Yakin ingin menghapus Wali Kelas "' + wali.name + '" (' + wali.email + ')?')) {
     const result = store.deleteUser(id);
     if (result.success) {
       alert('✅ Wali berhasil dihapus!');
@@ -2487,18 +2755,6 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ============================================================
-// DEBUG FUNCTIONS
-// ============================================================
-function debugWali() {
-  console.log('===== DEBUG WALI =====');
-  console.log('currentWali:', currentWali);
-  console.log('currentRole:', currentRole);
-  console.log('All Students:', store.getStudents());
-  console.log('All Users:', store.getUsers());
-  console.log('======================');
-}
-
-// ============================================================
 // INITIALIZATION
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
@@ -2508,12 +2764,11 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('adminDashboard').classList.add('hidden');
   setLoginRole('student');
   
-  console.log('🏫 Wali Digital v4.0 - With Admin Dashboard');
+  console.log('🏫 Wali Digital v5.1 - Fixed Curhat Replies');
   console.log('📌 Default Login:');
   console.log('  Siswa: Nama & Kelas sesuai data, PIN: 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
-  console.log('📊 Admin dapat mengelola Wali Kelas');
 });
 </script>
 </body>
