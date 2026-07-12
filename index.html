@@ -800,7 +800,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- MODAL FORM LAPORAN KONDISI (DIPERBAIKI) -->
+<!-- MODAL FORM LAPORAN KONDISI -->
 <!-- ============================================================ -->
 <input type="checkbox" id="formKondisiModal" class="modal-toggle" />
 <div class="modal">
@@ -851,7 +851,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- MODAL LAINNYA (PERBUATAN BAIK, CURHAT, JURNAL, RIWAYAT, TAMBAH SISWA, TAMBAH WALI, BALAS CURHAT) -->
+<!-- MODAL LAINNYA -->
 <!-- ============================================================ -->
 <!-- MODAL PERBUATAN BAIK -->
 <input type="checkbox" id="perbuatanBaikModal" class="modal-toggle" />
@@ -1028,7 +1028,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- JAVASCRIPT (LENGKAP) -->
+<!-- JAVASCRIPT -->
 <!-- ============================================================ -->
 <script>
 // ============================================================
@@ -1352,23 +1352,60 @@ class DataStore {
   
   getLaporanKondisiTerakhir(studentId) {
     const list = this.getLaporanKondisi(studentId);
-    return list.length > 0 ? list[list.length - 1] : null;
+    if (list.length === 0) return null;
+    // Urutkan berdasarkan updated_at atau created_at
+    const sorted = list.sort((a, b) => {
+      const dateA = new Date(a.updated_at || a.created_at || 0);
+      const dateB = new Date(b.updated_at || b.created_at || 0);
+      return dateB - dateA;
+    });
+    return sorted[0];
   }
   
   saveLaporanKondisi(laporan) {
-    const existing = this.getLaporanKondisi(laporan.student_id);
-    const existingSamePeriod = existing.find(l => l.periode === laporan.periode);
-    if (existingSamePeriod) {
-      Object.assign(existingSamePeriod, laporan);
-      existingSamePeriod.updated_at = new Date().toISOString();
-    } else {
-      laporan.id = 'lk_' + Date.now();
-      laporan.updated_at = new Date().toISOString();
-      this.data.laporanKondisi.push(laporan);
+    try {
+      // Cek apakah sudah ada dengan periode yang sama
+      const existing = this.data.laporanKondisi.filter(l => l.student_id === laporan.student_id);
+      const existingSamePeriod = existing.find(l => l.periode === laporan.periode);
+      
+      if (existingSamePeriod) {
+        // Update existing
+        Object.assign(existingSamePeriod, laporan);
+        existingSamePeriod.updated_at = new Date().toISOString();
+      } else {
+        // Insert new
+        laporan.id = 'lk_' + Date.now();
+        laporan.created_at = new Date().toISOString();
+        laporan.updated_at = new Date().toISOString();
+        this.data.laporanKondisi.push(laporan);
+      }
+      
+      this.saveToStorage();
+      
+      // Sync ke API
+      if (this.isOnline && CONFIG.USE_API) {
+        const params = new URLSearchParams({
+          action: 'saveLaporanKondisi',
+          studentId: laporan.student_id,
+          nilaiAkademik: laporan.nilai_akademik || '',
+          sikap: laporan.sikap || 'Baik',
+          catatanKhusus: laporan.catatan_khusus || '-',
+          periode: laporan.periode || 'Ganjil 2025/2026',
+          callback: 'callback'
+        });
+        
+        fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
+          .catch(err => {
+            console.warn('Sync laporan kondisi failed:', err);
+            this.pendingSync.push({ action: 'saveLaporanKondisi', data: laporan });
+          });
+      }
+      
+      return { success: true };
+    } catch (error) {
+      console.error('Error saving laporan kondisi:', error);
+      return { success: false, error: error.message };
     }
-    this.saveToStorage();
-    this.syncToAPI('saveLaporanKondisi', laporan);
-    return { success: true };
   }
   
   // ============ USERS ============
@@ -1423,7 +1460,7 @@ class DataStore {
       this.pendingSync.push({ action, data });
       return;
     }
-    const params = new URLSearchParams({ action, ...data });
+    const params = new URLSearchParams({ action, ...data, callback: 'callback' });
     fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
       .catch(err => {
         console.warn('Sync failed:', err);
@@ -2344,7 +2381,7 @@ function exportLaporan() {
 }
 
 // ============================================================
-// STUDENT DETAIL FUNCTIONS (DIPERBAIKI)
+// STUDENT DETAIL FUNCTIONS
 // ============================================================
 function showStudentDetail(id) {
   detailStudentId = id;
@@ -2443,14 +2480,13 @@ function switchDetailTab(tab) {
 }
 
 // ============================================================
-// FORM LAPORAN KONDISI (DIPERBAIKI)
+// FORM LAPORAN KONDISI
 // ============================================================
 function showFormKondisi() {
   if (!detailStudentId) {
     alert('❌ Tidak ada siswa yang dipilih');
     return;
   }
-  // Buka modal dengan cara meng-check checkbox
   document.getElementById('formKondisiModal').checked = true;
   console.log('✅ Modal form kondisi dibuka untuk siswa:', detailStudentId);
 }
@@ -2481,6 +2517,7 @@ function simpanKondisi() {
   };
   
   const result = store.saveLaporanKondisi(laporan);
+  
   if (result.success) {
     alert('✅ Laporan kondisi berhasil disimpan!');
     document.getElementById('formKondisiModal').checked = false;
