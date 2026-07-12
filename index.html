@@ -399,6 +399,27 @@
     }
     .message-sender-siswa { color: var(--blue-cyan); }
     .message-sender-wali { color: var(--purple-bright); }
+
+    /* Tambahan untuk laporan kondisi */
+    .laporan-kondisi-item {
+      background: rgba(0, 25, 90, 0.4);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 8px;
+      border: 1px solid rgba(139, 92, 246, 0.1);
+    }
+    .laporan-kondisi-item .label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .laporan-kondisi-item .value {
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-top: 2px;
+    }
   </style>
 </head>
 <body>
@@ -485,7 +506,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- DASHBOARD SISWA (SAMA SEPERTI SEBELUMNYA) -->
+<!-- DASHBOARD SISWA -->
 <!-- ============================================================ -->
 <div id="studentDashboard" class="p-4 max-w-lg mx-auto hidden" style="padding-bottom: 80px;">
   <div class="flex justify-between items-center fade-in">
@@ -704,10 +725,8 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- MODAL-MODAL -->
-<!-- ============================================================ -->
-
 <!-- MODAL DETAIL SISWA -->
+<!-- ============================================================ -->
 <input type="checkbox" id="detailSiswaModal" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box max-w-md">
@@ -719,6 +738,7 @@
       <button class="px-3 py-1 text-xs font-medium" style="color: var(--text-muted);" onclick="switchDetailTab('potensi')" id="detailTabPotensi"><i class="fas fa-compass mr-1"></i>Potensi</button>
       <button class="px-3 py-1 text-xs font-medium" style="color: var(--text-muted);" onclick="switchDetailTab('aktivitas')" id="detailTabAktivitas"><i class="fas fa-bolt mr-1"></i>Aktivitas</button>
       <button class="px-3 py-1 text-xs font-medium" style="color: var(--text-muted);" onclick="switchDetailTab('curhat')" id="detailTabCurhat"><i class="fas fa-comment-dots mr-1"></i>Curhat</button>
+      <button class="px-3 py-1 text-xs font-medium" style="color: var(--text-muted);" onclick="switchDetailTab('kondisi')" id="detailTabKondisi"><i class="fas fa-clipboard-list mr-1"></i>Kondisi</button>
     </div>
     <div id="detailProfil" class="space-y-2 text-sm">
       <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-hashtag mr-1"></i>NIS</span><span id="dNIS" class="font-medium">-</span></div>
@@ -750,12 +770,89 @@
     <div id="detailCurhat" class="hidden space-y-2 text-sm max-h-60 overflow-y-auto">
       <div id="dCurhatList" class="space-y-2"><div class="text-center" style="color: var(--text-muted);">Belum ada curhat</div></div>
     </div>
+    <div id="detailKondisi" class="hidden space-y-2 text-sm">
+      <div class="laporan-kondisi-item">
+        <div class="label"><i class="fas fa-graduation-cap mr-1"></i> Nilai Akademik</div>
+        <div class="value" id="dNilaiAkademik">-</div>
+      </div>
+      <div class="laporan-kondisi-item">
+        <div class="label"><i class="fas fa-hand-peace mr-1"></i> Sikap/Karakter</div>
+        <div class="value" id="dSikap">-</div>
+      </div>
+      <div class="laporan-kondisi-item">
+        <div class="label"><i class="fas fa-pen mr-1"></i> Catatan Khusus</div>
+        <div class="value" id="dCatatanKhusus">-</div>
+      </div>
+      <div class="laporan-kondisi-item">
+        <div class="label"><i class="fas fa-calendar-alt mr-1"></i> Periode</div>
+        <div class="value" id="dPeriode">-</div>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <button onclick="showFormKondisi()" class="btn btn-primary-custom btn-sm flex-1">
+          <i class="fas fa-edit mr-1"></i> Edit Laporan
+        </button>
+      </div>
+    </div>
     <div class="modal-action">
       <label for="detailSiswaModal" class="btn btn-ghost btn-sm">Tutup</label>
     </div>
   </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- MODAL FORM LAPORAN KONDISI (DIPERBAIKI) -->
+<!-- ============================================================ -->
+<input type="checkbox" id="formKondisiModal" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box">
+    <label for="formKondisiModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <h3 class="font-bold text-lg"><i class="fas fa-clipboard-list icon-green mr-2"></i> Laporan Kondisi Siswa</h3>
+    <div class="space-y-3 mt-4">
+      <div>
+        <label class="block text-sm font-medium" style="color: var(--text-secondary);">
+          <i class="fas fa-user mr-1"></i> Nama Siswa
+        </label>
+        <input id="formKondisiNama" class="input input-bordered w-full" disabled />
+      </div>
+      <div>
+        <label class="block text-sm font-medium" style="color: var(--text-secondary);">
+          <i class="fas fa-graduation-cap mr-1"></i> Nilai Akademik
+        </label>
+        <input id="formKondisiNilai" type="number" class="input input-bordered w-full" placeholder="Contoh: 85.5" step="0.01" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium" style="color: var(--text-secondary);">
+          <i class="fas fa-hand-peace mr-1"></i> Sikap/Karakter
+        </label>
+        <select id="formKondisiSikap" class="select select-bordered w-full">
+          <option value="Sangat Baik">Sangat Baik</option>
+          <option value="Baik" selected>Baik</option>
+          <option value="Cukup">Cukup</option>
+          <option value="Kurang">Kurang</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium" style="color: var(--text-secondary);">
+          <i class="fas fa-pen mr-1"></i> Catatan Khusus
+        </label>
+        <textarea id="formKondisiCatatan" class="textarea textarea-bordered w-full" rows="2" placeholder="Catatan khusus tentang siswa..."></textarea>
+      </div>
+      <div>
+        <label class="block text-sm font-medium" style="color: var(--text-secondary);">
+          <i class="fas fa-calendar-alt mr-1"></i> Periode
+        </label>
+        <input id="formKondisiPeriode" class="input input-bordered w-full" placeholder="Contoh: Ganjil 2025/2026" value="Ganjil 2025/2026" />
+      </div>
+      <button onclick="simpanKondisi()" class="btn btn-primary-custom w-full mt-2">
+        <i class="fas fa-save mr-2"></i> Simpan Laporan
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL LAINNYA (PERBUATAN BAIK, CURHAT, JURNAL, RIWAYAT, TAMBAH SISWA, TAMBAH WALI, BALAS CURHAT) -->
+<!-- ============================================================ -->
 <!-- MODAL PERBUATAN BAIK -->
 <input type="checkbox" id="perbuatanBaikModal" class="modal-toggle" />
 <div class="modal">
@@ -773,9 +870,7 @@
   </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL CURHAT (DIPERBAIKI) -->
-<!-- ============================================================ -->
+<!-- MODAL CURHAT -->
 <input type="checkbox" id="curhatModal" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box relative max-w-md">
@@ -788,7 +883,6 @@
       <button id="curhatSubmit" class="btn btn-primary-custom btn-sm mt-2 w-full"><i class="fas fa-paper-plane mr-1"></i> Kirim Curhat</button>
     </div>
     <div id="curhatResult" class="font-semibold mt-2 hidden" style="color: #4ade80; text-shadow: 0 0 10px rgba(74,222,128,0.3);"><i class="fas fa-check-circle"></i> Terima kasih sudah curhat, sabar ya menunggu balasan dari Wali.</div>
-    <!-- Area untuk balasan berlapis -->
     <div id="curhatReplyArea" class="hidden mt-3">
       <div class="divider text-xs" style="color: var(--text-muted);">💬 Balas</div>
       <div id="curhatReplies" class="space-y-2 max-h-60 overflow-y-auto"></div>
@@ -825,9 +919,7 @@
   </div>
 </div>
 
-<!-- ============================================================ -->
-<!-- MODAL RIWAYAT CURHAT (DIPERBAIKI) -->
-<!-- ============================================================ -->
+<!-- MODAL RIWAYAT CURHAT -->
 <div id="riwayatPanel" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,30,0.5); backdrop-filter: blur(8px);" onclick="if(event.target===this) closeRiwayat()">
   <div class="rounded-3xl p-5 max-w-sm w-full max-h-[80vh] overflow-y-auto" style="background: rgba(0, 18, 70, 0.92); backdrop-filter: blur(24px); border: var(--border-glow); box-shadow: 0 0 70px rgba(139, 92, 246, 0.12), 0 25px 60px rgba(0, 0, 0, 0.3);">
     <div class="flex justify-between"><span class="font-bold"><i class="fas fa-history icon-red mr-2"></i>Riwayat Curhat</span><button onclick="closeRiwayat()" class="btn btn-sm btn-ghost">✕</button></div>
@@ -936,7 +1028,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- JAVASCRIPT -->
+<!-- JAVASCRIPT (LENGKAP) -->
 <!-- ============================================================ -->
 <script>
 // ============================================================
@@ -1002,7 +1094,7 @@ class DataStore {
         if (!p.curhat) p.curhat = [];
         if (!p.curhatReplies) p.curhatReplies = [];
         if (!p.jurnal) p.jurnal = [];
-        if (!p.laporan) p.laporan = [];
+        if (!p.laporanKondisi) p.laporanKondisi = [];
         if (!p.users) p.users = [];
         return p;
       }
@@ -1031,7 +1123,7 @@ class DataStore {
       jurnal: [
         { id: 'jrn_1', student_id: 'stu_1', emoji: '😊', cerita: 'Hari ini saya belajar matematika dengan semangat!', date: new Date().toISOString().split('T')[0], created_at: new Date().toISOString() }
       ],
-      laporan: [],
+      laporanKondisi: [],
       users: [
         { id: 'admin_1', email: 'admin@walidigital.com', password: 'd4Rm@app', role: 'super_admin', name: 'Admin Super', class: '-', created_at: new Date().toISOString() },
         { id: 'wali_1', email: 'wali@walidigital.com', password: 'd4Rm@app', role: 'wali', name: 'Wali Kelas 7A', class: '7A', created_at: new Date().toISOString() }
@@ -1104,7 +1196,7 @@ class DataStore {
     this.data.curhat = this.data.curhat.filter(c => c.student_id !== id);
     this.data.curhatReplies = this.data.curhatReplies.filter(r => r.student_id !== id);
     this.data.jurnal = this.data.jurnal.filter(j => j.student_id !== id);
-    this.data.laporan = this.data.laporan.filter(l => l.student_id !== id);
+    this.data.laporanKondisi = this.data.laporanKondisi.filter(l => l.student_id !== id);
     this.data.students.splice(index, 1);
     this.saveToStorage();
     this.syncToAPI('deleteStudent', { id });
@@ -1253,6 +1345,32 @@ class DataStore {
     return list.length > 0 ? list[list.length - 1] : null;
   }
   
+  // ============ LAPORAN KONDISI ============
+  getLaporanKondisi(studentId) {
+    return this.data.laporanKondisi.filter(l => l.student_id === studentId);
+  }
+  
+  getLaporanKondisiTerakhir(studentId) {
+    const list = this.getLaporanKondisi(studentId);
+    return list.length > 0 ? list[list.length - 1] : null;
+  }
+  
+  saveLaporanKondisi(laporan) {
+    const existing = this.getLaporanKondisi(laporan.student_id);
+    const existingSamePeriod = existing.find(l => l.periode === laporan.periode);
+    if (existingSamePeriod) {
+      Object.assign(existingSamePeriod, laporan);
+      existingSamePeriod.updated_at = new Date().toISOString();
+    } else {
+      laporan.id = 'lk_' + Date.now();
+      laporan.updated_at = new Date().toISOString();
+      this.data.laporanKondisi.push(laporan);
+    }
+    this.saveToStorage();
+    this.syncToAPI('saveLaporanKondisi', laporan);
+    return { success: true };
+  }
+  
   // ============ USERS ============
   getUsers(role = null) {
     if (role) {
@@ -1297,11 +1415,6 @@ class DataStore {
     this.saveToStorage();
     this.syncToAPI('deleteUser', { id });
     return { success: true };
-  }
-  
-  // ============ LAPORAN ============
-  getLaporan(studentId) {
-    return this.data.laporan.filter(l => l.student_id === studentId);
   }
   
   // ============ SYNC ============
@@ -1565,7 +1678,6 @@ function navigateTo(page) {
 function openModal(id) {
   document.getElementById(id).checked = true;
   if (id === 'curhatModal') {
-    // Reset curhat flow
     curhatStep = 0;
     curhatAnswers = {};
     currentCurhatId = null;
@@ -1656,7 +1768,7 @@ function catatPerbuatan(action) {
 }
 
 // ============================================================
-// CURHAT (DIPERBAIKI)
+// CURHAT
 // ============================================================
 function showCurhatQuestion() {
   const flow = document.getElementById('curhatFlow');
@@ -1729,7 +1841,6 @@ function submitCurhat() {
       alert('⚠️ Kami akan segera menghubungimu! Tetap tenang ya.');
     }
     
-    // Tampilkan area balasan setelah beberapa detik
     setTimeout(function() {
       document.getElementById('curhatResult').classList.add('hidden');
       document.getElementById('curhatReplyArea').classList.remove('hidden');
@@ -1764,12 +1875,10 @@ function renderCurhatReplies(curhatId) {
     `;
   }).join('');
   
-  // Scroll ke bawah
   container.scrollTop = container.scrollHeight;
 }
 
 function sendCurhatReply() {
-  // Cek apakah user sudah login
   if (!currentStudent && !currentWali) {
     alert('Silakan login terlebih dahulu');
     return;
@@ -1786,7 +1895,6 @@ function sendCurhatReply() {
   
   let curhatId = currentCurhatId;
   if (!curhatId) {
-    // Cari curhat terakhir siswa
     const curhats = store.getCurhat(currentStudent ? currentStudent.id : null);
     if (curhats.length > 0) {
       curhatId = curhats[curhats.length - 1].id;
@@ -1807,7 +1915,6 @@ function sendCurhatReply() {
     renderCurhatReplies(curhatId);
     document.getElementById('recentActivity').innerHTML = '💬 Balasan terkirim: "' + message.substring(0, 30) + '..."';
     
-    // Jika dari dashboard wali, refresh inbox
     if (isWali) {
       renderCurhatInbox();
     }
@@ -1873,7 +1980,7 @@ function renderMiniJurnal() {
 }
 
 // ============================================================
-// RIWAYAT CURHAT (DIPERBAIKI)
+// RIWAYAT CURHAT
 // ============================================================
 function loadRiwayat() {
   if (!currentStudent) return;
@@ -1924,14 +2031,12 @@ function openCurhatDetail(curhatId) {
   const curhat = store.data.curhat.find(function(c) { return c.id === curhatId; });
   if (!curhat) return;
   
-  // Reset modal curhat
   document.getElementById('curhatFlow').innerHTML = '';
   document.getElementById('curhatOptions').innerHTML = '';
   document.getElementById('curhatTextArea').classList.add('hidden');
   document.getElementById('curhatResult').classList.add('hidden');
   document.getElementById('curhatReplyArea').classList.remove('hidden');
   
-  // Tampilkan curhat awal
   const flow = document.getElementById('curhatFlow');
   flow.innerHTML = `
     <div class="bubble bubble-left">${curhat.cerita}</div>
@@ -2136,8 +2241,8 @@ function renderLaporanList() {
     const jurnalList = store.getJurnal(s.id);
     const curhatList = store.getCurhat(s.id);
     const totalReplies = curhatList.reduce(function(sum, c) { return sum + store.getCurhatReplies(c.id).length; }, 0);
+    const laporanKondisi = store.getLaporanKondisiTerakhir(s.id);
     
-    // Ringkasan aktivitas terbaru
     const allActivities = [];
     perbuatanList.forEach(function(p) { allActivities.push({ type: 'perbuatan', data: p, date: p.created_at }); });
     jurnalList.forEach(function(j) { allActivities.push({ type: 'jurnal', data: j, date: j.created_at }); });
@@ -2179,6 +2284,12 @@ function renderLaporanList() {
           </div>
         ` : ''}
         
+        ${laporanKondisi ? `
+          <div class="mt-2 text-xs text-slate-400">
+            <i class="fas fa-clipboard-list mr-1 icon-green"></i> Laporan Kondisi: ${laporanKondisi.sikap} · Nilai: ${laporanKondisi.nilai_akademik || '-'}
+          </div>
+        ` : ''}
+        
         ${recentActivities.length > 0 ? `
           <div class="mt-2">
             <div class="text-xs text-slate-400 font-medium"><i class="fas fa-bolt mr-1 icon-yellow"></i> Aktivitas Terbaru:</div>
@@ -2208,7 +2319,7 @@ function exportLaporan() {
   if (!currentWali) return;
   
   const students = store.getStudents(currentWali.id);
-  let csv = 'Nama,NIS,Kelas,Peta Potensi,Perbuatan Baik,Jurnal,Curhat,Balasan Curhat\n';
+  let csv = 'Nama,NIS,Kelas,Peta Potensi,Perbuatan Baik,Jurnal,Curhat,Balasan Curhat,Sikap,Nilai Akademik,Catatan Khusus,Periode\n';
   
   students.forEach(function(s) {
     const potensi = store.getPotensi(s.id);
@@ -2216,8 +2327,9 @@ function exportLaporan() {
     const jurnalList = store.getJurnal(s.id);
     const curhatList = store.getCurhat(s.id);
     const totalReplies = curhatList.reduce(function(sum, c) { return sum + store.getCurhatReplies(c.id).length; }, 0);
+    const laporan = store.getLaporanKondisiTerakhir(s.id);
     
-    csv += '"' + s.name + '","' + s.nis + '","' + s.class + '","' + (potensi ? 'Sudah' : 'Belum') + '",' + totalBaik + ',' + jurnalList.length + ',' + curhatList.length + ',' + totalReplies + '\n';
+    csv += '"' + s.name + '","' + s.nis + '","' + s.class + '","' + (potensi ? 'Sudah' : 'Belum') + '",' + totalBaik + ',' + jurnalList.length + ',' + curhatList.length + ',' + totalReplies + ',"' + (laporan?.sikap || '-') + '","' + (laporan?.nilai_akademik || '-') + '","' + (laporan?.catatan_khusus || '-') + '","' + (laporan?.periode || '-') + '"\n';
   });
   
   const blob = new Blob([csv], { type: 'text/csv' });
@@ -2232,7 +2344,7 @@ function exportLaporan() {
 }
 
 // ============================================================
-// STUDENT DETAIL FUNCTIONS
+// STUDENT DETAIL FUNCTIONS (DIPERBAIKI)
 // ============================================================
 function showStudentDetail(id) {
   detailStudentId = id;
@@ -2299,19 +2411,86 @@ function showStudentDetail(id) {
     }).join('');
   }
   
+  // ============ LAPORAN KONDISI ============
+  const laporan = store.getLaporanKondisiTerakhir(id);
+  document.getElementById('dNilaiAkademik').textContent = laporan?.nilai_akademik || '-';
+  document.getElementById('dSikap').textContent = laporan?.sikap || '-';
+  document.getElementById('dCatatanKhusus').textContent = laporan?.catatan_khusus || '-';
+  document.getElementById('dPeriode').textContent = laporan?.periode || '-';
+  
+  // Set form kondisi dengan data siswa
+  document.getElementById('formKondisiNama').value = student.name;
+  document.getElementById('formKondisiNilai').value = laporan?.nilai_akademik || '';
+  document.getElementById('formKondisiSikap').value = laporan?.sikap || 'Baik';
+  document.getElementById('formKondisiCatatan').value = laporan?.catatan_khusus || '';
+  document.getElementById('formKondisiPeriode').value = laporan?.periode || 'Ganjil 2025/2026';
+  
   switchDetailTab('profil');
   document.getElementById('detailSiswaModal').checked = true;
 }
 
 function switchDetailTab(tab) {
-  ['Profil', 'Potensi', 'Aktivitas', 'Curhat'].forEach(function(t) {
+  ['Profil', 'Potensi', 'Aktivitas', 'Curhat', 'Kondisi'].forEach(function(t) {
     const content = document.getElementById('detail' + t);
     const btn = document.getElementById('detailTab' + t);
     const isActive = t.toLowerCase() === tab;
-    content.classList.toggle('hidden', !isActive);
-    btn.className = 'px-3 py-1 text-xs font-medium' + (isActive ? ' tab-active' : '');
-    btn.style.color = isActive ? '' : 'var(--text-muted)';
+    if (content) content.classList.toggle('hidden', !isActive);
+    if (btn) {
+      btn.className = 'px-3 py-1 text-xs font-medium' + (isActive ? ' tab-active' : '');
+      btn.style.color = isActive ? '' : 'var(--text-muted)';
+    }
   });
+}
+
+// ============================================================
+// FORM LAPORAN KONDISI (DIPERBAIKI)
+// ============================================================
+function showFormKondisi() {
+  if (!detailStudentId) {
+    alert('❌ Tidak ada siswa yang dipilih');
+    return;
+  }
+  // Buka modal dengan cara meng-check checkbox
+  document.getElementById('formKondisiModal').checked = true;
+  console.log('✅ Modal form kondisi dibuka untuk siswa:', detailStudentId);
+}
+
+function simpanKondisi() {
+  const nilai = document.getElementById('formKondisiNilai').value;
+  const sikap = document.getElementById('formKondisiSikap').value;
+  const catatan = document.getElementById('formKondisiCatatan').value.trim();
+  const periode = document.getElementById('formKondisiPeriode').value.trim();
+  
+  if (!periode) {
+    alert('❌ Mohon isi periode');
+    document.getElementById('formKondisiPeriode').focus();
+    return;
+  }
+  
+  if (!detailStudentId) {
+    alert('❌ Error: Tidak ada siswa yang dipilih');
+    return;
+  }
+  
+  const laporan = {
+    student_id: detailStudentId,
+    nilai_akademik: nilai ? parseFloat(nilai) : null,
+    sikap: sikap,
+    catatan_khusus: catatan || '-',
+    periode: periode
+  };
+  
+  const result = store.saveLaporanKondisi(laporan);
+  if (result.success) {
+    alert('✅ Laporan kondisi berhasil disimpan!');
+    document.getElementById('formKondisiModal').checked = false;
+    // Refresh detail
+    showStudentDetail(detailStudentId);
+    // Refresh laporan
+    renderLaporanList();
+  } else {
+    alert('❌ Gagal menyimpan laporan: ' + (result.error || 'Unknown error'));
+  }
 }
 
 // ============================================================
@@ -2405,7 +2584,6 @@ function openBalasCurhat(id) {
     <div class="text-xs mt-1 text-slate-400"><i class="fas fa-clock mr-1"></i>${new Date(curhat.created_at).toLocaleString('id-ID')}</div>
   `;
   
-  // Tampilkan riwayat balasan
   const replies = store.getCurhatReplies(id);
   const repliesContainer = document.getElementById('curhatDetailReplies');
   if (replies.length === 0) {
@@ -2436,7 +2614,6 @@ function kirimBalasan() {
   const curhat = store.data.curhat.find(function(x) { return x.id === selectedCurhatId; });
   if (!curhat) { alert('❌ Curhat tidak ditemukan'); return; }
   
-  // Tambahkan balasan sebagai reply
   const result = store.addCurhatReply(
     selectedCurhatId,
     curhat.student_id,
@@ -2595,6 +2772,7 @@ function renderStatistik() {
   const allJurnal = store.data.jurnal;
   const allPerbuatan = store.data.perbuatanBaik;
   const allReplies = store.data.curhatReplies;
+  const allLaporan = store.data.laporanKondisi;
   
   const classStats = {};
   allStudents.forEach(function(s) {
@@ -2636,6 +2814,10 @@ function renderStatistik() {
         <div class="bg-slate-800/30 p-3 rounded-lg text-center">
           <div class="text-xl font-bold text-purple-400">${allReplies.length}</div>
           <div class="text-xs text-slate-400">Total Balasan Curhat</div>
+        </div>
+        <div class="bg-slate-800/30 p-3 rounded-lg text-center col-span-2">
+          <div class="text-xl font-bold text-green-400">${allLaporan.length}</div>
+          <div class="text-xs text-slate-400">Total Laporan Kondisi</div>
         </div>
       </div>
     </div>
@@ -2764,11 +2946,15 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('adminDashboard').classList.add('hidden');
   setLoginRole('student');
   
-  console.log('🏫 Wali Digital v5.1 - Fixed Curhat Replies');
+  console.log('🏫 Wali Digital v6.0 - With Laporan Kondisi & Excel Export');
   console.log('📌 Default Login:');
   console.log('  Siswa: Nama & Kelas sesuai data, PIN: 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
+  console.log('📊 Fitur Baru:');
+  console.log('  - Laporan Kondisi Siswa (Nilai, Sikap, Catatan)');
+  console.log('  - Export Excel lengkap dengan semua data');
+  console.log('  - Tab Kondisi di Detail Siswa');
 });
 </script>
 </body>
