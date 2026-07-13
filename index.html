@@ -44,7 +44,6 @@
       background: #d4e8f5;
     }
 
-    /* ========== BACKGROUND IMAGE UNSplash ========== */
     body::before {
       content: '';
       position: fixed;
@@ -110,7 +109,6 @@
     #connectionStatus, #loginPage, #studentDashboard, #waliDashboard, #adminDashboard,
     .modal, .modal-box, #riwayatPanel { position: relative; z-index: 10; }
 
-    /* ========== GLASS CARDS ========== */
     .card-glass {
       background: var(--bg-card);
       backdrop-filter: blur(16px);
@@ -756,7 +754,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- DASHBOARD WALI KELAS -->
+<!-- DASHBOARD WALI KELAS (DENGAN TOMBOL SYNC) -->
 <!-- ============================================================ -->
 <div id="waliDashboard" class="p-4 max-w-lg mx-auto hidden" style="padding-bottom: 80px;">
   <div class="flex justify-between items-center fade-in">
@@ -767,7 +765,14 @@
       </h1>
       <p class="text-sm mt-1" style="color: var(--text-secondary);">Selamat datang, <span id="waliNameDisplay" class="gradient-text">Wali Kelas</span></p>
     </div>
-    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
+    <div class="flex gap-2">
+      <button onclick="syncDataFromAPI()" class="btn btn-sm btn-ghost" style="color: var(--blue-primary);">
+        <i class="fas fa-sync mr-1"></i> Sinkronisasi
+      </button>
+      <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);">
+        <i class="fas fa-power-off mr-1"></i> Keluar
+      </button>
+    </div>
   </div>
 
   <div class="grid grid-cols-3 gap-3 mt-4 fade-in">
@@ -824,7 +829,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- DASHBOARD ADMIN SUPER (DENGAN TOMBOL UPDATE PROFILE) -->
+<!-- DASHBOARD ADMIN SUPER (DENGAN TOMBOL SYNC) -->
 <!-- ============================================================ -->
 <div id="adminDashboard" class="p-4 max-w-lg mx-auto hidden" style="padding-bottom: 80px;">
   <div class="flex justify-between items-center fade-in">
@@ -841,6 +846,9 @@
       </button>
       <button onclick="refreshAdminFromSpreadsheet()" class="btn btn-sm btn-ghost" style="color: var(--blue-primary);">
         <i class="fas fa-sync mr-1"></i> Refresh
+      </button>
+      <button onclick="syncDataFromAPI()" class="btn btn-sm btn-ghost" style="color: var(--purple-primary);">
+        <i class="fas fa-cloud-download-alt mr-1"></i> Sync
       </button>
       <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);">
         <i class="fas fa-power-off mr-1"></i> Keluar
@@ -1126,7 +1134,7 @@
       </div>
       <div>
         <label class="block text-sm font-medium" style="color: var(--text-secondary);">
-          <i class="fas fa-lock mr-1"></i> PIN (Password: ******)
+          <i class="fas fa-lock mr-1"></i> PIN (Default: 51sw@qu)
         </label>
         <input id="siswaPIN" class="input input-bordered w-full" placeholder="51sw@qu" value="51sw@qu">
       </div>
@@ -1167,7 +1175,7 @@
       </div>
       <div>
         <label class="block text-sm font-medium" style="color: var(--text-secondary);">
-          <i class="fas fa-lock mr-1"></i> Password (Password: ******)
+          <i class="fas fa-lock mr-1"></i> Password (Default: d4Rm@app)
         </label>
         <input id="waliPasswordBaru" class="input input-bordered w-full" placeholder="d4Rm@app" value="d4Rm@app">
       </div>
@@ -1200,7 +1208,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- JAVASCRIPT -->
+<!-- JAVASCRIPT (DIPERBAIKI DENGAN FITUR SYNC) -->
 <!-- ============================================================ -->
 <script>
 // ============================================================
@@ -1213,7 +1221,7 @@ const CONFIG = {
 };
 
 // ============================================================
-// DATA STORE
+// DATA STORE (DIPERBAIKI DENGAN FITUR LOAD DATA)
 // ============================================================
 class DataStore {
   constructor() {
@@ -1255,6 +1263,51 @@ class DataStore {
     }
   }
   
+  // ============ LOAD DATA DARI API (FITUR BARU) ============
+  loadAllDataFromAPI() {
+    if (!this.isOnline || !CONFIG.USE_API) {
+      console.warn('Offline atau API tidak aktif');
+      return;
+    }
+    
+    const actions = [
+      { action: 'getAllStudents', key: 'students' },
+      { action: 'getAllCurhat', key: 'curhat' },
+      { action: 'getAllUsers', key: 'users' }
+    ];
+    
+    let loadedCount = 0;
+    const totalActions = actions.length;
+    
+    actions.forEach(item => {
+      const params = new URLSearchParams({
+        action: item.action,
+        callback: 'callback'
+      });
+      
+      fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
+        .then(response => response.text())
+        .then(text => {
+          try {
+            const json = text.substring(text.indexOf('(') + 1, text.lastIndexOf(')'));
+            const data = JSON.parse(json);
+            if (data && Array.isArray(data)) {
+              this.data[item.key] = data;
+              this.saveToStorage();
+              loadedCount++;
+              console.log(`✅ Loaded ${item.action} from API (${data.length} items)`);
+            }
+          } catch (e) {
+            console.warn(`Failed to parse ${item.action}:`, e);
+          }
+        })
+        .catch(err => console.warn(`Failed to load ${item.action}:`, err));
+    });
+    
+    return loadedCount;
+  }
+  
+  // ============ LOAD FROM STORAGE ============
   loadFromStorage() {
     try {
       const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
@@ -1343,7 +1396,26 @@ class DataStore {
     };
     this.data.students.push(newStudent);
     this.saveToStorage();
-    this.syncToAPI('addStudent', newStudent);
+    
+    // Sync ke API
+    if (this.isOnline && CONFIG.USE_API) {
+      const params = new URLSearchParams({
+        action: 'addStudent',
+        nis: newStudent.nis,
+        name: newStudent.name,
+        password: newStudent.password,
+        waliId: newStudent.wali_id,
+        class: newStudent.class,
+        callback: 'callback'
+      });
+      
+      fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
+        .catch(err => {
+          console.warn('Sync student failed:', err);
+          this.pendingSync.push({ action: 'addStudent', data: newStudent });
+        });
+    }
+    
     return { success: true, id: newStudent.id };
   }
   
@@ -1575,7 +1647,7 @@ class DataStore {
     }
   }
   
-  // ============ USERS (DIPERBAIKI DENGAN UPDATE USER) ============
+  // ============ USERS ============
   getUsers(role = null) {
     if (role) {
       return this.data.users.filter(u => u.role === role);
@@ -1606,18 +1678,14 @@ class DataStore {
     return { success: true, id: newUser.id };
   }
   
-  // METHOD UPDATE USER (TAMBAHKAN INI)
   updateUser(id, field, value) {
     const user = this.getUser(id);
     if (!user) {
       return { success: false, error: 'User tidak ditemukan' };
     }
-    
-    // Update di local storage
     user[field] = value;
     this.saveToStorage();
     
-    // Sync ke API
     if (this.isOnline && CONFIG.USE_API) {
       const params = new URLSearchParams({
         action: 'updateUser',
@@ -1637,7 +1705,6 @@ class DataStore {
     return { success: true };
   }
   
-  // METHOD REFRESH USER (TAMBAHKAN INI)
   refreshUser(email) {
     if (!this.isOnline || !CONFIG.USE_API) {
       return null;
@@ -1649,23 +1716,24 @@ class DataStore {
       callback: 'callback'
     });
     
-    // Sync fetch untuk mendapatkan data
     fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
       .then(response => response.text())
       .then(text => {
-        // Parse JSONP response
-        const json = text.substring(text.indexOf('(') + 1, text.lastIndexOf(')'));
-        const data = JSON.parse(json);
-        if (data && data.id) {
-          // Update user di local storage
-          const existing = this.getUser(data.id);
-          if (existing) {
-            Object.assign(existing, data);
-          } else {
-            this.data.users.push(data);
+        try {
+          const json = text.substring(text.indexOf('(') + 1, text.lastIndexOf(')'));
+          const data = JSON.parse(json);
+          if (data && data.id) {
+            const existing = this.getUser(data.id);
+            if (existing) {
+              Object.assign(existing, data);
+            } else {
+              this.data.users.push(data);
+            }
+            this.saveToStorage();
+            return data;
           }
-          this.saveToStorage();
-          return data;
+        } catch (e) {
+          console.warn('Refresh user parse error:', e);
         }
         return null;
       })
@@ -1729,6 +1797,33 @@ let selectedCurhatId = null;
 let detailStudentId = null;
 let loginRole = 'student';
 let currentCurhatId = null;
+
+// ============================================================
+// FUNGSI SYNC DATA (BARU)
+// ============================================================
+function syncDataFromAPI() {
+  if (!store.isOnline) {
+    alert('❌ Koneksi offline. Tidak bisa sinkronisasi.');
+    return;
+  }
+  
+  alert('📡 Mengambil data terbaru dari server...');
+  const loaded = store.loadAllDataFromAPI();
+  
+  setTimeout(() => {
+    // Refresh tampilan
+    if (currentRole === 'wali') {
+      renderWaliDashboard();
+      renderStudentList();
+      renderLaporanList();
+    } else if (currentRole === 'admin') {
+      renderAdminDashboard();
+    } else if (currentRole === 'student') {
+      // Refresh student dashboard jika diperlukan
+    }
+    alert('✅ Sinkronisasi selesai! Data terbaru telah dimuat.');
+  }, 2000);
+}
 
 // ============================================================
 // LOGIN FUNCTIONS
@@ -1858,6 +1953,12 @@ function showWaliDashboard() {
   document.getElementById('waliDashboard').classList.remove('hidden');
   document.getElementById('adminDashboard').classList.add('hidden');
   document.getElementById('waliNameDisplay').textContent = currentWali.name;
+  
+  // Load data dari API
+  if (store.isOnline && CONFIG.USE_API) {
+    store.loadAllDataFromAPI();
+  }
+  
   renderWaliDashboard();
   switchWaliTab('siswa');
 }
@@ -1868,6 +1969,12 @@ function showAdminDashboard() {
   document.getElementById('waliDashboard').classList.add('hidden');
   document.getElementById('adminDashboard').classList.remove('hidden');
   document.getElementById('adminNameDisplay').textContent = currentUser.name;
+  
+  // Load data dari API
+  if (store.isOnline && CONFIG.USE_API) {
+    store.loadAllDataFromAPI();
+  }
+  
   renderAdminDashboard();
   switchAdminTab('wali');
 }
@@ -3193,13 +3300,11 @@ function deleteWaliConfirm(id) {
 }
 
 // ============================================================
-// UPDATE PROFILE ADMIN (BARU)
+// UPDATE PROFILE ADMIN
 // ============================================================
 function updateAdminProfile() {
-  // Cari admin dari local storage
   let adminUser = store.getUserByEmail('admin@walidigital.com');
   
-  // Jika tidak ada di local, coba refresh dari API
   if (!adminUser) {
     if (store.isOnline && CONFIG.USE_API) {
       alert('📡 Mengambil data admin dari spreadsheet...');
@@ -3214,7 +3319,6 @@ function updateAdminProfile() {
     }
   }
   
-  // Tampilkan menu pilihan
   const choice = prompt(
     '🔐 UPDATE PROFILE ADMIN\n\n' +
     'Email saat ini: ' + adminUser.email + '\n' +
@@ -3322,24 +3426,21 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('adminDashboard').classList.add('hidden');
   setLoginRole('student');
   
-  // Cek user admin dan refresh jika perlu
   const adminUser = store.getUserByEmail('admin@walidigital.com');
   if (!adminUser && store.isOnline) {
     console.log('📡 Mengambil data admin dari spreadsheet...');
     store.refreshUser('admin@walidigital.com');
   }
   
-  console.log('🏫 Wali Digital v6.0 - With Laporan Kondisi & Excel Export & Update Profile');
+  console.log('🏫 Wali Digital v7.0 - With Cross-Device Sync');
   console.log('📌 Default Login:');
   console.log('  Siswa: Nama & Kelas sesuai data, PIN: 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('📊 Fitur Baru:');
-  console.log('  - Laporan Kondisi Siswa (Nilai, Sikap, Catatan)');
-  console.log('  - Export Excel lengkap dengan semua data');
-  console.log('  - Tab Kondisi di Detail Siswa');
-  console.log('  - Update Profile Admin (Email & Password)');
-  console.log('  - Refresh Data dari Spreadsheet');
+  console.log('  - Cross-Device Sinkronisasi');
+  console.log('  - Tombol Sync Manual');
+  console.log('  - Auto Load Data dari API');
 });
 </script>
 </body>
