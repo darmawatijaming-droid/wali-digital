@@ -9,48 +9,69 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&family=Orbitron:wght@400;600;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    /* ========== ROOT — BIRU CERAH + AKSEN UNGU & MERAH ========== */
+    /* ========== ROOT — BIRU MUDA + GLASSMORPHISM ========== */
     :root {
-      --bg-deep: #0044bb;
-      --bg-mid: #0055dd;
-      --bg-card: rgba(0, 30, 100, 0.55);
-      --bg-card-hover: rgba(0, 40, 120, 0.7);
-      --blue-primary: #0070ff;
-      --blue-bright: #0090ff;
-      --blue-cyan: #00bbff;
-      --blue-light: #44ccff;
-      --purple-primary: #8b5cf6;
-      --purple-bright: #a78bfa;
-      --purple-glow: rgba(139, 92, 246, 0.35);
-      --red-primary: #ef4444;
-      --red-bright: #f87171;
-      --red-glow: rgba(239, 68, 68, 0.3);
-      --text-primary: #ffffff;
-      --text-secondary: #c4daff;
-      --text-muted: #7eaadd;
-      --glow-purple: 0 0 25px var(--purple-glow), 0 0 60px rgba(139, 92, 246, 0.1);
-      --glow-red: 0 0 25px var(--red-glow), 0 0 60px rgba(239, 68, 68, 0.08);
-      --glow-blue: 0 0 25px rgba(0, 112, 255, 0.2), 0 0 60px rgba(0, 112, 255, 0.06);
-      --border-glow: 1px solid rgba(139, 92, 246, 0.2);
+      --bg-deep: #b8d4e3;
+      --bg-mid: #d4e8f5;
+      --bg-card: rgba(255, 255, 255, 0.25);
+      --bg-card-hover: rgba(255, 255, 255, 0.4);
+      --blue-primary: #4a9bc7;
+      --blue-bright: #6db8e0;
+      --blue-cyan: #89cff0;
+      --blue-light: #b5dff5;
+      --purple-primary: #7b9cd6;
+      --purple-bright: #9db8e8;
+      --purple-glow: rgba(123, 156, 214, 0.3);
+      --red-primary: #e8848a;
+      --red-bright: #f0a0a5;
+      --red-glow: rgba(232, 132, 138, 0.25);
+      --text-primary: #1a3a4a;
+      --text-secondary: #2d5a70;
+      --text-muted: #6a8fa0;
+      --glow-purple: 0 0 25px var(--purple-glow), 0 0 60px rgba(123, 156, 214, 0.08);
+      --glow-red: 0 0 25px var(--red-glow), 0 0 60px rgba(232, 132, 138, 0.06);
+      --glow-blue: 0 0 25px rgba(74, 155, 199, 0.15), 0 0 60px rgba(74, 155, 199, 0.05);
+      --border-glow: 1px solid rgba(255, 255, 255, 0.4);
     }
 
     * { font-family: 'Exo 2', 'Inter', sans-serif; box-sizing: border-box; }
+    
     body {
-      background: linear-gradient(155deg, #003db3 0%, #0060ee 40%, #0078ff 70%, #0055cc 100%);
       min-height: 100vh;
       color: var(--text-primary);
       overflow-x: hidden;
       position: relative;
+      background: #d4e8f5;
     }
 
+    /* ========== BACKGROUND IMAGE UNSplash ========== */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background:
-        radial-gradient(ellipse 500px 400px at 10% 15%, rgba(139, 92, 246, 0.18), transparent),
-        radial-gradient(ellipse 400px 400px at 90% 85%, rgba(239, 68, 68, 0.12), transparent),
-        radial-gradient(ellipse 600px 300px at 50% 50%, rgba(0, 112, 255, 0.08), transparent);
+      background: 
+        url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.3;
+    }
+
+    /* Overlay biru muda transparan */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(180, 220, 240, 0.4) 0%, rgba(200, 230, 248, 0.3) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Background gradient tambahan */
+    .bg-gradient-overlay {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(74, 155, 199, 0.08), transparent 60%),
+                  radial-gradient(ellipse at 80% 50%, rgba(123, 156, 214, 0.06), transparent 60%);
       z-index: 0;
       pointer-events: none;
     }
@@ -58,322 +79,455 @@
     .cyber-grid {
       position: fixed; inset: 0;
       background:
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 50px 50px;
+        linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
       z-index: 0; pointer-events: none;
     }
 
     .orb {
-      position: fixed; border-radius: 50%; filter: blur(70px);
+      position: fixed; border-radius: 50%; filter: blur(80px);
       z-index: 0; pointer-events: none;
-      animation: orbFloat 10s ease-in-out infinite;
+      animation: orbFloat 12s ease-in-out infinite;
     }
-    .orb-1 { width: 280px; height: 280px; background: rgba(139, 92, 246, 0.18); top: 2%; left: -80px; }
-    .orb-2 { width: 230px; height: 230px; background: rgba(239, 68, 68, 0.14); bottom: 5%; right: -60px; animation-delay: -3s; animation-duration: 13s; }
-    .orb-3 { width: 180px; height: 180px; background: rgba(0, 187, 255, 0.12); top: 45%; left: 55%; animation-delay: -6s; animation-duration: 15s; }
+    .orb-1 { width: 350px; height: 350px; background: rgba(74, 155, 199, 0.15); top: 5%; left: -100px; }
+    .orb-2 { width: 280px; height: 280px; background: rgba(123, 156, 214, 0.12); bottom: 8%; right: -80px; animation-delay: -4s; animation-duration: 14s; }
+    .orb-3 { width: 200px; height: 200px; background: rgba(137, 207, 240, 0.12); top: 50%; left: 60%; animation-delay: -7s; animation-duration: 16s; }
 
     @keyframes orbFloat {
       0%, 100% { transform: translate(0, 0) scale(1); }
-      33% { transform: translate(25px, -15px) scale(1.06); }
-      66% { transform: translate(-15px, 12px) scale(0.95); }
+      33% { transform: translate(30px, -20px) scale(1.08); }
+      66% { transform: translate(-20px, 15px) scale(0.92); }
     }
 
     .scanline {
       position: fixed; top: 0; left: 0; right: 0;
       height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.5), transparent);
-      opacity: 0.2; z-index: 1; pointer-events: none;
-      animation: scanMove 5s linear infinite;
+      background: linear-gradient(90deg, transparent, rgba(123, 156, 214, 0.3), transparent);
+      opacity: 0.15; z-index: 1; pointer-events: none;
+      animation: scanMove 7s linear infinite;
     }
     @keyframes scanMove { 0% { top: -2px; } 100% { top: 100%; } }
 
     #connectionStatus, #loginPage, #studentDashboard, #waliDashboard, #adminDashboard,
     .modal, .modal-box, #riwayatPanel { position: relative; z-index: 10; }
 
+    /* ========== GLASS CARDS ========== */
     .card-glass {
       background: var(--bg-card);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border-radius: 20px;
-      box-shadow: var(--glow-purple), 0 8px 32px rgba(0, 0, 0, 0.15);
-      border: var(--border-glow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(74, 155, 199, 0.08), 0 2px 8px rgba(255,255,255,0.3);
+      border: 1px solid rgba(255, 255, 255, 0.35);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .card-glass:hover {
       background: var(--bg-card-hover);
-      box-shadow: 0 0 40px rgba(139, 92, 246, 0.25), 0 12px 40px rgba(0, 0, 0, 0.2);
-      border-color: rgba(139, 92, 246, 0.4);
+      box-shadow: 0 12px 48px rgba(74, 155, 199, 0.12), 0 4px 16px rgba(255,255,255,0.4);
+      border-color: rgba(255, 255, 255, 0.6);
+      transform: translateY(-2px);
     }
 
     .bg-glass {
-      background: rgba(0, 30, 100, 0.5);
-      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      border: var(--border-glow);
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
+    /* ========== BUTTONS ========== */
     .btn-primary-custom {
-      background: linear-gradient(135deg, var(--purple-primary), #6d28d9);
-      color: #fff; border: none; font-weight: 700;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-      box-shadow: 0 0 22px var(--purple-glow), 0 4px 15px rgba(0,0,0,0.15);
-      transition: all 0.3s; letter-spacing: 0.3px;
+      background: linear-gradient(135deg, var(--blue-primary), #5ba8d4);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(74, 155, 199, 0.25);
+      transition: all 0.3s;
+      letter-spacing: 0.3px;
     }
     .btn-primary-custom:hover {
-      background: linear-gradient(135deg, var(--purple-bright), #7c3aed);
-      box-shadow: 0 0 38px rgba(139, 92, 246, 0.45), 0 6px 20px rgba(0,0,0,0.2);
-      transform: translateY(-1px);
+      background: linear-gradient(135deg, var(--blue-bright), #4a9bc7);
+      box-shadow: 0 6px 25px rgba(74, 155, 199, 0.35);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+    
+    .btn-success-custom {
+      background: linear-gradient(135deg, #5ba8b0, #4a9aa0);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 4px 15px rgba(74, 155, 199, 0.2);
+      transition: all 0.3s;
+    }
+    .btn-success-custom:hover {
+      background: linear-gradient(135deg, #6db8c0, #5ba8b0);
+      box-shadow: 0 6px 25px rgba(74, 155, 199, 0.3);
+      transform: translateY(-2px);
+      color: #fff;
     }
 
-    .btn-ghost { color: var(--text-secondary); }
-    .btn-ghost:hover { background: rgba(139, 92, 246, 0.12); color: var(--purple-bright); }
+    .btn-danger-custom {
+      background: linear-gradient(135deg, var(--red-primary), #d47076);
+      color: #fff;
+      border: none;
+      font-weight: 700;
+      box-shadow: 0 4px 15px var(--red-glow);
+      transition: all 0.3s;
+    }
+    .btn-danger-custom:hover {
+      background: linear-gradient(135deg, var(--red-bright), #e8848a);
+      box-shadow: 0 6px 25px rgba(232, 132, 138, 0.3);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    .btn-ghost { 
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .btn-ghost:hover { 
+      background: rgba(255,255,255,0.3);
+      color: var(--text-primary);
+    }
 
     .btn-outline {
-      border-color: rgba(139, 92, 246, 0.3) !important;
-      color: var(--text-primary) !important;
-      background: rgba(139, 92, 246, 0.06) !important;
+      border-color: rgba(74, 155, 199, 0.3) !important;
+      color: var(--text-secondary) !important;
+      background: rgba(255, 255, 255, 0.15) !important;
       transition: all 0.3s !important;
     }
     .btn-outline:hover {
-      border-color: var(--purple-primary) !important;
-      background: rgba(139, 92, 246, 0.16) !important;
-      box-shadow: 0 0 18px rgba(139, 92, 246, 0.2);
-      color: #fff !important;
+      border-color: var(--blue-primary) !important;
+      background: rgba(255, 255, 255, 0.3) !important;
+      box-shadow: 0 0 18px rgba(74, 155, 199, 0.15);
+      color: var(--text-primary) !important;
     }
 
+    /* ========== INPUTS ========== */
     .input, .select, .textarea {
-      background: rgba(0, 20, 80, 0.55) !important;
-      border-color: rgba(139, 92, 246, 0.2) !important;
+      background: rgba(255, 255, 255, 0.5) !important;
+      border-color: rgba(74, 155, 199, 0.2) !important;
       color: var(--text-primary) !important;
-      border-radius: 12px !important;
+      border-radius: 14px !important;
       transition: all 0.3s !important;
     }
     .input:focus, .select:focus, .textarea:focus {
-      border-color: var(--purple-primary) !important;
-      box-shadow: 0 0 22px rgba(139, 92, 246, 0.2), inset 0 0 10px rgba(139, 92, 246, 0.04) !important;
+      border-color: var(--blue-primary) !important;
+      box-shadow: 0 0 22px rgba(74, 155, 199, 0.15), inset 0 0 10px rgba(74, 155, 199, 0.04) !important;
       outline: none !important;
+      background: rgba(255, 255, 255, 0.7) !important;
     }
     .input::placeholder, .textarea::placeholder { color: var(--text-muted) !important; }
     .label-text { color: var(--text-secondary) !important; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.3px; }
-    select option { background: #002266; color: #fff; }
+    select option { background: #d4e8f5; color: var(--text-primary); }
 
+    /* ========== BOTTOM NAV ========== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(0, 20, 80, 0.75);
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(139, 92, 246, 0.15);
-      display: flex; justify-content: space-around;
-      padding: 10px 0 14px; z-index: 50;
-      border-radius: 24px 24px 0 0;
-      box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.4);
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0 16px;
+      z-index: 50;
+      border-radius: 28px 28px 0 0;
+      box-shadow: 0 -8px 30px rgba(74, 155, 199, 0.06);
     }
     .nav-btn {
       display: flex; flex-direction: column; align-items: center;
       font-size: 11px; color: var(--text-muted);
-      transition: all 0.3s; background: transparent; border: none;
-      padding: 6px 14px; border-radius: 16px; position: relative; letter-spacing: 0.3px;
+      transition: all 0.3s;
+      background: transparent;
+      border: none;
+      padding: 6px 16px;
+      border-radius: 18px;
+      position: relative;
+      letter-spacing: 0.3px;
     }
     .nav-btn i { font-size: 22px; margin-bottom: 3px; transition: all 0.3s; }
     .nav-btn.active {
-      color: #fff; font-weight: 700;
-      background: rgba(139, 92, 246, 0.25);
-      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      color: var(--blue-primary);
+      font-weight: 700;
+      background: rgba(74, 155, 199, 0.12);
+      text-shadow: 0 0 20px rgba(74, 155, 199, 0.1);
     }
-    .nav-btn.active i { filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.6)); }
-    .nav-btn:hover:not(.active) { color: var(--text-secondary); background: rgba(139, 92, 246, 0.08); }
+    .nav-btn.active i { filter: drop-shadow(0 0 10px rgba(74, 155, 199, 0.2)); }
+    .nav-btn:hover:not(.active) { color: var(--text-secondary); background: rgba(255,255,255,0.15); }
 
+    /* ========== MODALS ========== */
     .modal-box {
-      border-radius: 24px !important;
-      background: rgba(0, 18, 70, 0.92) !important;
-      backdrop-filter: blur(24px) !important; -webkit-backdrop-filter: blur(24px) !important;
-      max-height: 90vh; overflow-y: auto;
-      border: var(--border-glow) !important;
-      box-shadow: 0 0 70px rgba(139, 92, 246, 0.12), 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+      border-radius: 28px !important;
+      background: rgba(255, 255, 255, 0.85) !important;
+      backdrop-filter: blur(24px) !important;
+      -webkit-backdrop-filter: blur(24px) !important;
+      max-height: 90vh;
+      overflow-y: auto;
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      box-shadow: 0 20px 60px rgba(74, 155, 199, 0.12), 0 8px 32px rgba(0, 0, 0, 0.06) !important;
       color: var(--text-primary);
     }
     .modal-box .btn-circle {
-      background: rgba(139, 92, 246, 0.15); color: var(--text-secondary);
-      border: 1px solid rgba(139, 92, 246, 0.2);
+      background: rgba(255, 255, 255, 0.3);
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
     .modal-box .btn-circle:hover {
-      background: rgba(239, 68, 68, 0.2); color: var(--red-bright);
-      border-color: rgba(239, 68, 68, 0.35);
+      background: rgba(232, 132, 138, 0.2);
+      color: var(--red-primary);
+      border-color: rgba(232, 132, 138, 0.3);
     }
-    .modal-action .btn-ghost { color: var(--text-muted); border: 1px solid rgba(139, 92, 246, 0.15); }
+    .modal-action .btn-ghost { 
+      color: var(--text-muted);
+      border: 1px solid rgba(74, 155, 199, 0.15);
+      background: rgba(255,255,255,0.2);
+    }
 
+    /* ========== CHAT BUBBLES ========== */
     .bubble {
-      max-width: 85%; padding: 10px 14px; border-radius: 16px;
-      margin: 4px 0; word-wrap: break-word; font-size: 0.85rem; line-height: 1.5;
+      max-width: 85%;
+      padding: 12px 18px;
+      border-radius: 18px;
+      margin: 6px 0;
+      word-wrap: break-word;
+      font-size: 0.875rem;
+      line-height: 1.5;
     }
     .bubble-left {
-      background: rgba(139, 92, 246, 0.18);
-      border: 1px solid rgba(139, 92, 246, 0.2);
-      align-self: flex-start; border-bottom-left-radius: 4px; color: #fff;
+      background: rgba(74, 155, 199, 0.15);
+      border: 1px solid rgba(74, 155, 199, 0.15);
+      align-self: flex-start;
+      border-bottom-left-radius: 6px;
+      color: var(--text-primary);
     }
     .bubble-right {
-      background: rgba(0, 112, 255, 0.2);
-      border: 1px solid rgba(0, 112, 255, 0.25);
-      align-self: flex-end; border-bottom-right-radius: 4px; color: #fff;
+      background: rgba(123, 156, 214, 0.15);
+      border: 1px solid rgba(123, 156, 214, 0.15);
+      align-self: flex-end;
+      border-bottom-right-radius: 6px;
+      color: var(--text-primary);
     }
-    .bubble-wali {
-      background: rgba(139, 92, 246, 0.25);
-      border: 1px solid rgba(139, 92, 246, 0.3);
-      align-self: flex-start; border-bottom-left-radius: 4px; color: #fff;
-    }
-    .bubble-siswa {
-      background: rgba(0, 187, 255, 0.15);
-      border: 1px solid rgba(0, 187, 255, 0.2);
-      align-self: flex-end; border-bottom-right-radius: 4px; color: #fff;
-    }
-    .chat-container { display: flex; flex-direction: column; max-height: 400px; overflow-y: auto; padding: 8px 4px; }
+    .chat-container { display: flex; flex-direction: column; }
 
+    /* ========== STATUS ========== */
     .connection-status {
-      position: fixed; top: 12px; right: 12px; z-index: 100;
-      padding: 5px 14px; border-radius: 20px; font-size: 11px;
-      font-weight: 700; letter-spacing: 0.5px;
-      background: rgba(0, 18, 70, 0.7); backdrop-filter: blur(12px);
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 100;
+      padding: 5px 16px;
+      border-radius: 24px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
     .connection-status.online {
-      color: #4ade80; border: 1px solid rgba(74, 222, 128, 0.3);
-      box-shadow: 0 0 12px rgba(74, 222, 128, 0.1);
+      color: #4a9b7a;
+      border: 1px solid rgba(74, 155, 122, 0.2);
+      box-shadow: 0 0 12px rgba(74, 155, 122, 0.06);
     }
     .connection-status.offline {
-      color: var(--red-bright); border: 1px solid rgba(248, 113, 113, 0.3);
-      box-shadow: 0 0 12px rgba(248, 113, 113, 0.1);
+      color: var(--red-primary);
+      border: 1px solid rgba(232, 132, 138, 0.2);
+      box-shadow: 0 0 12px rgba(232, 132, 138, 0.06);
     }
 
     .status-badge {
-      display: inline-block; padding: 3px 12px; border-radius: 20px;
-      font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
+      display: inline-block;
+      padding: 3px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
     }
-    .status-red { background: rgba(239, 68, 68, 0.2); color: var(--red-bright); border: 1px solid rgba(239, 68, 68, 0.25); }
-    .status-yellow { background: rgba(250, 204, 21, 0.2); color: #fde047; border: 1px solid rgba(250, 204, 21, 0.25); }
-    .status-green { background: rgba(34, 197, 94, 0.2); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.25); }
+    .status-red { background: rgba(232, 132, 138, 0.15); color: var(--red-primary); border: 1px solid rgba(232, 132, 138, 0.2); }
+    .status-yellow { background: rgba(255, 193, 7, 0.12); color: #b8860b; border: 1px solid rgba(255, 193, 7, 0.15); }
+    .status-green { background: rgba(74, 155, 122, 0.12); color: #2d7a6a; border: 1px solid rgba(74, 155, 122, 0.15); }
 
+    /* ========== LOGIN ========== */
     .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .login-box { max-width: 420px; width: 100%; }
 
-    .student-card { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; }
+    /* ========== STUDENT CARD ========== */
+    .student-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+    }
     .student-card:hover {
       transform: translateY(-4px) scale(1.01);
-      box-shadow: 0 0 45px rgba(139, 92, 246, 0.22), 0 16px 50px rgba(0, 0, 0, 0.15);
-      border-color: rgba(139, 92, 246, 0.45);
+      box-shadow: 0 12px 48px rgba(74, 155, 199, 0.12);
+      border-color: rgba(255, 255, 255, 0.6);
+      background: var(--bg-card-hover);
     }
 
+    /* ========== TABS ========== */
     .tab-active {
-      border-bottom: 3px solid var(--purple-bright) !important;
-      color: #fff !important;
+      border-bottom: 3px solid var(--blue-primary) !important;
+      color: var(--blue-primary) !important;
       font-weight: 700 !important;
-      text-shadow: 0 0 8px var(--purple-glow);
+      text-shadow: 0 0 8px rgba(74, 155, 199, 0.1);
     }
 
+    /* ========== REPORT ========== */
     .report-section {
-      background: rgba(0, 25, 90, 0.5); border-radius: 16px;
-      padding: 16px; margin-top: 12px; border: var(--border-glow);
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 18px;
+      padding: 16px;
+      margin-top: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(8px);
     }
     .report-item {
-      display: flex; justify-content: space-between; padding: 8px 0;
-      border-bottom: 1px solid rgba(139, 92, 246, 0.08); font-size: 0.85rem;
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(74, 155, 199, 0.08);
+      font-size: 0.85rem;
     }
     .report-item:last-child { border-bottom: none; }
 
-    .fade-in { animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+    /* ========== ANIMATIONS ========== */
+    .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(15px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
     @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 25px rgba(139, 92, 246, 0.2), 0 8px 32px rgba(0,0,0,0.15); }
-      50% { box-shadow: 0 0 45px rgba(139, 92, 246, 0.35), 0 12px 40px rgba(0,0,0,0.2); }
+      0%, 100% { box-shadow: 0 8px 32px rgba(74, 155, 199, 0.08), 0 2px 8px rgba(255,255,255,0.3); }
+      50% { box-shadow: 0 12px 48px rgba(74, 155, 199, 0.12), 0 4px 16px rgba(255,255,255,0.4); }
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--blue-primary), var(--purple-primary), var(--blue-bright));
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: textShimmer 5s linear infinite;
     }
     @keyframes textShimmer {
       0% { background-position: -200% center; }
       100% { background-position: 200% center; }
     }
 
-    .gradient-text {
-      background: linear-gradient(90deg, var(--purple-bright), #fff, var(--red-bright), var(--purple-bright));
-      background-size: 200% auto;
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; animation: textShimmer 4s linear infinite;
-    }
-
-    .glow-icon { filter: drop-shadow(0 0 8px currentColor); transition: all 0.3s; }
-    .glow-icon:hover { filter: drop-shadow(0 0 16px currentColor); transform: scale(1.1); }
+    .glow-icon { filter: drop-shadow(0 0 8px rgba(74, 155, 199, 0.2)); transition: all 0.3s; }
+    .glow-icon:hover { filter: drop-shadow(0 0 16px rgba(74, 155, 199, 0.3)); transform: scale(1.05); }
 
     .motivation-box {
-      background: rgba(139, 92, 246, 0.1);
-      border: 1px solid rgba(139, 92, 246, 0.15);
-      position: relative; overflow: hidden;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(4px);
     }
     .motivation-box::before {
-      content: ''; position: absolute; top: 0; left: -100%;
-      width: 100%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.1), transparent);
-      animation: shimmerSlide 5s ease-in-out infinite;
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmerSlide 6s ease-in-out infinite;
     }
     @keyframes shimmerSlide {
-      0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; }
+      0% { left: -100%; }
+      50% { left: 100%; }
+      100% { left: 100%; }
     }
 
+    /* ========== SCROLLBAR ========== */
     ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-    ::-webkit-scrollbar-thumb { background: rgba(139, 92, 246, 0.3); border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(139, 92, 246, 0.5); }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); }
+    ::-webkit-scrollbar-thumb { background: rgba(74, 155, 199, 0.2); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(74, 155, 199, 0.3); }
 
-    .divider { border-top-color: rgba(139, 92, 246, 0.12) !important; }
-    .border-b { border-color: rgba(139, 92, 246, 0.12) !important; }
+    .divider { border-top-color: rgba(74, 155, 199, 0.1) !important; }
+    .border-b { border-color: rgba(74, 155, 199, 0.08) !important; }
 
     #riwayatPanel > div {
-      background: rgba(0, 18, 70, 0.92) !important;
+      background: rgba(255, 255, 255, 0.85) !important;
       backdrop-filter: blur(24px) !important;
-      border: var(--border-glow) !important;
-      box-shadow: 0 0 70px rgba(139, 92, 246, 0.12), 0 25px 60px rgba(0, 0, 0, 0.3) !important;
+      border: 1px solid rgba(255, 255, 255, 0.5) !important;
+      box-shadow: 0 20px 60px rgba(74, 155, 199, 0.12) !important;
+      color: var(--text-primary);
     }
 
-    .icon-purple { color: var(--purple-bright); filter: drop-shadow(0 0 10px var(--purple-glow)); }
-    .icon-red { color: var(--red-bright); filter: drop-shadow(0 0 10px var(--red-glow)); }
-    .icon-blue { color: var(--blue-cyan); filter: drop-shadow(0 0 10px rgba(0,187,255,0.4)); }
-    .icon-yellow { color: #fde047; filter: drop-shadow(0 0 10px rgba(253,224,71,0.4)); }
-    .icon-green { color: #4ade80; filter: drop-shadow(0 0 10px rgba(74,222,128,0.4)); }
-    .icon-white { color: #fff; filter: drop-shadow(0 0 8px rgba(255,255,255,0.3)); }
+    /* ========== ICON COLOR CLASSES ========== */
+    .icon-purple { color: var(--purple-primary); filter: drop-shadow(0 0 10px var(--purple-glow)); }
+    .icon-red { color: var(--red-primary); filter: drop-shadow(0 0 10px var(--red-glow)); }
+    .icon-blue { color: var(--blue-cyan); filter: drop-shadow(0 0 10px rgba(137,207,240,0.4)); }
+    .icon-yellow { color: #d4a017; filter: drop-shadow(0 0 10px rgba(212,160,23,0.3)); }
+    .icon-green { color: #4a9b7a; filter: drop-shadow(0 0 10px rgba(74,155,122,0.3)); }
+    .icon-white { color: var(--text-primary); filter: drop-shadow(0 0 8px rgba(255,255,255,0.2)); }
 
     .futuristic-badge {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(239, 68, 68, 0.15));
-      border: 1px solid rgba(139, 92, 246, 0.25);
-      color: #fff; font-weight: 700;
-      letter-spacing: 0.5px; font-size: 0.7rem; text-transform: uppercase;
+      background: linear-gradient(135deg, rgba(74, 155, 199, 0.15), rgba(123, 156, 214, 0.1));
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: var(--text-secondary);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
     }
 
     .stat-card { position: relative; overflow: hidden; }
     .stat-card::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-      height: 3px; border-radius: 0 0 20px 20px;
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 0 0 20px 20px;
     }
     .stat-card.stat-blue::after { background: linear-gradient(90deg, var(--blue-primary), transparent); }
     .stat-card.stat-red::after { background: linear-gradient(90deg, var(--red-primary), transparent); }
-    .stat-card.stat-yellow::after { background: linear-gradient(90deg, #facc15, transparent); }
+    .stat-card.stat-yellow::after { background: linear-gradient(90deg, #d4a017, transparent); }
     .stat-card.stat-purple::after { background: linear-gradient(90deg, var(--purple-primary), transparent); }
 
-    .bg-indigo-50 { background: rgba(139, 92, 246, 0.08) !important; }
-    .wali-card { transition: all 0.3s; cursor: pointer; }
-    .wali-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(139, 92, 246, 0.2); }
+    .bg-indigo-50 { background: rgba(74, 155, 199, 0.06) !important; }
+    .wali-card { 
+      transition: all 0.3s;
+      cursor: pointer;
+      background: var(--bg-card);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .wali-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(74, 155, 199, 0.08);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
 
     .curhat-message {
-      padding: 10px 14px;
-      border-radius: 12px;
+      padding: 10px 16px;
+      border-radius: 14px;
       margin: 4px 0;
       max-width: 85%;
       word-wrap: break-word;
     }
     .curhat-message-siswa {
-      background: rgba(0, 112, 255, 0.15);
-      border: 1px solid rgba(0, 112, 255, 0.2);
+      background: rgba(74, 155, 199, 0.12);
+      border: 1px solid rgba(74, 155, 199, 0.12);
       align-self: flex-end;
       border-bottom-right-radius: 4px;
     }
     .curhat-message-wali {
-      background: rgba(139, 92, 246, 0.2);
-      border: 1px solid rgba(139, 92, 246, 0.25);
+      background: rgba(123, 156, 214, 0.12);
+      border: 1px solid rgba(123, 156, 214, 0.12);
       align-self: flex-start;
       border-bottom-left-radius: 4px;
     }
@@ -397,16 +551,15 @@
       font-weight: 600;
       margin-bottom: 2px;
     }
-    .message-sender-siswa { color: var(--blue-cyan); }
-    .message-sender-wali { color: var(--purple-bright); }
+    .message-sender-siswa { color: var(--blue-primary); }
+    .message-sender-wali { color: var(--purple-primary); }
 
-    /* Tambahan untuk laporan kondisi */
     .laporan-kondisi-item {
-      background: rgba(0, 25, 90, 0.4);
-      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
       padding: 12px;
       margin-top: 8px;
-      border: 1px solid rgba(139, 92, 246, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .laporan-kondisi-item .label {
       font-size: 0.7rem;
@@ -420,11 +573,36 @@
       font-weight: 500;
       margin-top: 2px;
     }
+
+    /* Text color adjustments for light theme */
+    .text-slate-400 { color: var(--text-muted) !important; }
+    .text-slate-500 { color: var(--text-secondary) !important; }
+    .text-slate-600 { color: var(--text-secondary) !important; }
+    .text-slate-700 { color: var(--text-primary) !important; }
+    .text-slate-800 { color: var(--text-primary) !important; }
+    .text-slate-900 { color: var(--text-primary) !important; }
+
+    .bg-slate-800\/30 { background: rgba(74, 155, 199, 0.06) !important; }
+    .bg-slate-800\/20 { background: rgba(74, 155, 199, 0.04) !important; }
+
+    .border-slate-700\/20 { border-color: rgba(74, 155, 199, 0.08) !important; }
+    .border-slate-700\/30 { border-color: rgba(74, 155, 199, 0.1) !important; }
+
+    .text-emerald-400 { color: #4a9b7a !important; }
+    .text-emerald-500 { color: #3d8a6a !important; }
+    .text-amber-500 { color: #b8860b !important; }
+    .text-red-400 { color: var(--red-primary) !important; }
+    .text-yellow-400 { color: #d4a017 !important; }
+    .text-blue-400 { color: var(--blue-primary) !important; }
+    .text-purple-400 { color: var(--purple-primary) !important; }
+
+    .border-l-purple-500 { border-left-color: var(--purple-primary) !important; }
   </style>
 </head>
 <body>
 
 <!-- Background Effects -->
+<div class="bg-gradient-overlay"></div>
 <div class="cyber-grid"></div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
@@ -443,7 +621,7 @@
   <div class="login-box">
     <div class="card-glass p-8 space-y-6 fade-in" style="animation: pulseGlow 4s ease-in-out infinite, fadeIn 0.6s ease-out;">
       <div class="text-center">
-        <div class="text-5xl mb-3 glow-icon" style="color: var(--purple-bright);"><i class="fas fa-school"></i></div>
+        <div class="text-5xl mb-3 glow-icon" style="color: var(--blue-primary);"><i class="fas fa-school"></i></div>
         <h1 class="text-3xl font-bold gradient-text" style="font-family: 'Orbitron', sans-serif;">Wali Digital</h1>
         <p class="text-sm mt-2" style="color: var(--text-secondary); letter-spacing: 1px;">Sistem Manajemen Siswa</p>
       </div>
@@ -500,7 +678,7 @@
         <button onclick="loginAdmin()" class="btn btn-primary-custom w-full"><i class="fas fa-sign-in-alt mr-2"></i> Masuk sebagai Admin</button>
       </div>
 
-      <div id="loginError" class="text-red-400 text-sm text-center hidden" style="text-shadow: 0 0 10px rgba(248,113,113,0.4);"></div>
+      <div id="loginError" class="text-red-500 text-sm text-center hidden"></div>
     </div>
   </div>
 </div>
@@ -518,58 +696,58 @@
     </div>
     <div class="text-right">
       <div class="text-xs" style="color: var(--text-muted);" id="dateDisplay">Senin, 11 Jul 2026</div>
-      <div class="text-2xl font-mono font-bold" style="color: #fff; text-shadow: 0 0 15px rgba(255,255,255,0.3);" id="clockDisplay">12:00</div>
+      <div class="text-2xl font-mono font-bold" style="color: var(--text-secondary); text-shadow: 0 0 15px rgba(74,155,199,0.1);" id="clockDisplay">12:00</div>
     </div>
   </div>
 
-  <div class="motivation-box text-center text-sm mt-4 rounded-full py-2.5 px-5" style="color: #e0d4ff;">
-    <i class="fas fa-quote-left mr-1 icon-purple" style="opacity:0.5;"></i> <span id="motivationText">Jadilah versi terbaik dari dirimu hari ini.</span>
+  <div class="motivation-box text-center text-sm mt-4 rounded-full py-2.5 px-5" style="color: var(--text-secondary);">
+    <i class="fas fa-quote-left mr-1" style="color: var(--blue-primary); opacity:0.5;"></i> <span id="motivationText">Jadilah versi terbaik dari dirimu hari ini.</span>
   </div>
 
   <div class="flex justify-end mt-2">
-    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-bright);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
+    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
   </div>
 
   <div id="studentContent" class="space-y-5 mt-4">
     <!-- Peta Potensi -->
     <div id="potensiCard" class="card-glass p-5 space-y-3 fade-in">
       <div class="flex items-center gap-2">
-        <i class="fas fa-compass icon-purple text-xl"></i>
-        <span class="font-bold text-lg" style="letter-spacing: 0.5px;">Peta Potensi</span>
+        <i class="fas fa-compass" style="color: var(--blue-primary); filter: drop-shadow(0 0 10px rgba(74,155,199,0.3));"></i>
+        <span class="font-bold text-lg" style="letter-spacing: 0.5px; color: var(--text-primary);">Peta Potensi</span>
       </div>
       <div id="potensiForm">
         <div class="grid grid-cols-2 gap-2 text-sm">
-          <div><label class="block text-xs font-medium" style="color: var(--text-secondary);"><i class="fas fa-heart mr-1" style="color:var(--red-bright);"></i> Minat</label><select id="minat" class="select select-bordered select-sm w-full"><option>Olahraga</option><option>Seni</option><option>Sains</option><option>Teknologi</option><option>Bahasa</option><option>Lainnya</option></select></div>
-          <div><label class="block text-xs font-medium" style="color: var(--text-secondary);"><i class="fas fa-brain mr-1 icon-purple"></i> Gaya Belajar</label><select id="gayaBelajar" class="select select-bordered select-sm w-full"><option>Visual</option><option>Auditori</option><option>Kinestetik</option><option>Baca/Tulis</option></select></div>
+          <div><label class="block text-xs font-medium" style="color: var(--text-secondary);"><i class="fas fa-heart mr-1" style="color:var(--red-primary);"></i> Minat</label><select id="minat" class="select select-bordered select-sm w-full"><option>Olahraga</option><option>Seni</option><option>Sains</option><option>Teknologi</option><option>Bahasa</option><option>Lainnya</option></select></div>
+          <div><label class="block text-xs font-medium" style="color: var(--text-secondary);"><i class="fas fa-brain mr-1" style="color: var(--purple-primary);"></i> Gaya Belajar</label><select id="gayaBelajar" class="select select-bordered select-sm w-full"><option>Visual</option><option>Auditori</option><option>Kinestetik</option><option>Baca/Tulis</option></select></div>
         </div>
-        <div><label class="block text-xs font-medium mt-2" style="color: var(--text-secondary);"><i class="fas fa-rocket mr-1 icon-blue"></i> Cita-cita</label><input id="citaCita" type="text" placeholder="Cita-citamu" class="input input-bordered input-sm w-full"></div>
-        <div><label class="block text-xs font-medium mt-2" style="color: var(--text-secondary);"><i class="fas fa-gem mr-1 icon-purple"></i> Kekuatan Karakter</label><select id="karakter" class="select select-bordered select-sm w-full"><option>Pemberani</option><option>Baik Hati</option><option>Kreatif</option><option>Pantang Menyerah</option><option>Disiplin</option><option>Pemimpin</option><option>Jujur</option></select></div>
-        <div><label class="block text-xs font-medium mt-2" style="color: var(--text-secondary);"><i class="fas fa-futbol mr-1 icon-blue"></i> Ekstrakurikuler</label><input id="ekskul" type="text" placeholder="Kegiatan ekstra" class="input input-bordered input-sm w-full"></div>
+        <div><label class="block text-xs font-medium mt-2" style="color: var(--text-secondary);"><i class="fas fa-rocket mr-1" style="color: var(--blue-primary);"></i> Cita-cita</label><input id="citaCita" type="text" placeholder="Cita-citamu" class="input input-bordered input-sm w-full"></div>
+        <div><label class="block text-xs font-medium mt-2" style="color: var(--text-secondary);"><i class="fas fa-gem mr-1" style="color: var(--purple-primary);"></i> Kekuatan Karakter</label><select id="karakter" class="select select-bordered select-sm w-full"><option>Pemberani</option><option>Baik Hati</option><option>Kreatif</option><option>Pantang Menyerah</option><option>Disiplin</option><option>Pemimpin</option><option>Jujur</option></select></div>
+        <div><label class="block text-xs font-medium mt-2" style="color: var(--text-secondary);"><i class="fas fa-futbol mr-1" style="color: var(--blue-primary);"></i> Ekstrakurikuler</label><input id="ekskul" type="text" placeholder="Kegiatan ekstra" class="input input-bordered input-sm w-full"></div>
         <button id="simpanPotensi" class="btn btn-primary-custom btn-sm w-full mt-3"><i class="fas fa-database mr-1"></i> Simpan Peta Potensi</button>
       </div>
-      <div id="potensiDone" class="hidden font-semibold" style="color: #4ade80; text-shadow: 0 0 10px rgba(74,222,128,0.3);"><i class="fas fa-check-circle"></i> Peta Potensi Sudah Diisi</div>
+      <div id="potensiDone" class="hidden font-semibold" style="color: #4a9b7a; text-shadow: 0 0 10px rgba(74,155,122,0.2);"><i class="fas fa-check-circle"></i> Peta Potensi Sudah Diisi</div>
     </div>
 
     <!-- Fitur Aksi -->
     <div class="grid grid-cols-2 gap-3 fade-in">
       <div class="card-glass p-4 text-center cursor-pointer" onclick="openModal('perbuatanBaikModal')">
-        <i class="fas fa-star text-3xl icon-yellow"></i>
-        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px;">Perbuatan Baik</div>
+        <i class="fas fa-star text-3xl" style="color: #d4a017; filter: drop-shadow(0 0 10px rgba(212,160,23,0.3));"></i>
+        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px; color: var(--text-primary);">Perbuatan Baik</div>
         <div id="perbuatanStatus" class="text-xs mt-1" style="color: var(--text-muted);">Klik untuk catat</div>
       </div>
       <div class="card-glass p-4 text-center cursor-pointer" onclick="openModal('curhatModal')">
-        <i class="fas fa-comment-dots text-3xl icon-purple"></i>
-        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px;">Curhat</div>
+        <i class="fas fa-comment-dots text-3xl" style="color: var(--purple-primary); filter: drop-shadow(0 0 10px var(--purple-glow));"></i>
+        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px; color: var(--text-primary);">Curhat</div>
         <div class="text-xs mt-1" style="color: var(--text-muted);">Ceritakan</div>
       </div>
       <div class="card-glass p-4 text-center cursor-pointer" onclick="openModal('jurnalModal')">
-        <i class="fas fa-book-open text-3xl icon-blue"></i>
-        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px;">Jurnal Harian</div>
+        <i class="fas fa-book-open text-3xl" style="color: var(--blue-cyan); filter: drop-shadow(0 0 10px rgba(137,207,240,0.4));"></i>
+        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px; color: var(--text-primary);">Jurnal Harian</div>
         <div class="text-xs mt-1" style="color: var(--text-muted);">Catat perasaan</div>
       </div>
       <div class="card-glass p-4 text-center cursor-pointer" onclick="showRiwayat()">
-        <i class="fas fa-history text-3xl icon-red"></i>
-        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px;">Riwayat Curhat</div>
+        <i class="fas fa-history text-3xl" style="color: var(--red-primary); filter: drop-shadow(0 0 10px var(--red-glow));"></i>
+        <div class="font-bold text-sm mt-2" style="letter-spacing: 0.3px; color: var(--text-primary);">Riwayat Curhat</div>
         <div class="text-xs mt-1" style="color: var(--text-muted);">Balasan</div>
       </div>
     </div>
@@ -577,7 +755,7 @@
     <!-- Aktivitas Terakhir -->
     <div class="card-glass p-4 fade-in">
       <div class="flex justify-between">
-        <span class="font-bold"><i class="fas fa-bolt icon-yellow mr-2"></i>Aktivitas Terakhir</span>
+        <span class="font-bold" style="color: var(--text-primary);"><i class="fas fa-bolt mr-2" style="color: #d4a017;"></i>Aktivitas Terakhir</span>
         <span class="text-xs" style="color: var(--text-muted);">hari ini</span>
       </div>
       <div id="recentActivity" class="text-sm mt-2" style="color: var(--text-secondary);">Belum ada aktivitas.</div>
@@ -601,29 +779,29 @@
     <div>
       <span class="futuristic-badge px-3 py-1 rounded-full"><i class="fas fa-satellite-dish mr-1"></i> Wali Digital</span>
       <h1 class="text-2xl font-bold mt-2" style="font-family: 'Orbitron', sans-serif;">
-        <i class="fas fa-chalkboard-teacher mr-2 icon-purple"></i>Dashboard Wali
+        <i class="fas fa-chalkboard-teacher mr-2" style="color: var(--blue-primary);"></i>Dashboard Wali
       </h1>
       <p class="text-sm mt-1" style="color: var(--text-secondary);">Selamat datang, <span id="waliNameDisplay" class="gradient-text">Wali Kelas</span></p>
     </div>
-    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-bright);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
+    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
   </div>
 
   <div class="grid grid-cols-3 gap-3 mt-4 fade-in">
     <div class="card-glass p-3 text-center stat-card stat-blue">
-      <div class="text-2xl font-bold" style="color: var(--blue-cyan); text-shadow: 0 0 18px rgba(0,187,255,0.4);" id="totalSiswa">0</div>
+      <div class="text-2xl font-bold" style="color: var(--blue-primary); text-shadow: 0 0 18px rgba(74,155,199,0.3);" id="totalSiswa">0</div>
       <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-users mr-1"></i>Total Siswa</div>
     </div>
     <div class="card-glass p-3 text-center stat-card stat-red">
-      <div class="text-2xl font-bold" style="color: var(--red-bright); text-shadow: 0 0 18px var(--red-glow);" id="curhatDarurat">0</div>
+      <div class="text-2xl font-bold" style="color: var(--red-primary); text-shadow: 0 0 18px var(--red-glow);" id="curhatDarurat">0</div>
       <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-exclamation-triangle mr-1"></i>Darurat</div>
     </div>
     <div class="card-glass p-3 text-center stat-card stat-yellow">
-      <div class="text-2xl font-bold" style="color: #fde047; text-shadow: 0 0 18px rgba(253,224,71,0.35);" id="curhatBelumDibaca">0</div>
+      <div class="text-2xl font-bold" style="color: #d4a017; text-shadow: 0 0 18px rgba(212,160,23,0.25);" id="curhatBelumDibaca">0</div>
       <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-envelope mr-1"></i>Belum Dibaca</div>
     </div>
   </div>
 
-  <div class="flex gap-2 mt-5 border-b" style="border-color: rgba(139, 92, 246, 0.12) !important;">
+  <div class="flex gap-2 mt-5 border-b" style="border-color: rgba(74, 155, 199, 0.1) !important;">
     <button id="tabSiswa" class="px-4 py-2 text-sm font-medium tab-active" onclick="switchWaliTab('siswa')">
       <i class="fas fa-users mr-1"></i> Siswa
     </button>
@@ -637,7 +815,7 @@
 
   <div id="tabSiswaContent" class="mt-4 fade-in">
     <div class="flex justify-between items-center mb-3">
-      <h3 class="font-bold"><i class="fas fa-address-book icon-purple mr-2"></i> Daftar Siswa</h3>
+      <h3 class="font-bold" style="color: var(--text-primary);"><i class="fas fa-address-book" style="color: var(--purple-primary);"></i> Daftar Siswa</h3>
       <button onclick="showTambahSiswa()" class="btn btn-primary-custom btn-sm">
         <i class="fas fa-user-plus mr-1"></i> Tambah
       </button>
@@ -646,13 +824,13 @@
   </div>
 
   <div id="tabCurhatContent" class="mt-4 hidden">
-    <h3 class="font-bold"><i class="fas fa-inbox icon-purple mr-2"></i> Inbox Curhat</h3>
+    <h3 class="font-bold" style="color: var(--text-primary);"><i class="fas fa-inbox" style="color: var(--purple-primary);"></i> Inbox Curhat</h3>
     <div id="curhatInbox" class="space-y-2 mt-3"></div>
   </div>
 
   <div id="tabLaporanContent" class="mt-4 hidden">
     <div class="flex justify-between items-center mb-3">
-      <h3 class="font-bold"><i class="fas fa-chart-bar icon-green mr-2"></i> Laporan Lengkap Siswa</h3>
+      <h3 class="font-bold" style="color: var(--text-primary);"><i class="fas fa-chart-bar" style="color: #4a9b7a;"></i> Laporan Lengkap Siswa</h3>
       <button onclick="exportLaporan()" class="btn btn-success-custom btn-sm">
         <i class="fas fa-file-excel mr-1"></i> Export Excel
       </button>
@@ -669,29 +847,29 @@
     <div>
       <span class="futuristic-badge px-3 py-1 rounded-full"><i class="fas fa-crown mr-1"></i> Super Admin</span>
       <h1 class="text-2xl font-bold mt-2" style="font-family: 'Orbitron', sans-serif;">
-        <i class="fas fa-user-shield mr-2 icon-purple"></i>Dashboard Admin
+        <i class="fas fa-user-shield mr-2" style="color: var(--purple-primary);"></i>Dashboard Admin
       </h1>
       <p class="text-sm mt-1" style="color: var(--text-secondary);">Selamat datang, <span id="adminNameDisplay" class="gradient-text">Admin Super</span></p>
     </div>
-    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-bright);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
+    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
   </div>
 
   <div class="grid grid-cols-3 gap-3 mt-4 fade-in">
     <div class="card-glass p-3 text-center stat-card stat-blue">
-      <div class="text-2xl font-bold" style="color: var(--blue-cyan); text-shadow: 0 0 18px rgba(0,187,255,0.4);" id="totalWali">0</div>
+      <div class="text-2xl font-bold" style="color: var(--blue-primary); text-shadow: 0 0 18px rgba(74,155,199,0.3);" id="totalWali">0</div>
       <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-chalkboard-teacher mr-1"></i>Total Wali</div>
     </div>
     <div class="card-glass p-3 text-center stat-card stat-purple">
-      <div class="text-2xl font-bold" style="color: var(--purple-bright); text-shadow: 0 0 18px var(--purple-glow);" id="totalSiswaAdmin">0</div>
+      <div class="text-2xl font-bold" style="color: var(--purple-primary); text-shadow: 0 0 18px var(--purple-glow);" id="totalSiswaAdmin">0</div>
       <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-users mr-1"></i>Total Siswa</div>
     </div>
     <div class="card-glass p-3 text-center stat-card stat-yellow">
-      <div class="text-2xl font-bold" style="color: #fde047; text-shadow: 0 0 18px rgba(253,224,71,0.35);" id="totalCurhatAdmin">0</div>
+      <div class="text-2xl font-bold" style="color: #d4a017; text-shadow: 0 0 18px rgba(212,160,23,0.25);" id="totalCurhatAdmin">0</div>
       <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-comment mr-1"></i>Total Curhat</div>
     </div>
   </div>
 
-  <div class="flex gap-2 mt-5 border-b" style="border-color: rgba(139, 92, 246, 0.12) !important;">
+  <div class="flex gap-2 mt-5 border-b" style="border-color: rgba(74, 155, 199, 0.1) !important;">
     <button id="adminTabWali" class="px-4 py-2 text-sm font-medium tab-active" onclick="switchAdminTab('wali')">
       <i class="fas fa-chalkboard-teacher mr-1"></i> Kelola Wali
     </button>
@@ -705,7 +883,7 @@
 
   <div id="adminTabWaliContent" class="mt-4 fade-in">
     <div class="flex justify-between items-center mb-3">
-      <h3 class="font-bold"><i class="fas fa-user-plus icon-green mr-2"></i> Daftar Wali Kelas</h3>
+      <h3 class="font-bold" style="color: var(--text-primary);"><i class="fas fa-user-plus" style="color: #4a9b7a;"></i> Daftar Wali Kelas</h3>
       <button onclick="showTambahWali()" class="btn btn-primary-custom btn-sm">
         <i class="fas fa-plus mr-1"></i> Tambah Wali
       </button>
@@ -714,12 +892,12 @@
   </div>
 
   <div id="adminTabSiswaContent" class="mt-4 hidden">
-    <h3 class="font-bold"><i class="fas fa-address-book icon-purple mr-2"></i> Semua Siswa</h3>
+    <h3 class="font-bold" style="color: var(--text-primary);"><i class="fas fa-address-book" style="color: var(--purple-primary);"></i> Semua Siswa</h3>
     <div id="allStudentsList" class="space-y-2 mt-3"></div>
   </div>
 
   <div id="adminTabStatistikContent" class="mt-4 hidden">
-    <h3 class="font-bold"><i class="fas fa-chart-pie icon-blue mr-2"></i> Statistik Sekolah</h3>
+    <h3 class="font-bold" style="color: var(--text-primary);"><i class="fas fa-chart-pie" style="color: var(--blue-primary);"></i> Statistik Sekolah</h3>
     <div id="statistikContent" class="space-y-3 mt-3"></div>
   </div>
 </div>
@@ -731,9 +909,9 @@
 <div class="modal">
   <div class="modal-box max-w-md">
     <label for="detailSiswaModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-user-graduate icon-purple mr-2"></i> <span id="detailSiswaNama">Nama Siswa</span></h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-user-graduate" style="color: var(--purple-primary);"></i> <span id="detailSiswaNama">Nama Siswa</span></h3>
     <div class="divider"></div>
-    <div class="flex gap-2 border-b mb-3" style="border-color: rgba(139, 92, 246, 0.12) !important;">
+    <div class="flex gap-2 border-b mb-3" style="border-color: rgba(74, 155, 199, 0.1) !important;">
       <button class="px-3 py-1 text-xs font-medium tab-active" onclick="switchDetailTab('profil')" id="detailTabProfil"><i class="fas fa-id-card mr-1"></i>Profil</button>
       <button class="px-3 py-1 text-xs font-medium" style="color: var(--text-muted);" onclick="switchDetailTab('potensi')" id="detailTabPotensi"><i class="fas fa-compass mr-1"></i>Potensi</button>
       <button class="px-3 py-1 text-xs font-medium" style="color: var(--text-muted);" onclick="switchDetailTab('aktivitas')" id="detailTabAktivitas"><i class="fas fa-bolt mr-1"></i>Aktivitas</button>
@@ -748,23 +926,23 @@
       <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-chalkboard-teacher mr-1"></i>Wali Kelas</span><span id="dWaliName" class="font-medium">-</span></div>
     </div>
     <div id="detailPotensi" class="hidden space-y-2 text-sm">
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-heart mr-1" style="color:var(--red-bright);"></i>Minat</span><span id="dMinat" class="font-medium">-</span></div>
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-brain mr-1 icon-purple"></i>Gaya Belajar</span><span id="dGayaBelajar" class="font-medium">-</span></div>
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-rocket mr-1 icon-blue"></i>Cita-cita</span><span id="dCitaCita" class="font-medium">-</span></div>
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-gem mr-1 icon-purple"></i>Kekuatan Karakter</span><span id="dKarakter" class="font-medium">-</span></div>
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-futbol mr-1 icon-blue"></i>Ekstrakurikuler</span><span id="dEkskul" class="font-medium">-</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-heart mr-1" style="color:var(--red-primary);"></i>Minat</span><span id="dMinat" class="font-medium">-</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-brain mr-1" style="color: var(--purple-primary);"></i>Gaya Belajar</span><span id="dGayaBelajar" class="font-medium">-</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-rocket mr-1" style="color: var(--blue-primary);"></i>Cita-cita</span><span id="dCitaCita" class="font-medium">-</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-gem mr-1" style="color: var(--purple-primary);"></i>Kekuatan Karakter</span><span id="dKarakter" class="font-medium">-</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-futbol mr-1" style="color: var(--blue-primary);"></i>Ekstrakurikuler</span><span id="dEkskul" class="font-medium">-</span></div>
     </div>
     <div id="detailAktivitas" class="hidden space-y-2 text-sm">
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-star mr-1"></i>Total Perbuatan Baik</span><span id="dTotalBaik" class="font-medium" style="color: #fde047;">0</span></div>
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-book mr-1"></i>Total Jurnal</span><span id="dTotalJurnal" class="font-medium" style="color: var(--blue-cyan);">0</span></div>
-      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-comment mr-1"></i>Total Curhat</span><span id="dTotalCurhat" class="font-medium" style="color: var(--purple-bright);">0</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-star mr-1"></i>Total Perbuatan Baik</span><span id="dTotalBaik" class="font-medium" style="color: #d4a017;">0</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-book mr-1"></i>Total Jurnal</span><span id="dTotalJurnal" class="font-medium" style="color: var(--blue-primary);">0</span></div>
+      <div class="flex justify-between"><span style="color: var(--text-muted);"><i class="fas fa-comment mr-1"></i>Total Curhat</span><span id="dTotalCurhat" class="font-medium" style="color: var(--purple-primary);">0</span></div>
       <div class="mt-3">
         <div class="text-xs font-medium" style="color: var(--text-muted);"><i class="fas fa-book-open mr-1"></i>Jurnal Terakhir:</div>
-        <div id="dJurnalTerakhir" class="p-2 rounded-lg text-xs mt-1" style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.1);">Belum ada jurnal</div>
+        <div id="dJurnalTerakhir" class="p-2 rounded-lg text-xs mt-1" style="background: rgba(74, 155, 199, 0.06); border: 1px solid rgba(74, 155, 199, 0.08);">Belum ada jurnal</div>
       </div>
       <div class="mt-2">
         <div class="text-xs font-medium" style="color: var(--text-muted);"><i class="fas fa-star mr-1"></i>Perbuatan Baik Terakhir:</div>
-        <div id="dPerbuatanTerakhir" class="p-2 rounded-lg text-xs mt-1" style="background: rgba(253,224,71,0.08); border: 1px solid rgba(253,224,71,0.1);">Belum ada</div>
+        <div id="dPerbuatanTerakhir" class="p-2 rounded-lg text-xs mt-1" style="background: rgba(212,160,23,0.06); border: 1px solid rgba(212,160,23,0.08);">Belum ada</div>
       </div>
     </div>
     <div id="detailCurhat" class="hidden space-y-2 text-sm max-h-60 overflow-y-auto">
@@ -806,7 +984,7 @@
 <div class="modal">
   <div class="modal-box">
     <label for="formKondisiModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-clipboard-list icon-green mr-2"></i> Laporan Kondisi Siswa</h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-clipboard-list" style="color: #4a9b7a;"></i> Laporan Kondisi Siswa</h3>
     <div class="space-y-3 mt-4">
       <div>
         <label class="block text-sm font-medium" style="color: var(--text-secondary);">
@@ -858,15 +1036,15 @@
 <div class="modal">
   <div class="modal-box relative">
     <label for="perbuatanBaikModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-star icon-yellow mr-2"></i>Perbuatan Baik Hari Ini</h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-star" style="color: #d4a017;"></i>Perbuatan Baik Hari Ini</h3>
     <div class="grid grid-cols-2 gap-2 mt-4">
-      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku membantu teman')"><i class="fas fa-handshake mr-1 icon-green"></i> Membantu teman</button>
-      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku berbagi makanan')"><i class="fas fa-utensils mr-1 icon-yellow"></i> Berbagi makanan</button>
-      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku menjaga kebersihan')"><i class="fas fa-broom mr-1 icon-blue"></i> Menjaga kebersihan</button>
-      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku berkata jujur')"><i class="fas fa-comment mr-1 icon-purple"></i> Berkata jujur</button>
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku membantu teman')"><i class="fas fa-handshake mr-1" style="color: #4a9b7a;"></i> Membantu teman</button>
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku berbagi makanan')"><i class="fas fa-utensils mr-1" style="color: #d4a017;"></i> Berbagi makanan</button>
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku menjaga kebersihan')"><i class="fas fa-broom mr-1" style="color: var(--blue-primary);"></i> Menjaga kebersihan</button>
+      <button class="btn btn-outline btn-sm" onclick="catatPerbuatan('Aku berkata jujur')"><i class="fas fa-comment mr-1" style="color: var(--purple-primary);"></i> Berkata jujur</button>
     </div>
     <div class="mt-3"><input id="perbuatanLain" placeholder="Tulis perbuatan baik lainnya..." class="input input-bordered w-full input-sm"/><button class="btn btn-primary-custom btn-sm mt-2 w-full" onclick="catatPerbuatan(document.getElementById('perbuatanLain').value || 'Lainnya')"><i class="fas fa-plus mr-1"></i> Catat</button></div>
-    <div id="perbuatanFeedback" class="mt-3 text-center font-semibold" style="color: var(--purple-bright); text-shadow: 0 0 12px var(--purple-glow);"></div>
+    <div id="perbuatanFeedback" class="mt-3 text-center font-semibold" style="color: var(--purple-primary); text-shadow: 0 0 12px var(--purple-glow);"></div>
   </div>
 </div>
 
@@ -875,14 +1053,14 @@
 <div class="modal">
   <div class="modal-box relative max-w-md">
     <label for="curhatModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-comment-dots icon-purple mr-2"></i>Curhat</h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-comment-dots" style="color: var(--purple-primary);"></i>Curhat</h3>
     <div id="curhatFlow" class="chat-container mt-3 space-y-1"></div>
     <div id="curhatOptions" class="flex flex-wrap gap-2 mt-2"></div>
     <div id="curhatTextArea" class="hidden mt-2">
       <textarea id="curhatCerita" class="textarea textarea-bordered w-full" placeholder="Ceritakan..." rows="2"></textarea>
       <button id="curhatSubmit" class="btn btn-primary-custom btn-sm mt-2 w-full"><i class="fas fa-paper-plane mr-1"></i> Kirim Curhat</button>
     </div>
-    <div id="curhatResult" class="font-semibold mt-2 hidden" style="color: #4ade80; text-shadow: 0 0 10px rgba(74,222,128,0.3);"><i class="fas fa-check-circle"></i> Terima kasih sudah curhat, sabar ya menunggu balasan dari Wali.</div>
+    <div id="curhatResult" class="font-semibold mt-2 hidden" style="color: #4a9b7a; text-shadow: 0 0 10px rgba(74,155,122,0.2);"><i class="fas fa-check-circle"></i> Terima kasih sudah curhat, sabar ya menunggu balasan dari Wali.</div>
     <div id="curhatReplyArea" class="hidden mt-3">
       <div class="divider text-xs" style="color: var(--text-muted);">💬 Balas</div>
       <div id="curhatReplies" class="space-y-2 max-h-60 overflow-y-auto"></div>
@@ -899,7 +1077,7 @@
 <div class="modal">
   <div class="modal-box">
     <label for="jurnalModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-book-open icon-blue mr-2"></i>Jurnal Harian</h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-book-open" style="color: var(--blue-primary);"></i>Jurnal Harian</h3>
     <div class="mt-3">
       <label class="block text-sm" style="color: var(--text-secondary);"><i class="fas fa-smile mr-1"></i> Bagaimana perasaanmu hari ini?</label>
       <div class="flex gap-3 text-3xl my-3">
@@ -912,7 +1090,7 @@
       <input id="jurnalEmoji" type="hidden" value="😊">
       <textarea id="jurnalCerita" class="textarea textarea-bordered w-full" placeholder="Ceritakan harimu..." rows="2"></textarea>
       <button onclick="simpanJurnal()" class="btn btn-primary-custom btn-sm w-full mt-2"><i class="fas fa-save mr-1"></i> Simpan Jurnal</button>
-      <div id="jurnalFeedback" class="text-sm mt-1" style="color: #4ade80; text-shadow: 0 0 10px rgba(74,222,128,0.3);"></div>
+      <div id="jurnalFeedback" class="text-sm mt-1" style="color: #4a9b7a; text-shadow: 0 0 10px rgba(74,155,122,0.2);"></div>
     </div>
     <div class="mt-3 text-xs" style="color: var(--text-muted);"><i class="fas fa-calendar-alt mr-1"></i> Riwayat jurnal</div>
     <div id="miniJurnal" class="text-xs space-y-1 max-h-32 overflow-y-auto"></div>
@@ -920,9 +1098,9 @@
 </div>
 
 <!-- MODAL RIWAYAT CURHAT -->
-<div id="riwayatPanel" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(0,0,30,0.5); backdrop-filter: blur(8px);" onclick="if(event.target===this) closeRiwayat()">
-  <div class="rounded-3xl p-5 max-w-sm w-full max-h-[80vh] overflow-y-auto" style="background: rgba(0, 18, 70, 0.92); backdrop-filter: blur(24px); border: var(--border-glow); box-shadow: 0 0 70px rgba(139, 92, 246, 0.12), 0 25px 60px rgba(0, 0, 0, 0.3);">
-    <div class="flex justify-between"><span class="font-bold"><i class="fas fa-history icon-red mr-2"></i>Riwayat Curhat</span><button onclick="closeRiwayat()" class="btn btn-sm btn-ghost">✕</button></div>
+<div id="riwayatPanel" class="fixed inset-0 flex items-center justify-center z-50 hidden" style="background: rgba(74,155,199,0.08); backdrop-filter: blur(8px);" onclick="if(event.target===this) closeRiwayat()">
+  <div class="rounded-3xl p-5 max-w-sm w-full max-h-[80vh] overflow-y-auto" style="background: rgba(255,255,255,0.85); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 20px 60px rgba(74,155,199,0.12);">
+    <div class="flex justify-between"><span class="font-bold" style="color: var(--text-primary);"><i class="fas fa-history" style="color: var(--red-primary);"></i>Riwayat Curhat</span><button onclick="closeRiwayat()" class="btn btn-sm btn-ghost">✕</button></div>
     <div id="riwayatList" class="space-y-3 mt-3 text-sm"></div>
   </div>
 </div>
@@ -932,7 +1110,7 @@
 <div class="modal">
   <div class="modal-box">
     <label for="tambahSiswaModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-user-plus icon-green mr-2"></i>Tambah Siswa</h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-user-plus" style="color: #4a9b7a;"></i>Tambah Siswa</h3>
     <div class="space-y-3 mt-4">
       <div>
         <label class="block text-sm font-medium" style="color: var(--text-secondary);">
@@ -954,7 +1132,7 @@
       </div>
       <div>
         <label class="block text-sm font-medium" style="color: var(--text-secondary);">
-          <i class="fas fa-lock mr-1"></i> PIN (Default: 51sw@qu)
+          <i class="fas fa-lock mr-1"></i> PIN (Password: ******)
         </label>
         <input id="siswaPIN" class="input input-bordered w-full" placeholder="51sw@qu" value="51sw@qu">
       </div>
@@ -973,7 +1151,7 @@
 <div class="modal">
   <div class="modal-box">
     <label for="tambahWaliModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-user-plus icon-purple mr-2"></i>Tambah Wali Kelas</h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-user-plus" style="color: var(--purple-primary);"></i>Tambah Wali Kelas</h3>
     <div class="space-y-3 mt-4">
       <div>
         <label class="block text-sm font-medium" style="color: var(--text-secondary);">
@@ -995,7 +1173,7 @@
       </div>
       <div>
         <label class="block text-sm font-medium" style="color: var(--text-secondary);">
-          <i class="fas fa-lock mr-1"></i> Password (Default: d4Rm@app)
+          <i class="fas fa-lock mr-1"></i> Password (Password: ******)
         </label>
         <input id="waliPasswordBaru" class="input input-bordered w-full" placeholder="d4Rm@app" value="d4Rm@app">
       </div>
@@ -1014,9 +1192,9 @@
 <div class="modal">
   <div class="modal-box">
     <label for="balasCurhatModal" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-    <h3 class="font-bold text-lg"><i class="fas fa-reply icon-purple mr-2"></i>Balas Curhat</h3>
+    <h3 class="font-bold text-lg"><i class="fas fa-reply" style="color: var(--purple-primary);"></i>Balas Curhat</h3>
     <div class="mt-3">
-      <div class="p-3 rounded-lg text-sm" style="background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.15);" id="curhatDetail"></div>
+      <div class="p-3 rounded-lg text-sm" style="background: rgba(74, 155, 199, 0.06); border: 1px solid rgba(74, 155, 199, 0.08);" id="curhatDetail"></div>
       
       <!-- Riwayat Balasan -->
       <div id="curhatDetailReplies" class="mt-3 space-y-2 max-h-40 overflow-y-auto"></div>
@@ -1028,7 +1206,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- JAVASCRIPT -->
+<!-- JAVASCRIPT (SAMA SEPERTI SEBELUMNYA, TIDAK DIUBAH) -->
 <!-- ============================================================ -->
 <script>
 // ============================================================
@@ -1353,7 +1531,6 @@ class DataStore {
   getLaporanKondisiTerakhir(studentId) {
     const list = this.getLaporanKondisi(studentId);
     if (list.length === 0) return null;
-    // Urutkan berdasarkan updated_at atau created_at
     const sorted = list.sort((a, b) => {
       const dateA = new Date(a.updated_at || a.created_at || 0);
       const dateB = new Date(b.updated_at || b.created_at || 0);
@@ -1364,16 +1541,13 @@ class DataStore {
   
   saveLaporanKondisi(laporan) {
     try {
-      // Cek apakah sudah ada dengan periode yang sama
       const existing = this.data.laporanKondisi.filter(l => l.student_id === laporan.student_id);
       const existingSamePeriod = existing.find(l => l.periode === laporan.periode);
       
       if (existingSamePeriod) {
-        // Update existing
         Object.assign(existingSamePeriod, laporan);
         existingSamePeriod.updated_at = new Date().toISOString();
       } else {
-        // Insert new
         laporan.id = 'lk_' + Date.now();
         laporan.created_at = new Date().toISOString();
         laporan.updated_at = new Date().toISOString();
@@ -1382,7 +1556,6 @@ class DataStore {
       
       this.saveToStorage();
       
-      // Sync ke API
       if (this.isOnline && CONFIG.USE_API) {
         const params = new URLSearchParams({
           action: 'saveLaporanKondisi',
@@ -1772,7 +1945,7 @@ function updatePerbuatanStatus() {
   const el = document.getElementById('perbuatanStatus');
   if (pb) {
     el.innerHTML = '✔️ Sudah';
-    el.className = 'text-xs text-emerald-400 font-semibold';
+    el.className = 'text-xs text-emerald-500 font-semibold';
     perbuatanToday = true;
   } else {
     el.innerHTML = 'Klik untuk catat';
@@ -1968,7 +2141,7 @@ function pilihEmoji(emoji) {
   document.querySelectorAll('#jurnalModal .text-3xl span').forEach(function(s) {
     s.style.transform = s.textContent.trim() === emoji ? 'scale(1.4)' : 'scale(1)';
     s.style.transition = 'transform 0.2s';
-    s.style.filter = s.textContent.trim() === emoji ? 'drop-shadow(0 0 10px rgba(139,92,246,0.5))' : 'none';
+    s.style.filter = s.textContent.trim() === emoji ? 'drop-shadow(0 0 10px rgba(74,155,199,0.3))' : 'none';
   });
 }
 
@@ -2006,11 +2179,11 @@ function renderMiniJurnal() {
     return;
   }
   container.innerHTML = jurnalList.slice(-3).reverse().map(function(j) {
-    return `<div class="flex gap-2 items-start p-1 border-b border-slate-700/20">
+    return `<div class="flex gap-2 items-start p-1 border-b" style="border-color: rgba(74,155,199,0.08);">
       <span class="text-lg">${j.emoji || '📖'}</span>
       <div>
-        <div class="text-slate-300">${j.cerita}</div>
-        <div class="text-slate-500 text-xs">${new Date(j.created_at).toLocaleDateString('id-ID')}</div>
+        <div style="color: var(--text-secondary);">${j.cerita}</div>
+        <div style="color: var(--text-muted); font-size: 0.65rem;">${new Date(j.created_at).toLocaleDateString('id-ID')}</div>
       </div>
     </div>`;
   }).join('');
@@ -2035,25 +2208,25 @@ function loadRiwayat() {
     const replyCount = replies.length;
     
     let statusText = '⏳ Menunggu Balasan';
-    let statusColor = 'text-yellow-400';
+    let statusColor = 'text-amber-500';
     if (replyCount > 0) {
       statusText = '💬 ' + replyCount + ' balasan';
-      statusColor = 'text-emerald-400';
+      statusColor = 'text-emerald-500';
     }
     
-    return `<div class="border-b border-slate-700/20 py-3">
+    return `<div class="border-b py-3" style="border-color: rgba(74,155,199,0.08);">
       <div class="flex justify-between items-start">
         <div>
-          <div class="font-medium">${c.untuk_siapa || 'Siswa'}</div>
-          <div class="text-xs text-slate-400">${new Date(c.created_at).toLocaleString()}</div>
+          <div class="font-medium" style="color: var(--text-primary);">${c.untuk_siapa || 'Siswa'}</div>
+          <div class="text-xs" style="color: var(--text-muted);">${new Date(c.created_at).toLocaleString()}</div>
         </div>
         <span class="text-xs ${statusColor}">${statusText}</span>
       </div>
-      <div class="text-sm mt-1">${c.cerita}</div>
+      <div class="text-sm mt-1" style="color: var(--text-secondary);">${c.cerita}</div>
       ${replyCount > 0 ? `
-        <div class="mt-2 text-xs text-slate-400">
+        <div class="mt-2 text-xs" style="color: var(--text-muted);">
           <i class="fas fa-reply mr-1"></i> Balasan terakhir: ${lastReply ? lastReply.message.substring(0, 40) + (lastReply.message.length > 40 ? '...' : '') : ''}
-          <span class="block text-slate-500 text-xs mt-1">dari ${lastReply ? lastReply.sender_name : ''}</span>
+          <span class="block" style="color: var(--text-secondary); font-size: 0.65rem; margin-top: 2px;">dari ${lastReply ? lastReply.sender_name : ''}</span>
         </div>
       ` : ''}
       <button onclick="openCurhatDetail('${c.id}')" class="btn btn-primary-custom btn-xs mt-2">
@@ -2077,10 +2250,10 @@ function openCurhatDetail(curhatId) {
   const flow = document.getElementById('curhatFlow');
   flow.innerHTML = `
     <div class="bubble bubble-left">${curhat.cerita}</div>
-    <div class="text-xs text-slate-400 mt-1 ml-2">${new Date(curhat.created_at).toLocaleString()}</div>
+    <div class="text-xs" style="color: var(--text-muted); margin-top: 4px; margin-left: 8px;">${new Date(curhat.created_at).toLocaleString()}</div>
     <div class="text-xs mt-1 ml-2">
       <span class="status-badge ${curhat.tingkat_darurat === 'Aku butuh bantuan sekarang' ? 'status-red' : 'status-yellow'}">${curhat.tingkat_darurat}</span>
-      <span class="ml-2 text-slate-400">${curhat.kategori} · ${curhat.sub_kategori}</span>
+      <span class="ml-2" style="color: var(--text-muted);">${curhat.kategori} · ${curhat.sub_kategori}</span>
     </div>
   `;
   
@@ -2172,13 +2345,13 @@ function renderStudentList() {
     }
     
     return `
-      <div class="student-card card-glass p-3 flex items-center justify-between fade-in">
+      <div class="student-card p-3 flex items-center justify-between fade-in">
         <div class="flex items-center gap-3 cursor-pointer" onclick="showStudentDetail('${s.id}')">
-          <div style="width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(239,68,68,0.12));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;border:1px solid rgba(139,92,246,0.2);font-size:0.9rem;">
+          <div style="width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,rgba(74,155,199,0.15),rgba(123,156,214,0.1));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text-primary);border:1px solid rgba(255,255,255,0.2);font-size:0.9rem;">
             ${s.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <div class="font-semibold text-sm">${s.name}</div>
+            <div class="font-semibold text-sm" style="color: var(--text-primary);">${s.name}</div>
             <div class="text-xs" style="color: var(--text-muted);">
               <i class="fas fa-hashtag mr-1"></i>${s.nis} · 
               <i class="fas fa-layer-group ml-1 mr-1"></i>${s.class}
@@ -2188,8 +2361,7 @@ function renderStudentList() {
         <div class="flex items-center gap-2">
           ${statusBadge}
           <button onclick="event.stopPropagation(); deleteStudentConfirm('${s.id}')" 
-                  class="btn btn-sm btn-ghost text-red-400 hover:text-red-300"
-                  style="padding:4px 8px;">
+                  class="btn btn-sm btn-ghost" style="color: var(--red-primary); padding:4px 8px;">
             <i class="fas fa-trash-alt"></i>
           </button>
         </div>
@@ -2223,12 +2395,12 @@ function renderCurhatInbox() {
       const replyCount = replies.length;
       
       return `
-        <div class="card-glass p-3 cursor-pointer fade-in ${!c.is_read ? 'border-l-4 border-l-purple-500' : ''}" 
+        <div class="card-glass p-3 cursor-pointer fade-in ${!c.is_read ? 'border-l-4' : ''}" style="${!c.is_read ? 'border-left-color: var(--blue-primary);' : ''}" 
              onclick="openBalasCurhat('${c.id}')">
           <div class="flex justify-between items-start">
             <div>
-              <div class="font-semibold text-sm">
-                <i class="fas fa-user-graduate mr-1 icon-purple"></i>
+              <div class="font-semibold text-sm" style="color: var(--text-primary);">
+                <i class="fas fa-user-graduate mr-1" style="color: var(--purple-primary);"></i>
                 ${student ? student.name : 'Unknown'}
               </div>
               <div class="text-xs" style="color: var(--text-muted);">
@@ -2237,7 +2409,7 @@ function renderCurhatInbox() {
             </div>
             <div class="flex items-center gap-2">
               ${isDarurat ? '<span class="status-badge status-red"><i class="fas fa-exclamation-triangle mr-1"></i>Darurat</span>' : ''}
-              ${!c.is_read ? '<span style="width:8px;height:8px;border-radius:50%;background:var(--purple-primary);box-shadow:0 0 8px var(--purple-primary);display:inline-block;"></span>' : ''}
+              ${!c.is_read ? '<span style="width:8px;height:8px;border-radius:50%;background:var(--blue-primary);box-shadow:0 0 8px var(--blue-primary);display:inline-block;"></span>' : ''}
             </div>
           </div>
           <div class="text-sm mt-1" style="color: var(--text-secondary);">${c.cerita}</div>
@@ -2245,7 +2417,7 @@ function renderCurhatInbox() {
             <div class="text-xs" style="color: var(--text-muted);">
               <i class="fas fa-clock mr-1"></i>${new Date(c.created_at).toLocaleString('id-ID')}
             </div>
-            ${replyCount > 0 ? '<span class="text-xs text-emerald-400"><i class="fas fa-reply mr-1"></i>' + replyCount + ' balasan</span>' : ''}
+            ${replyCount > 0 ? '<span class="text-xs text-emerald-500"><i class="fas fa-reply mr-1"></i>' + replyCount + ' balasan</span>' : ''}
           </div>
         </div>
       `;
@@ -2290,46 +2462,46 @@ function renderLaporanList() {
     return `
       <div class="report-section fade-in">
         <div class="flex justify-between items-center cursor-pointer" onclick="showStudentDetail('${s.id}')">
-          <div class="font-semibold text-sm">
-            <i class="fas fa-user-graduate mr-2 icon-purple"></i>${s.name}
+          <div class="font-semibold text-sm" style="color: var(--text-primary);">
+            <i class="fas fa-user-graduate mr-2" style="color: var(--purple-primary);"></i>${s.name}
           </div>
           <i class="fas fa-chevron-right text-xs" style="color: var(--text-muted);"></i>
         </div>
         
         <div class="grid grid-cols-2 gap-2 mt-2">
           <div class="bg-slate-800/30 p-2 rounded-lg text-center">
-            <div class="text-lg font-bold text-yellow-400">${totalBaik}</div>
-            <div class="text-xs text-slate-400">Perbuatan Baik</div>
+            <div class="text-lg font-bold" style="color: #d4a017;">${totalBaik}</div>
+            <div class="text-xs" style="color: var(--text-muted);">Perbuatan Baik</div>
           </div>
           <div class="bg-slate-800/30 p-2 rounded-lg text-center">
-            <div class="text-lg font-bold text-blue-400">${jurnalList.length}</div>
-            <div class="text-xs text-slate-400">Jurnal</div>
+            <div class="text-lg font-bold" style="color: var(--blue-primary);">${jurnalList.length}</div>
+            <div class="text-xs" style="color: var(--text-muted);">Jurnal</div>
           </div>
           <div class="bg-slate-800/30 p-2 rounded-lg text-center">
-            <div class="text-lg font-bold text-purple-400">${curhatList.length}</div>
-            <div class="text-xs text-slate-400">Curhat</div>
+            <div class="text-lg font-bold" style="color: var(--purple-primary);">${curhatList.length}</div>
+            <div class="text-xs" style="color: var(--text-muted);">Curhat</div>
           </div>
           <div class="bg-slate-800/30 p-2 rounded-lg text-center">
-            <div class="text-lg font-bold text-emerald-400">${totalReplies}</div>
-            <div class="text-xs text-slate-400">Balasan Curhat</div>
+            <div class="text-lg font-bold" style="color: #4a9b7a;">${totalReplies}</div>
+            <div class="text-xs" style="color: var(--text-muted);">Balasan Curhat</div>
           </div>
         </div>
         
         ${potensi ? `
-          <div class="mt-2 text-xs text-slate-400">
-            <i class="fas fa-compass mr-1 icon-purple"></i> Potensi: ${potensi.minat} · ${potensi.gaya_belajar}
+          <div class="mt-2 text-xs" style="color: var(--text-muted);">
+            <i class="fas fa-compass mr-1" style="color: var(--purple-primary);"></i> Potensi: ${potensi.minat} · ${potensi.gaya_belajar}
           </div>
         ` : ''}
         
         ${laporanKondisi ? `
-          <div class="mt-2 text-xs text-slate-400">
-            <i class="fas fa-clipboard-list mr-1 icon-green"></i> Laporan Kondisi: ${laporanKondisi.sikap} · Nilai: ${laporanKondisi.nilai_akademik || '-'}
+          <div class="mt-2 text-xs" style="color: var(--text-muted);">
+            <i class="fas fa-clipboard-list mr-1" style="color: #4a9b7a;"></i> Laporan Kondisi: ${laporanKondisi.sikap} · Nilai: ${laporanKondisi.nilai_akademik || '-'}
           </div>
         ` : ''}
         
         ${recentActivities.length > 0 ? `
           <div class="mt-2">
-            <div class="text-xs text-slate-400 font-medium"><i class="fas fa-bolt mr-1 icon-yellow"></i> Aktivitas Terbaru:</div>
+            <div class="text-xs" style="color: var(--text-muted); font-weight: 500;"><i class="fas fa-bolt mr-1" style="color: #d4a017;"></i> Aktivitas Terbaru:</div>
             ${recentActivities.map(function(a) {
               let icon = '📌';
               let text = '';
@@ -2343,7 +2515,7 @@ function renderLaporanList() {
                 icon = '💬';
                 text = a.data.cerita;
               }
-              return '<div class="text-xs text-slate-400 mt-1">' + icon + ' ' + text.substring(0, 40) + (text.length > 40 ? '...' : '') + '</div>';
+              return '<div class="text-xs" style="color: var(--text-muted); margin-top: 4px;">' + icon + ' ' + text.substring(0, 40) + (text.length > 40 ? '...' : '') + '</div>';
             }).join('')}
           </div>
         ` : ''}
@@ -2394,8 +2566,8 @@ function showStudentDetail(id) {
   document.getElementById('dNIS').textContent = student.nis;
   document.getElementById('dKelas').textContent = student.class;
   document.getElementById('dStatus').innerHTML = student.is_potensi_filled ? 
-    '<span class="text-emerald-400"><i class="fas fa-check-circle"></i> Potensi sudah diisi</span>' : 
-    '<span class="text-yellow-400"><i class="fas fa-clock"></i> Potensi belum diisi</span>';
+    '<span class="text-emerald-500"><i class="fas fa-check-circle"></i> Potensi sudah diisi</span>' : 
+    '<span class="text-amber-500"><i class="fas fa-clock"></i> Potensi belum diisi</span>';
   document.getElementById('dBergabung').textContent = new Date(student.created_at).toLocaleDateString('id-ID');
   document.getElementById('dWaliName').textContent = wali ? wali.name : '-';
   
@@ -2427,22 +2599,22 @@ function showStudentDetail(id) {
   
   const curhatContainer = document.getElementById('dCurhatList');
   if (curhatList.length === 0) {
-    curhatContainer.innerHTML = '<div class="text-center text-slate-400">Belum ada curhat</div>';
+    curhatContainer.innerHTML = '<div class="text-center" style="color: var(--text-muted);">Belum ada curhat</div>';
   } else {
     curhatContainer.innerHTML = curhatList.map(function(c) {
       const replies = store.getCurhatReplies(c.id);
       return `
-        <div class="p-2 rounded-lg bg-slate-800/30 border border-slate-700/30">
-          <div class="text-xs text-slate-400">${new Date(c.created_at).toLocaleString('id-ID')}</div>
-          <div class="text-sm mt-1">${c.cerita}</div>
+        <div class="p-2 rounded-lg" style="background: rgba(74,155,199,0.05); border: 1px solid rgba(74,155,199,0.06);">
+          <div class="text-xs" style="color: var(--text-muted);">${new Date(c.created_at).toLocaleString('id-ID')}</div>
+          <div class="text-sm mt-1" style="color: var(--text-secondary);">${c.cerita}</div>
           ${replies.length > 0 ? `
-            <div class="mt-1 text-xs text-emerald-400">
+            <div class="mt-1 text-xs text-emerald-500">
               <i class="fas fa-reply mr-1"></i> ${replies.length} balasan
             </div>
-            <div class="text-xs text-slate-400 mt-1">
+            <div class="text-xs" style="color: var(--text-muted); margin-top: 2px;">
               Terakhir: ${replies[replies.length - 1].message.substring(0, 40)}${replies[replies.length - 1].message.length > 40 ? '...' : ''}
             </div>
-          ` : '<div class="text-xs text-yellow-400">⏳ Menunggu balasan</div>'}
+          ` : '<div class="text-xs text-amber-500">⏳ Menunggu balasan</div>'}
         </div>
       `;
     }).join('');
@@ -2455,7 +2627,6 @@ function showStudentDetail(id) {
   document.getElementById('dCatatanKhusus').textContent = laporan?.catatan_khusus || '-';
   document.getElementById('dPeriode').textContent = laporan?.periode || '-';
   
-  // Set form kondisi dengan data siswa
   document.getElementById('formKondisiNama').value = student.name;
   document.getElementById('formKondisiNilai').value = laporan?.nilai_akademik || '';
   document.getElementById('formKondisiSikap').value = laporan?.sikap || 'Baik';
@@ -2473,7 +2644,7 @@ function switchDetailTab(tab) {
     const isActive = t.toLowerCase() === tab;
     if (content) content.classList.toggle('hidden', !isActive);
     if (btn) {
-      btn.className = 'px-3 py-1 text-xs font-medium' + (isActive ? ' tab-active' : '');
+      btn.className = 'px-3 py-1 text-xs font-medium' + (isActive ? 'tab-active' : '');
       btn.style.color = isActive ? '' : 'var(--text-muted)';
     }
   });
@@ -2521,9 +2692,7 @@ function simpanKondisi() {
   if (result.success) {
     alert('✅ Laporan kondisi berhasil disimpan!');
     document.getElementById('formKondisiModal').checked = false;
-    // Refresh detail
     showStudentDetail(detailStudentId);
-    // Refresh laporan
     renderLaporanList();
   } else {
     alert('❌ Gagal menyimpan laporan: ' + (result.error || 'Unknown error'));
@@ -2614,11 +2783,11 @@ function openBalasCurhat(id) {
   
   const student = store.getStudent(curhat.student_id);
   document.getElementById('curhatDetail').innerHTML = `
-    <div class="font-semibold"><i class="fas fa-user-graduate mr-1 icon-purple"></i>${student ? student.name : 'Unknown'}</div>
-    <div class="text-xs mt-1 text-slate-400"><i class="fas fa-tag mr-1"></i>${curhat.kategori} · ${curhat.sub_kategori}</div>
+    <div class="font-semibold" style="color: var(--text-primary);"><i class="fas fa-user-graduate mr-1" style="color: var(--purple-primary);"></i>${student ? student.name : 'Unknown'}</div>
+    <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-tag mr-1"></i>${curhat.kategori} · ${curhat.sub_kategori}</div>
     ${curhat.tingkat_darurat === 'Aku butuh bantuan sekarang' ? '<div class="text-xs mt-1"><span class="status-badge status-red">DARURAT</span></div>' : ''}
-    <div class="mt-2 text-slate-300">${curhat.cerita}</div>
-    <div class="text-xs mt-1 text-slate-400"><i class="fas fa-clock mr-1"></i>${new Date(curhat.created_at).toLocaleString('id-ID')}</div>
+    <div class="mt-2" style="color: var(--text-secondary);">${curhat.cerita}</div>
+    <div class="text-xs mt-1" style="color: var(--text-muted);"><i class="fas fa-clock mr-1"></i>${new Date(curhat.created_at).toLocaleString('id-ID')}</div>
   `;
   
   const replies = store.getCurhatReplies(id);
@@ -2633,8 +2802,8 @@ function openBalasCurhat(id) {
       return `
         <div class="p-2 rounded-lg ${isWali ? 'bg-purple-500/10 border border-purple-500/20' : 'bg-blue-500/10 border border-blue-500/20'}">
           <div class="text-xs font-medium ${isWali ? 'text-purple-400' : 'text-blue-400'}">${senderName}</div>
-          <div class="text-sm">${r.message}</div>
-          <div class="text-xs text-slate-400">${time}</div>
+          <div class="text-sm" style="color: var(--text-secondary);">${r.message}</div>
+          <div class="text-xs" style="color: var(--text-muted);">${time}</div>
         </div>
       `;
     }).join('');
@@ -2724,13 +2893,13 @@ function renderWaliList() {
     const unreadCount = store.getUnreadCurhat(w.id).length;
     
     return `
-      <div class="wali-card card-glass p-3 flex items-center justify-between fade-in">
+      <div class="wali-card p-3 flex items-center justify-between fade-in">
         <div class="flex items-center gap-3">
-          <div style="width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,0.3),rgba(0,112,255,0.15));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;border:1px solid rgba(139,92,246,0.2);font-size:0.9rem;">
+          <div style="width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,rgba(74,155,199,0.2),rgba(123,156,214,0.1));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text-primary);border:1px solid rgba(255,255,255,0.2);font-size:0.9rem;">
             ${w.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <div class="font-semibold text-sm">${w.name}</div>
+            <div class="font-semibold text-sm" style="color: var(--text-primary);">${w.name}</div>
             <div class="text-xs" style="color: var(--text-muted);">
               <i class="fas fa-envelope mr-1"></i>${w.email} · 
               <i class="fas fa-layer-group mr-1"></i>${w.class}
@@ -2743,8 +2912,7 @@ function renderWaliList() {
           </span>
           ${unreadCount > 0 ? '<span class="status-badge status-yellow">' + unreadCount + ' curhat</span>' : ''}
           <button onclick="event.stopPropagation(); deleteWaliConfirm('${w.id}')" 
-                  class="btn btn-sm btn-ghost text-red-400 hover:text-red-300"
-                  style="padding:4px 8px;">
+                  class="btn btn-sm btn-ghost" style="color: var(--red-primary); padding:4px 8px;">
             <i class="fas fa-trash-alt"></i>
           </button>
         </div>
@@ -2774,13 +2942,13 @@ function renderAllStudentsList() {
     const replies = curhatList.reduce(function(sum, c) { return sum + store.getCurhatReplies(c.id).length; }, 0);
     
     return `
-      <div class="student-card card-glass p-3 flex items-center justify-between fade-in">
+      <div class="student-card p-3 flex items-center justify-between fade-in">
         <div class="flex items-center gap-3 cursor-pointer" onclick="showStudentDetail('${s.id}')">
-          <div style="width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,0.2),rgba(239,68,68,0.12));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;border:1px solid rgba(139,92,246,0.2);font-size:0.9rem;">
+          <div style="width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,rgba(74,155,199,0.15),rgba(123,156,214,0.1));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--text-primary);border:1px solid rgba(255,255,255,0.2);font-size:0.9rem;">
             ${s.name.charAt(0).toUpperCase()}
           </div>
           <div>
-            <div class="font-semibold text-sm">${s.name}</div>
+            <div class="font-semibold text-sm" style="color: var(--text-primary);">${s.name}</div>
             <div class="text-xs" style="color: var(--text-muted);">
               <i class="fas fa-hashtag mr-1"></i>${s.nis} · 
               <i class="fas fa-layer-group ml-1 mr-1"></i>${s.class}
@@ -2790,10 +2958,9 @@ function renderAllStudentsList() {
         </div>
         <div class="flex items-center gap-2">
           ${unread > 0 ? '<span class="status-badge status-yellow">' + unread + '</span>' : ''}
-          ${replies > 0 ? '<span class="text-xs text-emerald-400"><i class="fas fa-reply mr-1"></i>' + replies + '</span>' : ''}
+          ${replies > 0 ? '<span class="text-xs text-emerald-500"><i class="fas fa-reply mr-1"></i>' + replies + '</span>' : ''}
           <button onclick="event.stopPropagation(); deleteStudentConfirm('${s.id}')" 
-                  class="btn btn-sm btn-ghost text-red-400 hover:text-red-300"
-                  style="padding:4px 8px;">
+                  class="btn btn-sm btn-ghost" style="color: var(--red-primary); padding:4px 8px;">
             <i class="fas fa-trash-alt"></i>
           </button>
         </div>
@@ -2826,48 +2993,48 @@ function renderStatistik() {
   const content = document.getElementById('statistikContent');
   content.innerHTML = `
     <div class="card-glass p-4">
-      <h4 class="font-bold text-sm"><i class="fas fa-school mr-2 icon-blue"></i>Statistik Sekolah</h4>
+      <h4 class="font-bold text-sm" style="color: var(--text-primary);"><i class="fas fa-school mr-2" style="color: var(--blue-primary);"></i>Statistik Sekolah</h4>
       <div class="grid grid-cols-2 gap-3 mt-3">
         <div class="bg-slate-800/30 p-3 rounded-lg text-center">
-          <div class="text-xl font-bold text-emerald-400">${allStudents.length}</div>
-          <div class="text-xs text-slate-400">Total Siswa</div>
+          <div class="text-xl font-bold text-emerald-500">${allStudents.length}</div>
+          <div class="text-xs" style="color: var(--text-muted);">Total Siswa</div>
         </div>
         <div class="bg-slate-800/30 p-3 rounded-lg text-center">
-          <div class="text-xl font-bold text-purple-400">${waliUsers.length}</div>
-          <div class="text-xs text-slate-400">Total Wali</div>
+          <div class="text-xl font-bold" style="color: var(--purple-primary);">${waliUsers.length}</div>
+          <div class="text-xs" style="color: var(--text-muted);">Total Wali</div>
         </div>
         <div class="bg-slate-800/30 p-3 rounded-lg text-center">
-          <div class="text-xl font-bold text-yellow-400">${allCurhat.length}</div>
-          <div class="text-xs text-slate-400">Total Curhat</div>
+          <div class="text-xl font-bold" style="color: #d4a017;">${allCurhat.length}</div>
+          <div class="text-xs" style="color: var(--text-muted);">Total Curhat</div>
         </div>
         <div class="bg-slate-800/30 p-3 rounded-lg text-center">
-          <div class="text-xl font-bold text-blue-400">${allJurnal.length}</div>
-          <div class="text-xs text-slate-400">Total Jurnal</div>
+          <div class="text-xl font-bold" style="color: var(--blue-primary);">${allJurnal.length}</div>
+          <div class="text-xs" style="color: var(--text-muted);">Total Jurnal</div>
         </div>
         <div class="bg-slate-800/30 p-3 rounded-lg text-center">
-          <div class="text-xl font-bold text-yellow-400">${allPerbuatan.length}</div>
-          <div class="text-xs text-slate-400">Total Perbuatan Baik</div>
+          <div class="text-xl font-bold" style="color: #d4a017;">${allPerbuatan.length}</div>
+          <div class="text-xs" style="color: var(--text-muted);">Total Perbuatan Baik</div>
         </div>
         <div class="bg-slate-800/30 p-3 rounded-lg text-center">
-          <div class="text-xl font-bold text-purple-400">${allReplies.length}</div>
-          <div class="text-xs text-slate-400">Total Balasan Curhat</div>
+          <div class="text-xl font-bold" style="color: var(--purple-primary);">${allReplies.length}</div>
+          <div class="text-xs" style="color: var(--text-muted);">Total Balasan Curhat</div>
         </div>
         <div class="bg-slate-800/30 p-3 rounded-lg text-center col-span-2">
-          <div class="text-xl font-bold text-green-400">${allLaporan.length}</div>
-          <div class="text-xs text-slate-400">Total Laporan Kondisi</div>
+          <div class="text-xl font-bold text-emerald-500">${allLaporan.length}</div>
+          <div class="text-xs" style="color: var(--text-muted);">Total Laporan Kondisi</div>
         </div>
       </div>
     </div>
     
     <div class="card-glass p-4">
-      <h4 class="font-bold text-sm"><i class="fas fa-layer-group mr-2 icon-purple"></i>Statistik per Kelas</h4>
+      <h4 class="font-bold text-sm" style="color: var(--text-primary);"><i class="fas fa-layer-group mr-2" style="color: var(--purple-primary);"></i>Statistik per Kelas</h4>
       <div class="space-y-2 mt-3">
         ${Object.keys(classStats).length === 0 ? 
           '<div class="text-slate-400 text-sm">Belum ada data</div>' :
           Object.keys(classStats).sort().map(function(k) {
             return '<div class="flex justify-between items-center bg-slate-800/20 p-2 rounded-lg">' +
-              '<span class="text-sm">' + k + '</span>' +
-              '<span class="text-sm font-bold text-blue-400">' + classStats[k] + ' siswa</span>' +
+              '<span class="text-sm" style="color: var(--text-secondary);">' + k + '</span>' +
+              '<span class="text-sm font-bold" style="color: var(--blue-primary);">' + classStats[k] + ' siswa</span>' +
             '</div>';
           }).join('')
         }
@@ -2875,14 +3042,14 @@ function renderStatistik() {
     </div>
     
     <div class="card-glass p-4">
-      <h4 class="font-bold text-sm"><i class="fas fa-tags mr-2 icon-green"></i>Kategori Curhat</h4>
+      <h4 class="font-bold text-sm" style="color: var(--text-primary);"><i class="fas fa-tags mr-2" style="color: #4a9b7a;"></i>Kategori Curhat</h4>
       <div class="space-y-2 mt-3">
         ${Object.keys(curhatStats).length === 0 ? 
           '<div class="text-slate-400 text-sm">Belum ada curhat</div>' :
           Object.keys(curhatStats).map(function(k) {
             return '<div class="flex justify-between items-center bg-slate-800/20 p-2 rounded-lg">' +
-              '<span class="text-sm">' + k + '</span>' +
-              '<span class="text-sm font-bold text-purple-400">' + curhatStats[k] + ' curhat</span>' +
+              '<span class="text-sm" style="color: var(--text-secondary);">' + k + '</span>' +
+              '<span class="text-sm font-bold" style="color: var(--purple-primary);">' + curhatStats[k] + ' curhat</span>' +
             '</div>';
           }).join('')
         }
