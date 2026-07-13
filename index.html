@@ -56,7 +56,6 @@
       opacity: 0.3;
     }
 
-    /* Overlay biru muda transparan */
     body::after {
       content: '';
       position: fixed;
@@ -66,7 +65,6 @@
       pointer-events: none;
     }
 
-    /* Background gradient tambahan */
     .bg-gradient-overlay {
       position: fixed;
       inset: 0;
@@ -136,7 +134,6 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
-    /* ========== BUTTONS ========== */
     .btn-primary-custom {
       background: linear-gradient(135deg, var(--blue-primary), #5ba8d4);
       color: #fff;
@@ -207,7 +204,6 @@
       color: var(--text-primary) !important;
     }
 
-    /* ========== INPUTS ========== */
     .input, .select, .textarea {
       background: rgba(255, 255, 255, 0.5) !important;
       border-color: rgba(74, 155, 199, 0.2) !important;
@@ -225,7 +221,6 @@
     .label-text { color: var(--text-secondary) !important; font-weight: 600; font-size: 0.8rem; letter-spacing: 0.3px; }
     select option { background: #d4e8f5; color: var(--text-primary); }
 
-    /* ========== BOTTOM NAV ========== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: rgba(255, 255, 255, 0.5);
@@ -260,7 +255,6 @@
     .nav-btn.active i { filter: drop-shadow(0 0 10px rgba(74, 155, 199, 0.2)); }
     .nav-btn:hover:not(.active) { color: var(--text-secondary); background: rgba(255,255,255,0.15); }
 
-    /* ========== MODALS ========== */
     .modal-box {
       border-radius: 28px !important;
       background: rgba(255, 255, 255, 0.85) !important;
@@ -288,7 +282,6 @@
       background: rgba(255,255,255,0.2);
     }
 
-    /* ========== CHAT BUBBLES ========== */
     .bubble {
       max-width: 85%;
       padding: 12px 18px;
@@ -314,7 +307,6 @@
     }
     .chat-container { display: flex; flex-direction: column; }
 
-    /* ========== STATUS ========== */
     .connection-status {
       position: fixed;
       top: 12px;
@@ -352,11 +344,9 @@
     .status-yellow { background: rgba(255, 193, 7, 0.12); color: #b8860b; border: 1px solid rgba(255, 193, 7, 0.15); }
     .status-green { background: rgba(74, 155, 122, 0.12); color: #2d7a6a; border: 1px solid rgba(74, 155, 122, 0.15); }
 
-    /* ========== LOGIN ========== */
     .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .login-box { max-width: 420px; width: 100%; }
 
-    /* ========== STUDENT CARD ========== */
     .student-card {
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
@@ -372,7 +362,6 @@
       background: var(--bg-card-hover);
     }
 
-    /* ========== TABS ========== */
     .tab-active {
       border-bottom: 3px solid var(--blue-primary) !important;
       color: var(--blue-primary) !important;
@@ -380,7 +369,6 @@
       text-shadow: 0 0 8px rgba(74, 155, 199, 0.1);
     }
 
-    /* ========== REPORT ========== */
     .report-section {
       background: rgba(255, 255, 255, 0.2);
       border-radius: 18px;
@@ -398,7 +386,6 @@
     }
     .report-item:last-child { border-bottom: none; }
 
-    /* ========== ANIMATIONS ========== */
     .fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -448,7 +435,6 @@
       100% { left: 100%; }
     }
 
-    /* ========== SCROLLBAR ========== */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: rgba(0,0,0,0.03); }
     ::-webkit-scrollbar-thumb { background: rgba(74, 155, 199, 0.2); border-radius: 10px; }
@@ -465,7 +451,6 @@
       color: var(--text-primary);
     }
 
-    /* ========== ICON COLOR CLASSES ========== */
     .icon-purple { color: var(--purple-primary); filter: drop-shadow(0 0 10px var(--purple-glow)); }
     .icon-red { color: var(--red-primary); filter: drop-shadow(0 0 10px var(--red-glow)); }
     .icon-blue { color: var(--blue-cyan); filter: drop-shadow(0 0 10px rgba(137,207,240,0.4)); }
@@ -574,7 +559,6 @@
       margin-top: 2px;
     }
 
-    /* Text color adjustments for light theme */
     .text-slate-400 { color: var(--text-muted) !important; }
     .text-slate-500 { color: var(--text-secondary) !important; }
     .text-slate-600 { color: var(--text-secondary) !important; }
@@ -840,7 +824,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- DASHBOARD ADMIN SUPER -->
+<!-- DASHBOARD ADMIN SUPER (DENGAN TOMBOL UPDATE PROFILE) -->
 <!-- ============================================================ -->
 <div id="adminDashboard" class="p-4 max-w-lg mx-auto hidden" style="padding-bottom: 80px;">
   <div class="flex justify-between items-center fade-in">
@@ -851,7 +835,17 @@
       </h1>
       <p class="text-sm mt-1" style="color: var(--text-secondary);">Selamat datang, <span id="adminNameDisplay" class="gradient-text">Admin Super</span></p>
     </div>
-    <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);"><i class="fas fa-power-off mr-1"></i> Keluar</button>
+    <div class="flex gap-2">
+      <button onclick="updateAdminProfile()" class="btn btn-sm btn-primary-custom">
+        <i class="fas fa-user-edit mr-1"></i> Ubah Profile
+      </button>
+      <button onclick="refreshAdminFromSpreadsheet()" class="btn btn-sm btn-ghost" style="color: var(--blue-primary);">
+        <i class="fas fa-sync mr-1"></i> Refresh
+      </button>
+      <button onclick="logout()" class="btn btn-sm btn-ghost" style="color: var(--red-primary);">
+        <i class="fas fa-power-off mr-1"></i> Keluar
+      </button>
+    </div>
   </div>
 
   <div class="grid grid-cols-3 gap-3 mt-4 fade-in">
@@ -1206,14 +1200,14 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- JAVASCRIPT (SAMA SEPERTI SEBELUMNYA, TIDAK DIUBAH) -->
+<!-- JAVASCRIPT -->
 <!-- ============================================================ -->
 <script>
 // ============================================================
 // KONFIGURASI
 // ============================================================
 const CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbyzmd56lQRdW856VuLH5kFv-Ur_wLiW9R7tR3KaZt9Ac5gxReC2wHRGnbRvNHsrk1Fu/exec',
+  API_URL: 'https://script.google.com/macros/s/AKfycbzBpxAP81ZexNAlJCsuWzNT5o70f8SmiFlO1oqiSjI263OaTUhjCblaXntLns4x9u4j/exec',
   USE_API: true,
   STORAGE_KEY: 'waliDigitalData'
 };
@@ -1581,7 +1575,7 @@ class DataStore {
     }
   }
   
-  // ============ USERS ============
+  // ============ USERS (DIPERBAIKI DENGAN UPDATE USER) ============
   getUsers(role = null) {
     if (role) {
       return this.data.users.filter(u => u.role === role);
@@ -1610,6 +1604,77 @@ class DataStore {
     this.saveToStorage();
     this.syncToAPI('addUser', newUser);
     return { success: true, id: newUser.id };
+  }
+  
+  // METHOD UPDATE USER (TAMBAHKAN INI)
+  updateUser(id, field, value) {
+    const user = this.getUser(id);
+    if (!user) {
+      return { success: false, error: 'User tidak ditemukan' };
+    }
+    
+    // Update di local storage
+    user[field] = value;
+    this.saveToStorage();
+    
+    // Sync ke API
+    if (this.isOnline && CONFIG.USE_API) {
+      const params = new URLSearchParams({
+        action: 'updateUser',
+        userId: id,
+        field: field,
+        value: value,
+        callback: 'callback'
+      });
+      
+      fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
+        .catch(err => {
+          console.warn('Sync update user failed:', err);
+          this.pendingSync.push({ action: 'updateUser', data: { userId: id, field, value } });
+        });
+    }
+    
+    return { success: true };
+  }
+  
+  // METHOD REFRESH USER (TAMBAHKAN INI)
+  refreshUser(email) {
+    if (!this.isOnline || !CONFIG.USE_API) {
+      return null;
+    }
+    
+    const params = new URLSearchParams({
+      action: 'getUserByEmail',
+      email: email,
+      callback: 'callback'
+    });
+    
+    // Sync fetch untuk mendapatkan data
+    fetch(CONFIG.API_URL + '?' + params.toString(), { method: 'GET' })
+      .then(response => response.text())
+      .then(text => {
+        // Parse JSONP response
+        const json = text.substring(text.indexOf('(') + 1, text.lastIndexOf(')'));
+        const data = JSON.parse(json);
+        if (data && data.id) {
+          // Update user di local storage
+          const existing = this.getUser(data.id);
+          if (existing) {
+            Object.assign(existing, data);
+          } else {
+            this.data.users.push(data);
+          }
+          this.saveToStorage();
+          return data;
+        }
+        return null;
+      })
+      .catch(err => {
+        console.warn('Refresh user failed:', err);
+        return null;
+      });
+    
+    return null;
   }
   
   deleteUser(id) {
@@ -3128,6 +3193,113 @@ function deleteWaliConfirm(id) {
 }
 
 // ============================================================
+// UPDATE PROFILE ADMIN (BARU)
+// ============================================================
+function updateAdminProfile() {
+  // Cari admin dari local storage
+  let adminUser = store.getUserByEmail('admin@walidigital.com');
+  
+  // Jika tidak ada di local, coba refresh dari API
+  if (!adminUser) {
+    if (store.isOnline && CONFIG.USE_API) {
+      alert('📡 Mengambil data admin dari spreadsheet...');
+      adminUser = store.refreshUser('admin@walidigital.com');
+      if (!adminUser) {
+        alert('❌ Admin tidak ditemukan. Periksa koneksi ke spreadsheet.');
+        return;
+      }
+    } else {
+      alert('❌ Admin tidak ditemukan di Local Storage dan koneksi offline.');
+      return;
+    }
+  }
+  
+  // Tampilkan menu pilihan
+  const choice = prompt(
+    '🔐 UPDATE PROFILE ADMIN\n\n' +
+    'Email saat ini: ' + adminUser.email + '\n' +
+    'Password saat ini: ' + adminUser.password + '\n\n' +
+    'Pilih aksi:\n' +
+    '1. Ubah Email\n' +
+    '2. Ubah Password\n' +
+    '3. Lihat Data Admin\n\n' +
+    'Masukkan nomor pilihan (1-3):',
+    '1'
+  );
+  
+  if (choice === null) return;
+  
+  if (choice === '1') {
+    const newEmail = prompt('Masukkan email baru:', adminUser.email);
+    if (newEmail && newEmail !== adminUser.email) {
+      if (!newEmail.includes('@') || !newEmail.includes('.')) {
+        alert('❌ Email tidak valid!');
+        return;
+      }
+      
+      const result = store.updateUser(adminUser.id, 'email', newEmail);
+      if (result.success) {
+        alert('✅ Email admin berhasil diubah menjadi: ' + newEmail);
+        adminUser.email = newEmail;
+        alert('🔑 Login baru:\nEmail: ' + newEmail + '\nPassword: ' + adminUser.password);
+      } else {
+        alert('❌ Gagal mengubah email: ' + result.error);
+      }
+    } else if (newEmail === adminUser.email) {
+      alert('ℹ️ Email sama dengan yang lama, tidak ada perubahan.');
+    }
+  } else if (choice === '2') {
+    const newPassword = prompt('Masukkan password baru (minimal 6 karakter):');
+    if (newPassword && newPassword.length >= 6) {
+      const confirmPassword = prompt('Konfirmasi password baru:');
+      if (newPassword !== confirmPassword) {
+        alert('❌ Password tidak cocok!');
+        return;
+      }
+      
+      const result = store.updateUser(adminUser.id, 'password', newPassword);
+      if (result.success) {
+        alert('✅ Password admin berhasil diubah!');
+        adminUser.password = newPassword;
+        alert('🔑 Password baru: ' + newPassword);
+      } else {
+        alert('❌ Gagal mengubah password: ' + result.error);
+      }
+    } else if (newPassword && newPassword.length < 6) {
+      alert('❌ Password minimal 6 karakter!');
+    }
+  } else if (choice === '3') {
+    alert(
+      '📋 DATA ADMIN\n\n' +
+      'ID: ' + adminUser.id + '\n' +
+      'Email: ' + adminUser.email + '\n' +
+      'Password: ' + adminUser.password + '\n' +
+      'Role: ' + adminUser.role + '\n' +
+      'Nama: ' + adminUser.name + '\n' +
+      'Kelas: ' + adminUser.class + '\n' +
+      'Dibuat: ' + new Date(adminUser.created_at).toLocaleString()
+    );
+  } else {
+    alert('❌ Pilihan tidak valid!');
+  }
+}
+
+function refreshAdminFromSpreadsheet() {
+  if (!store.isOnline) {
+    alert('❌ Koneksi offline. Tidak bisa refresh data dari spreadsheet.');
+    return;
+  }
+  
+  alert('📡 Mengambil data admin dari spreadsheet...');
+  const result = store.refreshUser('admin@walidigital.com');
+  if (result) {
+    alert('✅ Data admin berhasil di-refresh dari spreadsheet!\n\nEmail: ' + result.email + '\nPassword: ' + result.password);
+  } else {
+    alert('❌ Gagal refresh data admin. Coba cek koneksi atau URL API.');
+  }
+}
+
+// ============================================================
 // KEYBOARD SHORTCUT
 // ============================================================
 document.addEventListener('keydown', function(e) {
@@ -3150,7 +3322,14 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('adminDashboard').classList.add('hidden');
   setLoginRole('student');
   
-  console.log('🏫 Wali Digital v6.0 - With Laporan Kondisi & Excel Export');
+  // Cek user admin dan refresh jika perlu
+  const adminUser = store.getUserByEmail('admin@walidigital.com');
+  if (!adminUser && store.isOnline) {
+    console.log('📡 Mengambil data admin dari spreadsheet...');
+    store.refreshUser('admin@walidigital.com');
+  }
+  
+  console.log('🏫 Wali Digital v6.0 - With Laporan Kondisi & Excel Export & Update Profile');
   console.log('📌 Default Login:');
   console.log('  Siswa: Nama & Kelas sesuai data, PIN: 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
@@ -3159,6 +3338,8 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('  - Laporan Kondisi Siswa (Nilai, Sikap, Catatan)');
   console.log('  - Export Excel lengkap dengan semua data');
   console.log('  - Tab Kondisi di Detail Siswa');
+  console.log('  - Update Profile Admin (Email & Password)');
+  console.log('  - Refresh Data dari Spreadsheet');
 });
 </script>
 </body>
