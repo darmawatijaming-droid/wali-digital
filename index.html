@@ -154,6 +154,214 @@
     .chat-date-divider { text-align: center; padding: 8px 0; font-size: 11px; opacity: 0.5; }
     .jurnal-card { transition: all 0.3s; }
     .jurnal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    
+    /* ===== SIDEBAR STYLES ===== */
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      display: none;
+    }
+    .sidebar-overlay.active {
+      display: block;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -280px;
+      width: 280px;
+      height: 100vh;
+      background: rgba(15,15,26,0.95);
+      backdrop-filter: blur(20px);
+      border-right: 1px solid rgba(255,255,255,0.08);
+      z-index: 1000;
+      transition: left 0.3s cubic-bezier(0.4,0,0.2,1);
+      padding: 20px 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .sidebar.open {
+      left: 0;
+    }
+    .sidebar-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 16px;
+    }
+    .sidebar-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+    }
+    .sidebar-header p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+    }
+    .sidebar-menu {
+      flex: 1;
+      padding: 0 12px;
+    }
+    .sidebar-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      color: rgba(255,255,255,0.6);
+      transition: all 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-menu-item:hover {
+      background: rgba(255,255,255,0.06);
+      color: white;
+    }
+    .sidebar-menu-item.active {
+      background: rgba(74,155,199,0.15);
+      color: white;
+      border-left: 3px solid #4a9bc7;
+    }
+    .sidebar-menu-item i {
+      width: 22px;
+      font-size: 16px;
+      text-align: center;
+    }
+    .sidebar-menu-item .badge {
+      margin-left: auto;
+      background: rgba(74,155,199,0.2);
+      color: #6db8e0;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      margin-top: auto;
+    }
+    .sidebar-footer button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .sidebar-footer button:hover {
+      background: rgba(232,132,138,0.15);
+      border-color: rgba(232,132,138,0.3);
+      color: #f0a0a5;
+    }
+    .hamburger-btn {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: white;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.3s;
+      display: none;
+    }
+    .hamburger-btn:hover {
+      background: rgba(255,255,255,0.12);
+    }
+    .sidebar-close-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.6);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 8px;
+      position: absolute;
+      right: 12px;
+      top: 12px;
+    }
+    .sidebar-close-btn:hover {
+      color: white;
+    }
+    
+    /* Content wrapper untuk sidebar */
+    .dashboard-content {
+      transition: margin-left 0.3s cubic-bezier(0.4,0,0.2,1);
+      padding: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 768px) {
+      .sidebar {
+        left: 0;
+        width: 240px;
+      }
+      .sidebar-close-btn {
+        display: none !important;
+      }
+      .sidebar-overlay {
+        display: none !important;
+      }
+      .dashboard-content {
+        margin-left: 240px;
+        max-width: calc(100% - 240px);
+        padding: 20px 24px;
+      }
+      .hamburger-btn {
+        display: none !important;
+      }
+      .sidebar-header .sidebar-close-btn {
+        display: none !important;
+      }
+    }
+    
+    @media (max-width: 767px) {
+      .hamburger-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .sidebar-close-btn {
+        display: block;
+      }
+      .dashboard-content {
+        margin-left: 0;
+        padding: 12px;
+      }
+      .sidebar.open + .sidebar-overlay {
+        display: block;
+      }
+    }
+    
+    .menu-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.25);
+      padding: 12px 16px 6px;
+      font-weight: 600;
+    }
+    
+    /* Scrollbar sidebar */
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
   </style>
 </head>
 <body>
@@ -177,11 +385,82 @@
   </div>
 </div>
 
-<!-- ===== APP ===== -->
-<div id="app" class="relative z-10 max-w-lg mx-auto p-4" style="padding-bottom: 80px;">
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
+<!-- ===== SIDEBAR ===== -->
+<div id="sidebar" class="sidebar">
+  <div class="sidebar-header">
+    <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
+    <h2>🏫 Wali Digital</h2>
+    <p id="sidebarUserInfo">Selamat datang</p>
+  </div>
+  
+  <!-- ===== SIDEBAR MENU SISWA ===== -->
+  <div id="sidebarStudentMenu" class="sidebar-menu hidden">
+    <div class="menu-label">📋 Menu Siswa</div>
+    <button class="sidebar-menu-item active" data-section="studentPotensi" onclick="showStudentSection('studentPotensi')">
+      <i class="fas fa-compass"></i> Peta Potensi
+    </button>
+    <button class="sidebar-menu-item" data-section="studentCurhat" onclick="showStudentSection('studentCurhat')">
+      <i class="fas fa-comment-dots"></i> Curhat
+    </button>
+    <button class="sidebar-menu-item" data-section="studentJurnal" onclick="showStudentSection('studentJurnal')">
+      <i class="fas fa-book-open"></i> Jurnal
+    </button>
+    <button class="sidebar-menu-item" data-section="studentPerbuatan" onclick="showStudentSection('studentPerbuatan')">
+      <i class="fas fa-star"></i> Perbuatan Baik
+    </button>
+    <button class="sidebar-menu-item" data-section="studentRiwayat" onclick="showStudentSection('studentRiwayat')">
+      <i class="fas fa-history"></i> Riwayat Curhat
+      <span class="badge" id="sidebarCurhatBadge">0</span>
+    </button>
+  </div>
+  
+  <!-- ===== SIDEBAR MENU WALI ===== -->
+  <div id="sidebarWaliMenu" class="sidebar-menu hidden">
+    <div class="menu-label">📋 Menu Wali</div>
+    <button class="sidebar-menu-item active" data-section="waliSiswa" onclick="showWaliSection('waliSiswa')">
+      <i class="fas fa-users"></i> Daftar Siswa
+    </button>
+    <button class="sidebar-menu-item" data-section="waliPotensi" onclick="showWaliSection('waliPotensi')">
+      <i class="fas fa-compass"></i> Peta Potensi
+    </button>
+    <button class="sidebar-menu-item" data-section="waliPerbuatan" onclick="showWaliSection('waliPerbuatan')">
+      <i class="fas fa-star"></i> Perbuatan Baik
+    </button>
+    <button class="sidebar-menu-item" data-section="waliJurnal" onclick="showWaliSection('waliJurnal')">
+      <i class="fas fa-book-open"></i> Jurnal Siswa
+    </button>
+    <button class="sidebar-menu-item" data-section="waliLaporan" onclick="showWaliSection('waliLaporan')">
+      <i class="fas fa-clipboard-list"></i> Laporan Kondisi
+    </button>
+    <button class="sidebar-menu-item" data-section="waliChat" onclick="showWaliSection('waliChat')">
+      <i class="fas fa-comments"></i> Riwayat Curhat
+      <span class="badge" id="sidebarChatBadge">0</span>
+    </button>
+  </div>
+  
+  <!-- ===== SIDEBAR MENU ADMIN ===== -->
+  <div id="sidebarAdminMenu" class="sidebar-menu hidden">
+    <div class="menu-label">🛡️ Menu Admin</div>
+    <button class="sidebar-menu-item active" data-section="adminWali" onclick="showAdminSection('adminWali')">
+      <i class="fas fa-chalkboard-teacher"></i> Wali Kelas
+    </button>
+  </div>
+  
+  <div class="sidebar-footer">
+    <button onclick="logout()">
+      <i class="fas fa-sign-out-alt"></i> Keluar
+    </button>
+  </div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app" class="relative z-10">
+  
   <!-- ===== CONNECTION STATUS ===== -->
-  <div class="flex justify-end items-center gap-3 mb-4">
+  <div class="flex justify-end items-center gap-3 p-3">
     <div class="status-indicator">
       <span class="status-dot offline" id="statusDot"></span>
       <span id="statusText" class="text-white">Offline</span>
@@ -192,7 +471,7 @@
   </div>
 
   <!-- ===== LOGIN PAGE ===== -->
-  <div id="loginPage" class="glass p-8 mt-2">
+  <div id="loginPage" class="glass p-8 mt-2 max-w-md mx-auto">
     <div class="text-center mb-8">
       <div class="text-6xl mb-3">🏫</div>
       <h1 class="text-4xl font-bold text-white" style="font-weight:800;letter-spacing:-0.5px;">Wali Digital</h1>
@@ -239,377 +518,317 @@
     <div id="loginError" class="text-red-400/80 text-sm mt-3 hidden text-center"></div>
   </div>
 
-  <!-- ===== DASHBOARD SISWA ===== -->
-  <div id="studentDashboard" class="hidden">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h2 class="text-2xl font-bold text-white">
-          Halo, <span id="studentNameDisplay" class="text-blue-300">Siswa</span> 👋
-        </h2>
-        <p class="text-white/60 text-sm" id="dateDisplay"></p>
-      </div>
-      <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </div>
-
-    <div class="grid grid-cols-2 gap-3 mb-4">
-      <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openCurhat()">
-        <i class="fas fa-comment-dots text-3xl text-purple-300"></i>
-        <div class="font-semibold text-sm mt-2 text-white">Curhat</div>
-        <div class="text-xs text-white/60">Ceritakan</div>
-      </div>
-      <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openJurnal()">
-        <i class="fas fa-book-open text-3xl text-blue-300"></i>
-        <div class="font-semibold text-sm mt-2 text-white">Jurnal</div>
-        <div class="text-xs text-white/60">Catat perasaan</div>
-      </div>
-      <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openPerbuatanBaik()">
-        <i class="fas fa-star text-3xl text-yellow-300"></i>
-        <div class="font-semibold text-sm mt-2 text-white">Perbuatan Baik</div>
-        <div class="text-xs text-white/60">Kebaikan hari ini</div>
-      </div>
-      <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openPotensi()">
-        <i class="fas fa-compass text-3xl text-green-300"></i>
-        <div class="font-semibold text-sm mt-2 text-white">Peta Potensi</div>
-        <div class="text-xs text-white/60">Cita-citamu</div>
-      </div>
-    </div>
-
-    <div class="glass p-5 mb-4">
-      <h3 class="font-bold text-white mb-3">
-        <i class="fas fa-bolt text-yellow-300 mr-2"></i>Aktivitas Terakhir
-      </h3>
-      <div id="recentActivity" class="text-sm text-white/60">Belum ada aktivitas</div>
-    </div>
-
-    <div class="glass p-5 curhat-text">
-      <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-white">
-          <i class="fas fa-comment-dots text-purple-300 mr-2"></i>Riwayat Curhat
-        </h3>
-        <span id="curhatBadge" class="badge-glass badge-glass-red hidden">📩 Balasan Baru</span>
-      </div>
-      <div id="riwayatCurhatSiswa" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-white/60 text-sm text-center py-4">Belum ada curhat</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== DASHBOARD WALI ===== -->
-  <div id="waliDashboard" class="hidden">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h2 class="text-2xl font-bold text-white">
-          👨‍🏫 <span id="waliNameDisplay" class="text-blue-300">Wali</span>
-        </h2>
-        <p class="text-white/60 text-sm">Dashboard Wali Kelas</p>
-      </div>
-      <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </div>
-
-    <div class="grid grid-cols-4 gap-2 mb-4">
-      <div class="glass p-3 text-center">
-        <div class="text-xl font-bold text-blue-300" id="totalSiswa">0</div>
-        <div class="text-xs text-white/60">Siswa</div>
-      </div>
-      <div class="glass p-3 text-center">
-        <div class="text-xl font-bold text-red-300" id="curhatBelumDibaca">0</div>
-        <div class="text-xs text-white/60">Belum Dibaca</div>
-      </div>
-      <div class="glass p-3 text-center">
-        <div class="text-xl font-bold text-yellow-300" id="curhatDarurat">0</div>
-        <div class="text-xs text-white/60">Darurat</div>
-      </div>
-      <div class="glass p-3 text-center">
-        <div class="text-xl font-bold text-rose-300" id="jurnalHariIni">0</div>
-        <div class="text-xs text-white/60">Jurnal Hari Ini</div>
-      </div>
-    </div>
-
-    <div class="glass p-5 mb-4">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-white">
-          <i class="fas fa-comments text-cyan-300 mr-2"></i>Riwayat Curhat
-        </h3>
-        <span class="badge-glass badge-glass-cyan" id="chatCount">0 percakapan</span>
-      </div>
-      <div id="chatHistoryContainer" class="space-y-3 max-h-96 overflow-y-auto chat-container">
-        <div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>
-      </div>
-    </div>
-
-    <!-- ===== JURNAL SISWA (TERHUBUNG DARI DASHBOARD SISWA) ===== -->
-    <div class="glass p-5 mb-4">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-white">
-          <i class="fas fa-book-open text-rose-300 mr-2"></i>Jurnal Siswa
-        </h3>
-        <span class="badge-glass badge-glass-rose" id="jurnalCount">0 siswa</span>
-      </div>
-      <div id="jurnalContainer" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>
-      </div>
-    </div>
-
-    <div class="glass p-5 mb-4">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-white"><i class="fas fa-users mr-2"></i>Daftar Siswa</h3>
-        <button onclick="showTambahSiswa()" class="btn-glass btn-glass-success text-sm py-1.5 px-4">
-          <i class="fas fa-plus mr-1"></i> Tambah
+  <!-- ===== DASHBOARD CONTENT ===== -->
+  <div id="dashboardContent" class="dashboard-content hidden">
+    
+    <!-- ===== DASHBOARD SISWA ===== -->
+    <div id="studentDashboard" class="hidden">
+      <!-- Header dengan hamburger -->
+      <div class="flex items-center gap-3 mb-6">
+        <button class="hamburger-btn" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
         </button>
-      </div>
-      <div id="studentList" class="space-y-2 max-h-60 overflow-y-auto"></div>
-    </div>
-
-    <div class="glass p-5 mb-4">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-white">
-          <i class="fas fa-clipboard-list text-green-300 mr-2"></i>Laporan Kondisi Siswa
-        </h3>
-        <div class="flex gap-2">
-          <button onclick="exportLaporanExcel()" class="btn-glass btn-glass-success text-sm py-1.5 px-3">
-            <i class="fas fa-file-excel mr-1"></i> Export
-          </button>
-          <button onclick="showTambahLaporan()" class="btn-glass btn-glass-purple text-sm py-1.5 px-3">
-            <i class="fas fa-plus mr-1"></i> Tambah
+        <div>
+          <h2 class="text-2xl font-bold text-white">
+            Halo, <span id="studentNameDisplay" class="text-blue-300">Siswa</span> 👋
+          </h2>
+          <p class="text-white/60 text-sm" id="dateDisplay"></p>
+        </div>
+        <div class="ml-auto">
+          <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
+            <i class="fas fa-sign-out-alt"></i>
           </button>
         </div>
       </div>
-      <div id="laporanKondisiContainer" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-white/60 text-sm text-center py-4">Belum ada laporan</div>
+
+      <!-- ===== SISWA: PETA POTENSI ===== -->
+      <div id="studentPotensiSection" class="section-content">
+        <div class="glass p-5">
+          <h3 class="font-bold text-white mb-3">
+            <i class="fas fa-compass text-green-300 mr-2"></i>Peta Potensi
+          </h3>
+          <div id="studentPotensiContent" class="text-white/60">Loading...</div>
+        </div>
+      </div>
+
+      <!-- ===== SISWA: CURHAT ===== -->
+      <div id="studentCurhatSection" class="section-content hidden">
+        <div class="glass p-5">
+          <h3 class="font-bold text-white mb-3">
+            <i class="fas fa-comment-dots text-purple-300 mr-2"></i>Curhat
+          </h3>
+          <div id="studentCurhatContent" class="curhat-text">
+            <div id="curhatFlow" class="space-y-2 text-sm text-white"></div>
+            <div id="curhatOptions" class="flex flex-wrap gap-2 mt-4"></div>
+            <div id="curhatTextArea" class="hidden mt-4">
+              <textarea id="curhatCerita" class="input-glass" rows="3" placeholder="Ceritakan masalahmu..."></textarea>
+              <button onclick="submitCurhat()" class="btn-glass btn-glass-primary w-full mt-3">
+                <i class="fas fa-paper-plane mr-2"></i>Kirim
+              </button>
+            </div>
+            <div id="curhatResult" class="hidden text-green-300 font-semibold mt-4">✅ Terima kasih sudah curhat!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SISWA: JURNAL ===== -->
+      <div id="studentJurnalSection" class="section-content hidden">
+        <div class="glass p-5">
+          <h3 class="font-bold text-white mb-3">
+            <i class="fas fa-book-open text-blue-300 mr-2"></i>Jurnal Harian
+          </h3>
+          <div class="text-center text-4xl mb-4">
+            <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😊')">😊</span>
+            <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😐')">😐</span>
+            <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😢')">😢</span>
+            <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😡')">😡</span>
+            <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😴')">😴</span>
+          </div>
+          <input id="jurnalEmoji" type="hidden" value="😊">
+          <textarea id="jurnalCerita" class="input-glass" rows="3" placeholder="Ceritakan harimu..."></textarea>
+          <button onclick="simpanJurnal()" class="btn-glass btn-glass-primary w-full mt-3">
+            <i class="fas fa-save mr-2"></i>Simpan
+          </button>
+          <div id="jurnalFeedback" class="text-green-300 text-sm mt-2"></div>
+        </div>
+      </div>
+
+      <!-- ===== SISWA: PERBUATAN BAIK ===== -->
+      <div id="studentPerbuatanSection" class="section-content hidden">
+        <div class="glass p-5">
+          <h3 class="font-bold text-white mb-3">
+            <i class="fas fa-star text-yellow-300 mr-2"></i>Perbuatan Baik
+          </h3>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="catatPerbuatan('Membantu teman')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
+              🤝 <div class="text-xs text-white mt-1">Membantu teman</div>
+            </button>
+            <button onclick="catatPerbuatan('Berbagi makanan')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
+              🍱 <div class="text-xs text-white mt-1">Berbagi makanan</div>
+            </button>
+            <button onclick="catatPerbuatan('Menjaga kebersihan')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
+              🧹 <div class="text-xs text-white mt-1">Menjaga kebersihan</div>
+            </button>
+            <button onclick="catatPerbuatan('Berkata jujur')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
+              💬 <div class="text-xs text-white mt-1">Berkata jujur</div>
+            </button>
+          </div>
+          <div class="mt-4">
+            <input id="perbuatanLain" class="input-glass" placeholder="Lainnya...">
+            <button onclick="catatPerbuatan(document.getElementById('perbuatanLain').value)" class="btn-glass btn-glass-primary w-full mt-2">
+              Catat
+            </button>
+          </div>
+          <div id="perbuatanFeedback" class="text-green-300 text-sm mt-2"></div>
+        </div>
+      </div>
+
+      <!-- ===== SISWA: RIWAYAT CURHAT ===== -->
+      <div id="studentRiwayatSection" class="section-content hidden">
+        <div class="glass p-5 curhat-text">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-history text-purple-300 mr-2"></i>Riwayat Curhat
+            </h3>
+            <span id="curhatBadge" class="badge-glass badge-glass-red hidden">📩 Balasan Baru</span>
+          </div>
+          <div id="riwayatCurhatSiswa" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada curhat</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="glass p-5 mb-4">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-white">
-          <i class="fas fa-compass text-orange-300 mr-2"></i>Peta Potensi Siswa
-        </h3>
-        <span class="badge-glass badge-glass-orange" id="potensiCount">0 siswa</span>
-      </div>
-      <div id="potensiContainer" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-white/60 text-sm text-center py-4">Belum ada data potensi</div>
-      </div>
-    </div>
-
-    <!-- ===== PERBUATAN BAIK SISWA (TERHUBUNG DARI DASHBOARD SISWA) ===== -->
-    <div class="glass p-5 mb-4">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-white">
-          <i class="fas fa-star text-yellow-300 mr-2"></i>Perbuatan Baik Siswa
-        </h3>
-        <span class="badge-glass badge-glass-yellow" id="perbuatanCount">0 hari ini</span>
-      </div>
-      <div id="perbuatanContainer" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik</div>
-      </div>
-    </div>
-
-    <div class="glass p-5 curhat-text">
-      <h3 class="font-bold text-white mb-4"><i class="fas fa-inbox mr-2"></i>Curhat Masuk</h3>
-      <div id="curhatInbox" class="space-y-2 max-h-60 overflow-y-auto"></div>
-    </div>
-  </div>
-
-  <!-- ===== DASHBOARD ADMIN ===== -->
-  <div id="adminDashboard" class="hidden">
-    <div class="flex justify-between items-center mb-6">
-      <div>
-        <h2 class="text-2xl font-bold text-white">
-          🛡️ <span id="adminNameDisplay" class="text-purple-300">Admin</span>
-        </h2>
-        <p class="text-white/60 text-sm">Dashboard Super Admin</p>
-      </div>
-      <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
-        <i class="fas fa-sign-out-alt"></i>
-      </button>
-    </div>
-
-    <div class="grid grid-cols-3 gap-2 mb-4">
-      <div class="glass p-4 text-center">
-        <div class="text-2xl font-bold text-blue-300" id="totalWaliAdmin">0</div>
-        <div class="text-xs text-white/60">Wali</div>
-      </div>
-      <div class="glass p-4 text-center">
-        <div class="text-2xl font-bold text-purple-300" id="totalSiswaAdmin">0</div>
-        <div class="text-xs text-white/60">Siswa</div>
-      </div>
-      <div class="glass p-4 text-center">
-        <div class="text-2xl font-bold text-green-300" id="totalCurhatAdmin">0</div>
-        <div class="text-xs text-white/60">Curhat</div>
-      </div>
-    </div>
-
-    <div class="glass p-5">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-white"><i class="fas fa-chalkboard-teacher mr-2"></i>Wali Kelas</h3>
-        <button onclick="showTambahWali()" class="btn-glass btn-glass-success text-sm py-1.5 px-4">
-          <i class="fas fa-plus mr-1"></i> Tambah
+    <!-- ===== DASHBOARD WALI ===== -->
+    <div id="waliDashboard" class="hidden">
+      <!-- Header dengan hamburger -->
+      <div class="flex items-center gap-3 mb-6">
+        <button class="hamburger-btn" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
         </button>
+        <div>
+          <h2 class="text-2xl font-bold text-white">
+            👨‍🏫 <span id="waliNameDisplay" class="text-blue-300">Wali</span>
+          </h2>
+          <p class="text-white/60 text-sm">Dashboard Wali Kelas</p>
+        </div>
+        <div class="ml-auto">
+          <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
       </div>
-      <div id="waliList" class="space-y-2 max-h-60 overflow-y-auto"></div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-4 gap-2 mb-4">
+        <div class="glass p-3 text-center">
+          <div class="text-xl font-bold text-blue-300" id="totalSiswa">0</div>
+          <div class="text-xs text-white/60">Siswa</div>
+        </div>
+        <div class="glass p-3 text-center">
+          <div class="text-xl font-bold text-red-300" id="curhatBelumDibaca">0</div>
+          <div class="text-xs text-white/60">Belum Dibaca</div>
+        </div>
+        <div class="glass p-3 text-center">
+          <div class="text-xl font-bold text-yellow-300" id="curhatDarurat">0</div>
+          <div class="text-xs text-white/60">Darurat</div>
+        </div>
+        <div class="glass p-3 text-center">
+          <div class="text-xl font-bold text-rose-300" id="jurnalHariIni">0</div>
+          <div class="text-xs text-white/60">Jurnal Hari Ini</div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: DAFTAR SISWA ===== -->
+      <div id="waliSiswaSection" class="section-content">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white"><i class="fas fa-users mr-2"></i>Daftar Siswa</h3>
+            <button onclick="showTambahSiswa()" class="btn-glass btn-glass-success text-sm py-1.5 px-4">
+              <i class="fas fa-plus mr-1"></i> Tambah
+            </button>
+          </div>
+          <div id="studentList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: PETA POTENSI ===== -->
+      <div id="waliPotensiSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-compass text-orange-300 mr-2"></i>Peta Potensi Siswa
+            </h3>
+            <span class="badge-glass badge-glass-orange" id="potensiCount">0 siswa</span>
+          </div>
+          <div id="potensiContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada data potensi</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: PERBUATAN BAIK ===== -->
+      <div id="waliPerbuatanSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-star text-yellow-300 mr-2"></i>Perbuatan Baik Siswa
+            </h3>
+            <span class="badge-glass badge-glass-yellow" id="perbuatanCount">0 hari ini</span>
+          </div>
+          <div id="perbuatanContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: JURNAL SISWA ===== -->
+      <div id="waliJurnalSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-book-open text-rose-300 mr-2"></i>Jurnal Siswa
+            </h3>
+            <span class="badge-glass badge-glass-rose" id="jurnalCount">0 siswa</span>
+          </div>
+          <div id="jurnalContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: LAPORAN KONDISI ===== -->
+      <div id="waliLaporanSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-clipboard-list text-green-300 mr-2"></i>Laporan Kondisi Siswa
+            </h3>
+            <div class="flex gap-2">
+              <button onclick="exportLaporanExcel()" class="btn-glass btn-glass-success text-sm py-1.5 px-3">
+                <i class="fas fa-file-excel mr-1"></i> Export
+              </button>
+              <button onclick="showTambahLaporan()" class="btn-glass btn-glass-purple text-sm py-1.5 px-3">
+                <i class="fas fa-plus mr-1"></i> Tambah
+              </button>
+            </div>
+          </div>
+          <div id="laporanKondisiContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada laporan</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: RIWAYAT CURHAT (CHAT) ===== -->
+      <div id="waliChatSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-comments text-cyan-300 mr-2"></i>Riwayat Curhat
+            </h3>
+            <span class="badge-glass badge-glass-cyan" id="chatCount">0 percakapan</span>
+          </div>
+          <div id="chatHistoryContainer" class="space-y-3 max-h-96 overflow-y-auto chat-container">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== DASHBOARD ADMIN ===== -->
+    <div id="adminDashboard" class="hidden">
+      <!-- Header dengan hamburger -->
+      <div class="flex items-center gap-3 mb-6">
+        <button class="hamburger-btn" onclick="toggleSidebar()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div>
+          <h2 class="text-2xl font-bold text-white">
+            🛡️ <span id="adminNameDisplay" class="text-purple-300">Admin</span>
+          </h2>
+          <p class="text-white/60 text-sm">Dashboard Super Admin</p>
+        </div>
+        <div class="ml-auto">
+          <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-2 mb-4">
+        <div class="glass p-4 text-center">
+          <div class="text-2xl font-bold text-blue-300" id="totalWaliAdmin">0</div>
+          <div class="text-xs text-white/60">Wali</div>
+        </div>
+        <div class="glass p-4 text-center">
+          <div class="text-2xl font-bold text-purple-300" id="totalSiswaAdmin">0</div>
+          <div class="text-xs text-white/60">Siswa</div>
+        </div>
+        <div class="glass p-4 text-center">
+          <div class="text-2xl font-bold text-green-300" id="totalCurhatAdmin">0</div>
+          <div class="text-xs text-white/60">Curhat</div>
+        </div>
+      </div>
+
+      <!-- ===== ADMIN: WALI KELAS ===== -->
+      <div id="adminWaliSection" class="section-content">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white"><i class="fas fa-chalkboard-teacher mr-2"></i>Wali Kelas</h3>
+            <button onclick="showTambahWali()" class="btn-glass btn-glass-success text-sm py-1.5 px-4">
+              <i class="fas fa-plus mr-1"></i> Tambah
+            </button>
+          </div>
+          <div id="waliList" class="space-y-2 max-h-96 overflow-y-auto"></div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- ===== MODALS ===== -->
   
-  <div id="curhatModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('curhatModal')">
-    <div class="modal-glass curhat-text">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-white">
-          <i class="fas fa-comment-dots text-purple-300 mr-2"></i>Curhat
-        </h3>
-        <button onclick="closeModal('curhatModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
-      </div>
-      <div id="curhatFlow" class="space-y-2 text-sm text-white"></div>
-      <div id="curhatOptions" class="flex flex-wrap gap-2 mt-4"></div>
-      <div id="curhatTextArea" class="hidden mt-4">
-        <textarea id="curhatCerita" class="input-glass" rows="3" placeholder="Ceritakan masalahmu..."></textarea>
-        <button onclick="submitCurhat()" class="btn-glass btn-glass-primary w-full mt-3">
-          <i class="fas fa-paper-plane mr-2"></i>Kirim
-        </button>
-      </div>
-      <div id="curhatResult" class="hidden text-green-300 font-semibold mt-4">✅ Terima kasih sudah curhat!</div>
-    </div>
-  </div>
-
-  <div id="jurnalModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('jurnalModal')">
-    <div class="modal-glass">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-white">
-          <i class="fas fa-book-open text-blue-300 mr-2"></i>Jurnal Harian
-        </h3>
-        <button onclick="closeModal('jurnalModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
-      </div>
-      <div class="text-center text-4xl mb-4">
-        <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😊')">😊</span>
-        <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😐')">😐</span>
-        <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😢')">😢</span>
-        <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😡')">😡</span>
-        <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😴')">😴</span>
-      </div>
-      <input id="jurnalEmoji" type="hidden" value="😊">
-      <textarea id="jurnalCerita" class="input-glass" rows="3" placeholder="Ceritakan harimu..."></textarea>
-      <button onclick="simpanJurnal()" class="btn-glass btn-glass-primary w-full mt-3">
-        <i class="fas fa-save mr-2"></i>Simpan
-      </button>
-      <div id="jurnalFeedback" class="text-green-300 text-sm mt-2"></div>
-    </div>
-  </div>
-
-  <div id="perbuatanModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('perbuatanModal')">
-    <div class="modal-glass">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-white">
-          <i class="fas fa-star text-yellow-300 mr-2"></i>Perbuatan Baik
-        </h3>
-        <button onclick="closeModal('perbuatanModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
-      </div>
-      <div class="grid grid-cols-2 gap-2">
-        <button onclick="catatPerbuatan('Membantu teman')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          🤝 <div class="text-xs text-white mt-1">Membantu teman</div>
-        </button>
-        <button onclick="catatPerbuatan('Berbagi makanan')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          🍱 <div class="text-xs text-white mt-1">Berbagi makanan</div>
-        </button>
-        <button onclick="catatPerbuatan('Menjaga kebersihan')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          🧹 <div class="text-xs text-white mt-1">Menjaga kebersihan</div>
-        </button>
-        <button onclick="catatPerbuatan('Berkata jujur')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          💬 <div class="text-xs text-white mt-1">Berkata jujur</div>
-        </button>
-      </div>
-      <div class="mt-4">
-        <input id="perbuatanLain" class="input-glass" placeholder="Lainnya...">
-        <button onclick="catatPerbuatan(document.getElementById('perbuatanLain').value)" class="btn-glass btn-glass-primary w-full mt-2">
-          Catat
-        </button>
-      </div>
-      <div id="perbuatanFeedback" class="text-green-300 text-sm mt-2"></div>
-    </div>
-  </div>
-
-  <div id="potensiModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('potensiModal')">
-    <div class="modal-glass">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-white">
-          <i class="fas fa-compass text-green-300 mr-2"></i>Peta Potensi
-        </h3>
-        <button onclick="closeModal('potensiModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
-      </div>
-      <div class="space-y-3">
-        <div>
-          <label class="text-sm text-white/60 font-medium">Minat</label>
-          <select id="potensiMinat" class="select-glass">
-            <option>Olahraga</option><option>Seni</option><option>Sains</option><option>Teknologi</option><option>Bahasa</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Gaya Belajar</label>
-          <select id="potensiGaya" class="select-glass">
-            <option>Visual</option><option>Auditori</option><option>Kinestetik</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Cita-cita</label>
-          <input id="potensiCita" class="input-glass" placeholder="Cita-citamu">
-        </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Kekuatan Karakter</label>
-          <select id="potensiKarakter" class="select-glass">
-            <option>Pemberani</option><option>Baik Hati</option><option>Kreatif</option><option>Pantang Menyerah</option><option>Disiplin</option>
-          </select>
-        </div>
-        <button onclick="simpanPotensi()" class="btn-glass btn-glass-primary w-full mt-2">
-          <i class="fas fa-save mr-2"></i>Simpan
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="tambahSiswaModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahSiswaModal')">
-    <div class="modal-glass">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-white">
-          <i class="fas fa-user-plus text-green-300 mr-2"></i>Tambah Siswa
-        </h3>
-        <button onclick="closeModal('tambahSiswaModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
-      </div>
-      <div class="space-y-3">
-        <input id="siswaNIS" class="input-glass" placeholder="NIS">
-        <input id="siswaNama" class="input-glass" placeholder="Nama Lengkap">
-        <input id="siswaKelas" class="input-glass" placeholder="Kelas">
-        <input id="siswaPIN" class="input-glass" placeholder="PIN (default: 51sw@qu)" value="51sw@qu">
-        <button onclick="tambahSiswa()" class="btn-glass btn-glass-primary w-full mt-2">
-          <i class="fas fa-save mr-2"></i>Simpan
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="tambahWaliModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahWaliModal')">
-    <div class="modal-glass">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-white">
-          <i class="fas fa-user-plus text-purple-300 mr-2"></i>Tambah Wali
-        </h3>
-        <button onclick="closeModal('tambahWaliModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
-      </div>
-      <div class="space-y-3">
-        <input id="waliNamaBaru" class="input-glass" placeholder="Nama Wali">
-        <input id="waliEmailBaru" class="input-glass" placeholder="Email Wali">
-        <input id="waliKelasBaru" class="input-glass" placeholder="Kelas">
-        <input id="waliPasswordBaru" class="input-glass" placeholder="Password (default: d4Rm@app)" value="d4Rm@app">
-        <button onclick="tambahWali()" class="btn-glass btn-glass-primary w-full mt-2">
-          <i class="fas fa-save mr-2"></i>Simpan
-        </button>
-      </div>
-    </div>
-  </div>
-
+  <!-- Detail Curhat Modal -->
   <div id="detailCurhatSiswaModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('detailCurhatSiswaModal')">
     <div class="modal-glass curhat-text">
       <div class="flex justify-between items-center mb-4">
@@ -659,6 +878,49 @@
     </div>
   </div>
 
+  <!-- Tambah Siswa Modal -->
+  <div id="tambahSiswaModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahSiswaModal')">
+    <div class="modal-glass">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-user-plus text-green-300 mr-2"></i>Tambah Siswa
+        </h3>
+        <button onclick="closeModal('tambahSiswaModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      <div class="space-y-3">
+        <input id="siswaNIS" class="input-glass" placeholder="NIS">
+        <input id="siswaNama" class="input-glass" placeholder="Nama Lengkap">
+        <input id="siswaKelas" class="input-glass" placeholder="Kelas">
+        <input id="siswaPIN" class="input-glass" placeholder="PIN (default: 51sw@qu)" value="51sw@qu">
+        <button onclick="tambahSiswa()" class="btn-glass btn-glass-primary w-full mt-2">
+          <i class="fas fa-save mr-2"></i>Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tambah Wali Modal -->
+  <div id="tambahWaliModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahWaliModal')">
+    <div class="modal-glass">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-user-plus text-purple-300 mr-2"></i>Tambah Wali
+        </h3>
+        <button onclick="closeModal('tambahWaliModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      <div class="space-y-3">
+        <input id="waliNamaBaru" class="input-glass" placeholder="Nama Wali">
+        <input id="waliEmailBaru" class="input-glass" placeholder="Email Wali">
+        <input id="waliKelasBaru" class="input-glass" placeholder="Kelas">
+        <input id="waliPasswordBaru" class="input-glass" placeholder="Password (default: d4Rm@app)" value="d4Rm@app">
+        <button onclick="tambahWali()" class="btn-glass btn-glass-primary w-full mt-2">
+          <i class="fas fa-save mr-2"></i>Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tambah Laporan Modal -->
   <div id="tambahLaporanModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahLaporanModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
@@ -702,6 +964,7 @@
     </div>
   </div>
 
+  <!-- Chat Detail Modal -->
   <div id="chatDetailModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('chatDetailModal')">
     <div class="modal-glass curhat-text">
       <div class="flex justify-between items-center mb-4">
@@ -785,6 +1048,87 @@ let allPerbuatanCache = [];
 let allPotensiCache = [];
 let dataLoaded = false;
 let loginInProgress = false;
+let currentStudentSection = 'studentPotensi';
+let currentWaliSection = 'waliSiswa';
+let currentAdminSection = 'adminWali';
+
+// ============================================================
+// SIDEBAR FUNCTIONS
+// ============================================================
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.toggle('open');
+  if (sidebar.classList.contains('open')) {
+    overlay.classList.add('active');
+  } else {
+    overlay.classList.remove('active');
+  }
+}
+
+function closeSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
+  sidebar.classList.remove('open');
+  overlay.classList.remove('active');
+}
+
+function showStudentSection(section) {
+  // Update menu aktif
+  document.querySelectorAll('#sidebarStudentMenu .sidebar-menu-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.section === section);
+  });
+  
+  // Sembunyikan semua section
+  document.querySelectorAll('#studentDashboard .section-content').forEach(el => {
+    el.classList.add('hidden');
+  });
+  
+  // Tampilkan section yang dipilih
+  const target = document.getElementById(section + 'Section');
+  if (target) target.classList.remove('hidden');
+  
+  currentStudentSection = section;
+  closeSidebar();
+}
+
+function showWaliSection(section) {
+  // Update menu aktif
+  document.querySelectorAll('#sidebarWaliMenu .sidebar-menu-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.section === section);
+  });
+  
+  // Sembunyikan semua section
+  document.querySelectorAll('#waliDashboard .section-content').forEach(el => {
+    el.classList.add('hidden');
+  });
+  
+  // Tampilkan section yang dipilih
+  const target = document.getElementById(section + 'Section');
+  if (target) target.classList.remove('hidden');
+  
+  currentWaliSection = section;
+  closeSidebar();
+}
+
+function showAdminSection(section) {
+  // Update menu aktif
+  document.querySelectorAll('#sidebarAdminMenu .sidebar-menu-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.section === section);
+  });
+  
+  // Sembunyikan semua section
+  document.querySelectorAll('#adminDashboard .section-content').forEach(el => {
+    el.classList.add('hidden');
+  });
+  
+  // Tampilkan section yang dipilih
+  const target = document.getElementById(section + 'Section');
+  if (target) target.classList.remove('hidden');
+  
+  currentAdminSection = section;
+  closeSidebar();
+}
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -829,7 +1173,7 @@ function hideLoading() {
 }
 
 // ============================================================
-// API CALL - DENGAN OPTIMASI PARALLEL
+// API CALL
 // ============================================================
 async function callAPI(action, params = {}, retryCount = 0) {
   if (!CONFIG.USE_API) {
@@ -914,7 +1258,7 @@ async function callAPI(action, params = {}, retryCount = 0) {
 }
 
 // ============================================================
-// BATCH API CALL - LOAD SEMUA DATA SEKALIGUS
+// LOAD ALL DATA PARALLEL
 // ============================================================
 async function loadAllDataParallel() {
   if (dataLoaded && allStudentsCache.length > 0) {
@@ -928,7 +1272,6 @@ async function loadAllDataParallel() {
   }
   
   try {
-    // Load semua data secara paralel
     const [students, curhat, jurnal, perbuatan, potensi] = await Promise.all([
       callAPI('getAllStudents'),
       callAPI('getAllCurhat'),
@@ -937,7 +1280,6 @@ async function loadAllDataParallel() {
       callAPI('getAllPotensi')
     ]);
     
-    // Cache data
     allStudentsCache = students || [];
     allCurhatCache = curhat || [];
     allJurnalCache = jurnal || [];
@@ -1011,7 +1353,7 @@ function setRole(role) {
 }
 
 // ============================================================
-// LOGIN FUNCTIONS - DENGAN LOADING OPTIMASI
+// LOGIN FUNCTIONS
 // ============================================================
 async function loginStudent() {
   if (loginInProgress) return;
@@ -1205,9 +1547,16 @@ function showLoginError(msg) {
 // ============================================================
 function showStudentDashboard() {
   hide('loginPage');
+  show('dashboardContent');
   show('studentDashboard');
   hide('waliDashboard');
   hide('adminDashboard');
+  
+  // Tampilkan sidebar student
+  hide('sidebarWaliMenu');
+  hide('sidebarAdminMenu');
+  show('sidebarStudentMenu');
+  document.getElementById('sidebarUserInfo').textContent = '👤 ' + currentStudent.name;
   
   $('studentNameDisplay').textContent = currentStudent.name;
   updateDateTime();
@@ -1218,9 +1567,16 @@ function showStudentDashboard() {
 
 async function showWaliDashboard() {
   hide('loginPage');
+  show('dashboardContent');
   hide('studentDashboard');
   show('waliDashboard');
   hide('adminDashboard');
+  
+  // Tampilkan sidebar wali
+  hide('sidebarStudentMenu');
+  hide('sidebarAdminMenu');
+  show('sidebarWaliMenu');
+  document.getElementById('sidebarUserInfo').textContent = '👨‍🏫 ' + currentWali.name;
   
   $('waliNameDisplay').textContent = currentWali.name;
   await loadWaliData();
@@ -1228,9 +1584,16 @@ async function showWaliDashboard() {
 
 async function showAdminDashboard() {
   hide('loginPage');
+  show('dashboardContent');
   hide('studentDashboard');
   hide('waliDashboard');
   show('adminDashboard');
+  
+  // Tampilkan sidebar admin
+  hide('sidebarStudentMenu');
+  hide('sidebarWaliMenu');
+  show('sidebarAdminMenu');
+  document.getElementById('sidebarUserInfo').textContent = '🛡️ ' + currentUser.name;
   
   $('adminNameDisplay').textContent = currentUser.name;
   await loadAdminData();
@@ -1252,6 +1615,7 @@ function logout() {
     allJurnalCache = [];
     allPerbuatanCache = [];
     allPotensiCache = [];
+    hide('dashboardContent');
     hide('studentDashboard');
     hide('waliDashboard');
     hide('adminDashboard');
@@ -1259,6 +1623,7 @@ function logout() {
     ['studentName', 'studentClass', 'studentPassword', 'waliEmail', 'waliPassword', 'adminEmail', 'adminPassword'].forEach(id => {
       if ($(id)) $(id).value = '';
     });
+    closeSidebar();
     showToast('👋 Sampai jumpa!', 'warning');
   }
 }
@@ -1277,21 +1642,34 @@ function updateDateTime() {
 }
 
 // ============================================================
-// STUDENT FUNCTIONS
+// STUDENT FUNCTIONS (dengan sidebar navigation)
 // ============================================================
 async function loadStudentData() {
   if (!isOnline) return;
   try {
+    // Load potensi
     const potensi = await callAPI('getPotensi', { studentId: currentStudent.id });
+    const potensiContent = document.getElementById('studentPotensiContent');
     if (potensi && potensi.id) {
-      $('recentActivity').innerHTML = '🗺️ Peta Potensi sudah diisi';
+      potensiContent.innerHTML = `
+        <div class="space-y-2 text-white">
+          <div><span class="text-white/60">Minat:</span> ${escapeHtml(potensi.minat || '-')}</div>
+          <div><span class="text-white/60">Gaya Belajar:</span> ${escapeHtml(potensi.gaya_belajar || '-')}</div>
+          <div><span class="text-white/60">Cita-cita:</span> ${escapeHtml(potensi.cita_cita || '-')}</div>
+          <div><span class="text-white/60">Kekuatan Karakter:</span> ${escapeHtml(potensi.kekuatan_karakter || '-')}</div>
+        </div>
+      `;
+    } else {
+      potensiContent.innerHTML = '<div class="text-white/60">Belum mengisi peta potensi. Silakan isi melalui menu Peta Potensi.</div>';
     }
     
+    // Load perbuatan baik hari ini
     const pb = await callAPI('getPerbuatanHariIni', { studentId: currentStudent.id });
     if (pb && pb.id) {
-      $('recentActivity').innerHTML = '⭐ Perbuatan baik: ' + escapeHtml(pb.action);
+      // Update recent activity
     }
     
+    // Load curhat
     await loadRiwayatCurhatSiswa();
   } catch(e) {
     console.warn('Load student data error:', e);
@@ -1308,15 +1686,18 @@ async function loadRiwayatCurhatSiswa() {
     const curhatList = await callAPI('getCurhatByStudent', { studentId: currentStudent.id });
     const container = document.getElementById('riwayatCurhatSiswa');
     const badge = document.getElementById('curhatBadge');
+    const sidebarBadge = document.getElementById('sidebarCurhatBadge');
     
     if (!curhatList || curhatList.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada curhat</div>';
       badge.classList.add('hidden');
+      sidebarBadge.textContent = '0';
       return;
     }
     
     let hasNewReply = false;
     let html = '';
+    let unreadCount = 0;
     
     for (const curhat of curhatList) {
       const replies = await callAPI('getCurhatReplies', { curhatId: curhat.id });
@@ -1326,6 +1707,7 @@ async function loadRiwayatCurhatSiswa() {
       const waliReplies = replies ? replies.filter(r => r.is_wali === true || r.is_wali === 'TRUE') : [];
       if (waliReplies.length > 0 && (curhat.is_read === false || curhat.is_read === 'FALSE')) {
         hasNewReply = true;
+        unreadCount++;
       }
       
       const daruratBadge = curhat.tingkat_darurat === 'Aku butuh bantuan sekarang' 
@@ -1366,6 +1748,7 @@ async function loadRiwayatCurhatSiswa() {
     }
     
     container.innerHTML = html;
+    sidebarBadge.textContent = unreadCount > 0 ? unreadCount : '0';
     
     if (hasNewReply) {
       badge.classList.remove('hidden');
@@ -1549,9 +1932,11 @@ async function kirimBalasanSiswa() {
 // CURHAT FLOW
 // ============================================================
 function openCurhat() {
+  // Pindah ke section curhat
+  showStudentSection('studentCurhat');
+  
   curhatStep = 0;
   curhatData = {};
-  show('curhatModal');
   $('curhatFlow').innerHTML = '<div class="text-white/60">Mulai curhat dengan memilih di bawah</div>';
   $('curhatOptions').innerHTML = `
     <button onclick="curhatStep1('Aku sendiri')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Aku sendiri</button>
@@ -1628,7 +2013,6 @@ async function submitCurhat() {
       $('curhatResult').classList.remove('hidden');
       $('curhatResult').textContent = '✅ Terima kasih sudah curhat!';
       $('curhatCerita').value = '';
-      $('recentActivity').innerHTML = '💬 Curhat terkirim';
       showToast('✅ Curhat berhasil dikirim!', 'success');
       
       if (curhatData.darurat === 'Aku butuh bantuan sekarang') {
@@ -1650,13 +2034,13 @@ async function submitCurhat() {
 // JURNAL FUNCTIONS
 // ============================================================
 function openJurnal() {
-  show('jurnalModal');
+  showStudentSection('studentJurnal');
   $('jurnalFeedback').textContent = '';
 }
 
 function pilihEmoji(emoji) {
   $('jurnalEmoji').value = emoji;
-  document.querySelectorAll('#jurnalModal .text-4xl span').forEach(el => {
+  document.querySelectorAll('#studentJurnalSection .text-4xl span').forEach(el => {
     el.style.transform = el.textContent === emoji ? 'scale(1.4)' : 'scale(1)';
   });
 }
@@ -1682,9 +2066,10 @@ async function simpanJurnal() {
     if (result.success) {
       $('jurnalFeedback').textContent = '✅ Jurnal tersimpan!';
       $('jurnalCerita').value = '';
-      $('recentActivity').innerHTML = '📖 Jurnal: ' + escapeHtml(cerita.substring(0, 30)) + '...';
       showToast('✅ Jurnal tersimpan!', 'success');
-      setTimeout(() => closeModal('jurnalModal'), 1500);
+      setTimeout(() => {
+        $('jurnalFeedback').textContent = '';
+      }, 3000);
     }
   } catch(e) {
     hideLoading();
@@ -1697,7 +2082,7 @@ async function simpanJurnal() {
 // PERBUATAN BAIK
 // ============================================================
 function openPerbuatanBaik() {
-  show('perbuatanModal');
+  showStudentSection('studentPerbuatan');
   $('perbuatanFeedback').textContent = '';
   $('perbuatanLain').value = '';
 }
@@ -1724,9 +2109,10 @@ async function catatPerbuatan(action) {
     if (result.success) {
       const feedbacks = ['🌟 Good Job!', '💪 Luar biasa!', '😇 Kamu anak baik!', '⚡ Keren!'];
       $('perbuatanFeedback').textContent = feedbacks[Math.floor(Math.random() * feedbacks.length)];
-      $('recentActivity').innerHTML = '⭐ Perbuatan baik: "' + escapeHtml(action) + '"';
       showToast('✅ Perbuatan baik dicatat!', 'success');
-      setTimeout(() => closeModal('perbuatanModal'), 1500);
+      setTimeout(() => {
+        $('perbuatanFeedback').textContent = '';
+      }, 3000);
     } else {
       showToast(result.error || 'Gagal mencatat', 'error');
     }
@@ -1741,7 +2127,7 @@ async function catatPerbuatan(action) {
 // POTENSI
 // ============================================================
 function openPotensi() {
-  show('potensiModal');
+  showStudentSection('studentPotensi');
 }
 
 async function simpanPotensi() {
@@ -1770,7 +2156,7 @@ async function simpanPotensi() {
     if (result.success) {
       showToast('✅ Peta Potensi berhasil disimpan!', 'success');
       closeModal('potensiModal');
-      $('recentActivity').innerHTML = '🗺️ Peta Potensi disimpan';
+      await loadStudentData();
     }
   } catch(e) {
     hideLoading();
@@ -1780,7 +2166,7 @@ async function simpanPotensi() {
 }
 
 // ============================================================
-// WALI FUNCTIONS - DENGAN DATA DARI CACHE PARALEL
+// WALI FUNCTIONS
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
@@ -1790,18 +2176,14 @@ async function loadWaliData() {
   
   showLoading('Memuat data wali...');
   try {
-    // Load semua data secara paralel
     const allData = await loadAllDataParallel();
     
-    // Filter data berdasarkan wali
     const students = allData.students.filter(s => s.wali_id === currentWali.id);
     $('totalSiswa').textContent = students.length;
     
-    // Filter curhat untuk siswa wali ini
     const studentIds = students.map(s => s.id);
     const waliCurhat = allData.curhat.filter(c => studentIds.includes(c.student_id));
     
-    // Tambahkan nama siswa ke curhat
     waliCurhat.forEach(c => {
       const student = students.find(s => s.id === c.student_id);
       c.student_name = student ? student.name : 'Siswa';
@@ -1814,9 +2196,6 @@ async function loadWaliData() {
     $('curhatDarurat').textContent = darurat.length;
     
     renderStudentList(students);
-    renderCurhatInbox(waliCurhat);
-    
-    // Load semua data lainnya dari cache
     await loadLaporanKondisi(students);
     await loadPotensiSiswa(students, allData.potensi);
     await loadPerbuatanBaik(students, allData.perbuatan);
@@ -1852,57 +2231,39 @@ function renderStudentList(students) {
   `).join('');
 }
 
-function renderCurhatInbox(curhats) {
-  const inbox = $('curhatInbox');
-  if (!curhats || curhats.length === 0) {
-    inbox.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada curhat masuk</div>';
-    return;
-  }
-  
-  inbox.innerHTML = curhats.slice(0, 5).map(c => `
-    <div class="glass p-4 ${c.is_read ? 'opacity-60' : 'border-l-4 border-blue-400/50'}">
-      <div class="flex justify-between items-start">
-        <span class="font-semibold text-white">${escapeHtml(c.student_name || 'Siswa')}</span>
-        <span class="text-xs text-white/60">${new Date(c.created_at).toLocaleString()}</span>
-      </div>
-      <div class="text-sm text-white/80 mt-1">${escapeHtml(c.cerita)}</div>
-      <div class="flex gap-2 mt-2">
-        <span class="badge-glass badge-glass-blue">${escapeHtml(c.kategori)}</span>
-        ${c.tingkat_darurat === 'Aku butuh bantuan sekarang' ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>' : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
 // ============================================================
-// CHAT HISTORY - DARI CACHE
+// CHAT HISTORY
 // ============================================================
 async function loadChatHistory(students, curhatData) {
   try {
     const container = document.getElementById('chatHistoryContainer');
     const countBadge = document.getElementById('chatCount');
+    const sidebarBadge = document.getElementById('sidebarChatBadge');
     chatDataCache = [];
     
     if (!students || students.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
       countBadge.textContent = '0 percakapan';
+      sidebarBadge.textContent = '0';
       return;
     }
     
     let html = '';
     let totalChats = 0;
+    let totalUnread = 0;
     
     for (const student of students) {
       const curhats = curhatData.filter(c => c.student_id === student.id);
       
       if (curhats && curhats.length > 0) {
         totalChats++;
+        const unreadCount = curhats.filter(c => c.is_read === false || c.is_read === 'FALSE').length;
+        totalUnread += unreadCount;
         
         const lastCurhat = curhats.sort((a, b) => 
           new Date(b.created_at) - new Date(a.created_at)
         )[0];
         
-        // Ambil balasan untuk curhat terakhir
         const replies = await callAPI('getCurhatReplies', { curhatId: lastCurhat.id });
         const lastReply = replies && replies.length > 0 
           ? replies.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0]
@@ -1914,7 +2275,6 @@ async function loadChatHistory(students, curhatData) {
           : student.name;
         const lastTime = lastReply ? lastReply.created_at : lastCurhat.created_at;
         
-        const unreadCount = curhats.filter(c => c.is_read === false || c.is_read === 'FALSE').length;
         const statusColor = unreadCount > 0 ? 'text-cyan-300' : 'text-white/60';
         const statusIcon = unreadCount > 0 ? '🔵' : '⚪';
         
@@ -1946,6 +2306,7 @@ async function loadChatHistory(students, curhatData) {
     }
     
     countBadge.textContent = `${totalChats} percakapan`;
+    sidebarBadge.textContent = totalUnread > 0 ? totalUnread : '0';
     
     if (totalChats === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>';
@@ -2134,78 +2495,6 @@ async function kirimBalasanWaliDariChat() {
 }
 
 // ============================================================
-// JURNAL SISWA - DARI CACHE (TERHUBUNG DARI DASHBOARD SISWA)
-// ============================================================
-async function loadJurnalSiswa(students, jurnalData) {
-  try {
-    const container = document.getElementById('jurnalContainer');
-    const countBadge = document.getElementById('jurnalCount');
-    
-    if (!students || students.length === 0) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
-      countBadge.textContent = '0 siswa';
-      return;
-    }
-    
-    let html = '';
-    let hasJurnal = false;
-    let totalJurnal = 0;
-    const today = new Date().toISOString().split('T')[0];
-    
-    for (const student of students) {
-      // Ambil semua jurnal siswa (bukan hanya hari ini)
-      const studentJurnals = jurnalData ? jurnalData.filter(j => j.student_id === student.id) : [];
-      const sortedJurnals = studentJurnals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-      const latestJurnal = sortedJurnals.length > 0 ? sortedJurnals[0] : null;
-      
-      if (latestJurnal) {
-        hasJurnal = true;
-        totalJurnal++;
-        
-        const emoji = latestJurnal.emoji || '😊';
-        const cerita = latestJurnal.cerita || 'Hari ini biasa saja';
-        const date = latestJurnal.date || latestJurnal.created_at ? new Date(latestJurnal.created_at).toLocaleDateString('id-ID') : 'Tanggal tidak diketahui';
-        
-        html += `
-          <div class="jurnal-card glass p-3 border-l-4 border-rose-400">
-            <div class="flex justify-between items-start">
-              <div>
-                <div class="flex items-center gap-2">
-                  <span class="font-semibold text-white">${escapeHtml(student.name)}</span>
-                  <span class="text-xs text-white/60">${escapeHtml(student.class)}</span>
-                </div>
-                <div class="text-xs text-white/60">${escapeHtml(date)}</div>
-              </div>
-              <span class="text-2xl">${escapeHtml(emoji)}</span>
-            </div>
-            <div class="text-sm text-white/90 mt-1">
-              <i class="fas fa-book-open text-rose-300 mr-1"></i> ${escapeHtml(cerita)}
-            </div>
-            <div class="text-xs text-white/40 mt-1">
-              <i class="fas fa-clock mr-1"></i> ${new Date(latestJurnal.created_at).toLocaleString('id-ID')}
-            </div>
-          </div>
-        `;
-      }
-    }
-    
-    countBadge.textContent = `${totalJurnal} siswa`;
-    $('jurnalHariIni').textContent = totalJurnal;
-    
-    if (!hasJurnal) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>';
-    } else {
-      container.innerHTML = html;
-    }
-    
-  } catch(e) {
-    console.warn('Load jurnal error:', e);
-    document.getElementById('jurnalContainer').innerHTML = 
-      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat jurnal</div>';
-  }
-}
-
-// ============================================================
 // LAPORAN KONDISI - LOAD & DISPLAY
 // ============================================================
 async function loadLaporanKondisi(students) {
@@ -2370,7 +2659,7 @@ async function loadPotensiSiswa(students, potensiData) {
 }
 
 // ============================================================
-// PERBUATAN BAIK SISWA - DARI CACHE (TERHUBUNG DARI DASHBOARD SISWA)
+// PERBUATAN BAIK SISWA - DARI CACHE
 // ============================================================
 async function loadPerbuatanBaik(students, perbuatanData) {
   try {
@@ -2390,10 +2679,8 @@ async function loadPerbuatanBaik(students, perbuatanData) {
     const today = new Date().toISOString().split('T')[0];
     
     for (const student of students) {
-      // Ambil perbuatan baik hari ini
       const perbuatan = perbuatanData ? perbuatanData.find(p => p.student_id === student.id && p.date === today) : null;
       
-      // Jika tidak ada hari ini, ambil yang terakhir
       let displayPerbuatan = perbuatan;
       if (!displayPerbuatan) {
         const allPerbuatan = perbuatanData ? perbuatanData.filter(p => p.student_id === student.id) : [];
@@ -2450,6 +2737,76 @@ async function loadPerbuatanBaik(students, perbuatanData) {
     console.warn('Load perbuatan error:', e);
     document.getElementById('perbuatanContainer').innerHTML = 
       '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat data perbuatan baik</div>';
+  }
+}
+
+// ============================================================
+// JURNAL SISWA - DARI CACHE
+// ============================================================
+async function loadJurnalSiswa(students, jurnalData) {
+  try {
+    const container = document.getElementById('jurnalContainer');
+    const countBadge = document.getElementById('jurnalCount');
+    
+    if (!students || students.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
+      countBadge.textContent = '0 siswa';
+      return;
+    }
+    
+    let html = '';
+    let hasJurnal = false;
+    let totalJurnal = 0;
+    
+    for (const student of students) {
+      const studentJurnals = jurnalData ? jurnalData.filter(j => j.student_id === student.id) : [];
+      const sortedJurnals = studentJurnals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const latestJurnal = sortedJurnals.length > 0 ? sortedJurnals[0] : null;
+      
+      if (latestJurnal) {
+        hasJurnal = true;
+        totalJurnal++;
+        
+        const emoji = latestJurnal.emoji || '😊';
+        const cerita = latestJurnal.cerita || 'Hari ini biasa saja';
+        const date = latestJurnal.date || latestJurnal.created_at ? new Date(latestJurnal.created_at).toLocaleDateString('id-ID') : 'Tanggal tidak diketahui';
+        
+        html += `
+          <div class="jurnal-card glass p-3 border-l-4 border-rose-400">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-white">${escapeHtml(student.name)}</span>
+                  <span class="text-xs text-white/60">${escapeHtml(student.class)}</span>
+                </div>
+                <div class="text-xs text-white/60">${escapeHtml(date)}</div>
+              </div>
+              <span class="text-2xl">${escapeHtml(emoji)}</span>
+            </div>
+            <div class="text-sm text-white/90 mt-1">
+              <i class="fas fa-book-open text-rose-300 mr-1"></i> ${escapeHtml(cerita)}
+            </div>
+            <div class="text-xs text-white/40 mt-1">
+              <i class="fas fa-clock mr-1"></i> ${new Date(latestJurnal.created_at).toLocaleString('id-ID')}
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    countBadge.textContent = `${totalJurnal} siswa`;
+    $('jurnalHariIni').textContent = totalJurnal;
+    
+    if (!hasJurnal) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>';
+    } else {
+      container.innerHTML = html;
+    }
+    
+  } catch(e) {
+    console.warn('Load jurnal error:', e);
+    document.getElementById('jurnalContainer').innerHTML = 
+      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat jurnal</div>';
   }
 }
 
@@ -2590,7 +2947,7 @@ async function simpanLaporanKondisi() {
 }
 
 // ============================================================
-// WALI - TAMBAH SISWA
+// WALI - TAMBAH SISWA & DELETE
 // ============================================================
 function showTambahSiswa() {
   $('siswaKelas').value = currentWali.class || '';
@@ -2814,22 +3171,17 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v20.0 - FULL OPTIMIZED');
+  console.log('🏫 Wali Digital v21.0 - SIDEBAR NAVIGATION');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
-  console.log('⚡ OPTIMASI:');
-  console.log('  ✅ Login lebih cepat (timeout 10s, retry 1x)');
-  console.log('  ✅ Data dimuat paralel (5x lebih cepat)');
-  console.log('  ✅ Cache data untuk mengurangi request');
-  console.log('  ✅ Login lock prevent double click');
-  console.log('💬 FITUR:');
-  console.log('  ✅ Jurnal terhubung dari dashboard siswa');
-  console.log('  ✅ Perbuatan Baik terhubung dari dashboard siswa');
-  console.log('  ✅ Balas langsung dari riwayat curhat');
-  console.log('  ✅ Peta Potensi dari dashboard siswa');
+  console.log('📱 FITUR SIDEBAR:');
+  console.log('  ✅ Sidebar kiri responsif (desktop tetap, HP collapsible)');
+  console.log('  ✅ Menu siswa: Peta Potensi, Curhat, Jurnal, Perbuatan Baik, Riwayat Curhat');
+  console.log('  ✅ Menu wali: Daftar Siswa, Peta Potensi, Perbuatan Baik, Jurnal, Laporan Kondisi, Riwayat Curhat');
+  console.log('  ✅ Hapus menu Curhat Masuk');
 });
 
 // Enter key untuk login
