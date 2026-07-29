@@ -362,6 +362,43 @@
     .sidebar::-webkit-scrollbar { width: 3px; }
     .sidebar::-webkit-scrollbar-track { background: transparent; }
     .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+    
+    /* Foto profile */
+    .profile-photo {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.2);
+    }
+    .profile-photo-sm {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.15);
+    }
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+    .file-input-wrapper input[type=file] {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    .curhat-flow-step {
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -399,6 +436,9 @@
   <!-- ===== SIDEBAR MENU SISWA ===== -->
   <div id="sidebarStudentMenu" class="sidebar-menu hidden">
     <div class="menu-label">📋 Menu Siswa</div>
+    <button class="sidebar-menu-item" data-section="studentProfil" onclick="showStudentSection('studentProfil')">
+      <i class="fas fa-user-circle"></i> Profil Diri
+    </button>
     <button class="sidebar-menu-item active" data-section="studentPotensi" onclick="showStudentSection('studentPotensi')">
       <i class="fas fa-compass"></i> Peta Potensi
     </button>
@@ -541,13 +581,80 @@
         </div>
       </div>
 
+      <!-- ===== SISWA: PROFIL DIRI ===== -->
+      <div id="studentProfilSection" class="section-content hidden">
+        <div class="glass p-5">
+          <h3 class="font-bold text-white mb-4">
+            <i class="fas fa-user-circle text-purple-300 mr-2"></i>Profil Diri
+          </h3>
+          <div class="flex flex-col items-center mb-4">
+            <div class="relative">
+              <img id="profilePhotoPreview" src="https://ui-avatars.com/api/?name=User&size=100&background=4a9bc7&color=fff" alt="Foto Profil" class="profile-photo">
+              <div class="file-input-wrapper mt-2">
+                <button class="btn-glass btn-glass-cyan text-xs py-1 px-3">📷 Upload Foto</button>
+                <input type="file" id="profilePhotoInput" accept="image/*" onchange="previewProfilePhoto(event)">
+              </div>
+            </div>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
+              <input id="profilTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010">
+            </div>
+            <div>
+              <label class="text-sm text-white/60 font-medium">Hobi</label>
+              <input id="profilHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda">
+            </div>
+            <div>
+              <label class="text-sm text-white/60 font-medium">Cita-cita</label>
+              <input id="profilCita" class="input-glass" placeholder="Contoh: Dokter, Pilot">
+            </div>
+            <div>
+              <label class="text-sm text-white/60 font-medium">Alamat</label>
+              <textarea id="profilAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap..."></textarea>
+            </div>
+            <button onclick="simpanProfil()" class="btn-glass btn-glass-primary w-full mt-2">
+              <i class="fas fa-save mr-2"></i>Simpan Profil
+            </button>
+            <div id="profilFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
+          </div>
+        </div>
+      </div>
+
       <!-- ===== SISWA: PETA POTENSI ===== -->
       <div id="studentPotensiSection" class="section-content">
         <div class="glass p-5">
           <h3 class="font-bold text-white mb-3">
             <i class="fas fa-compass text-green-300 mr-2"></i>Peta Potensi
           </h3>
-          <div id="studentPotensiContent" class="text-white/60">Loading...</div>
+          <div class="space-y-3">
+            <div>
+              <label class="text-sm text-white/60 font-medium">Minat</label>
+              <select id="potensiMinat" class="select-glass">
+                <option>Olahraga</option><option>Seni</option><option>Sains</option><option>Teknologi</option><option>Bahasa</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-sm text-white/60 font-medium">Gaya Belajar</label>
+              <select id="potensiGaya" class="select-glass">
+                <option>Visual</option><option>Auditori</option><option>Kinestetik</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-sm text-white/60 font-medium">Cita-cita</label>
+              <input id="potensiCita" class="input-glass" placeholder="Cita-citamu">
+            </div>
+            <div>
+              <label class="text-sm text-white/60 font-medium">Kekuatan Karakter</label>
+              <select id="potensiKarakter" class="select-glass">
+                <option>Pemberani</option><option>Baik Hati</option><option>Kreatif</option><option>Pantang Menyerah</option><option>Disiplin</option>
+              </select>
+            </div>
+            <button onclick="simpanPotensi()" class="btn-glass btn-glass-primary w-full mt-2">
+              <i class="fas fa-save mr-2"></i>Simpan
+            </button>
+            <div id="potensiFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
+          </div>
         </div>
       </div>
 
@@ -561,9 +668,9 @@
             <div id="curhatFlow" class="space-y-2 text-sm text-white"></div>
             <div id="curhatOptions" class="flex flex-wrap gap-2 mt-4"></div>
             <div id="curhatTextArea" class="hidden mt-4">
-              <textarea id="curhatCerita" class="input-glass" rows="3" placeholder="Ceritakan masalahmu..."></textarea>
+              <textarea id="curhatCerita" class="input-glass" rows="4" placeholder="Ceritakan masalahmu secara lengkap di sini..."></textarea>
               <button onclick="submitCurhat()" class="btn-glass btn-glass-primary w-full mt-3">
-                <i class="fas fa-paper-plane mr-2"></i>Kirim
+                <i class="fas fa-paper-plane mr-2"></i>Kirim Curhat
               </button>
             </div>
             <div id="curhatResult" class="hidden text-green-300 font-semibold mt-4">✅ Terima kasih sudah curhat!</div>
@@ -1046,11 +1153,13 @@ let allCurhatCache = [];
 let allJurnalCache = [];
 let allPerbuatanCache = [];
 let allPotensiCache = [];
+let allProfilCache = [];
 let dataLoaded = false;
 let loginInProgress = false;
 let currentStudentSection = 'studentPotensi';
 let currentWaliSection = 'waliSiswa';
 let currentAdminSection = 'adminWali';
+let profilePhotoData = null;
 
 // ============================================================
 // SIDEBAR FUNCTIONS
@@ -1074,17 +1183,14 @@ function closeSidebar() {
 }
 
 function showStudentSection(section) {
-  // Update menu aktif
   document.querySelectorAll('#sidebarStudentMenu .sidebar-menu-item').forEach(el => {
     el.classList.toggle('active', el.dataset.section === section);
   });
   
-  // Sembunyikan semua section
   document.querySelectorAll('#studentDashboard .section-content').forEach(el => {
     el.classList.add('hidden');
   });
   
-  // Tampilkan section yang dipilih
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
   
@@ -1093,17 +1199,14 @@ function showStudentSection(section) {
 }
 
 function showWaliSection(section) {
-  // Update menu aktif
   document.querySelectorAll('#sidebarWaliMenu .sidebar-menu-item').forEach(el => {
     el.classList.toggle('active', el.dataset.section === section);
   });
   
-  // Sembunyikan semua section
   document.querySelectorAll('#waliDashboard .section-content').forEach(el => {
     el.classList.add('hidden');
   });
   
-  // Tampilkan section yang dipilih
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
   
@@ -1112,17 +1215,14 @@ function showWaliSection(section) {
 }
 
 function showAdminSection(section) {
-  // Update menu aktif
   document.querySelectorAll('#sidebarAdminMenu .sidebar-menu-item').forEach(el => {
     el.classList.toggle('active', el.dataset.section === section);
   });
   
-  // Sembunyikan semua section
   document.querySelectorAll('#adminDashboard .section-content').forEach(el => {
     el.classList.add('hidden');
   });
   
-  // Tampilkan section yang dipilih
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
   
@@ -1267,17 +1367,19 @@ async function loadAllDataParallel() {
       curhat: allCurhatCache,
       jurnal: allJurnalCache,
       perbuatan: allPerbuatanCache,
-      potensi: allPotensiCache
+      potensi: allPotensiCache,
+      profil: allProfilCache
     };
   }
   
   try {
-    const [students, curhat, jurnal, perbuatan, potensi] = await Promise.all([
+    const [students, curhat, jurnal, perbuatan, potensi, profil] = await Promise.all([
       callAPI('getAllStudents'),
       callAPI('getAllCurhat'),
       callAPI('getAllJurnal'),
       callAPI('getAllPerbuatanBaik'),
-      callAPI('getAllPotensi')
+      callAPI('getAllPotensi'),
+      callAPI('getAllProfil') || []
     ]);
     
     allStudentsCache = students || [];
@@ -1285,6 +1387,7 @@ async function loadAllDataParallel() {
     allJurnalCache = jurnal || [];
     allPerbuatanCache = perbuatan || [];
     allPotensiCache = potensi || [];
+    allProfilCache = profil || [];
     dataLoaded = true;
     
     return {
@@ -1292,7 +1395,8 @@ async function loadAllDataParallel() {
       curhat: allCurhatCache,
       jurnal: allJurnalCache,
       perbuatan: allPerbuatanCache,
-      potensi: allPotensiCache
+      potensi: allPotensiCache,
+      profil: allProfilCache
     };
   } catch(e) {
     console.warn('Load all data error:', e);
@@ -1552,7 +1656,6 @@ function showStudentDashboard() {
   hide('waliDashboard');
   hide('adminDashboard');
   
-  // Tampilkan sidebar student
   hide('sidebarWaliMenu');
   hide('sidebarAdminMenu');
   show('sidebarStudentMenu');
@@ -1572,7 +1675,6 @@ async function showWaliDashboard() {
   show('waliDashboard');
   hide('adminDashboard');
   
-  // Tampilkan sidebar wali
   hide('sidebarStudentMenu');
   hide('sidebarAdminMenu');
   show('sidebarWaliMenu');
@@ -1589,7 +1691,6 @@ async function showAdminDashboard() {
   hide('waliDashboard');
   show('adminDashboard');
   
-  // Tampilkan sidebar admin
   hide('sidebarStudentMenu');
   hide('sidebarWaliMenu');
   show('sidebarAdminMenu');
@@ -1615,6 +1716,7 @@ function logout() {
     allJurnalCache = [];
     allPerbuatanCache = [];
     allPotensiCache = [];
+    allProfilCache = [];
     hide('dashboardContent');
     hide('studentDashboard');
     hide('waliDashboard');
@@ -1642,34 +1744,94 @@ function updateDateTime() {
 }
 
 // ============================================================
-// STUDENT FUNCTIONS (dengan sidebar navigation)
+// PROFIL FUNCTIONS
+// ============================================================
+function previewProfilePhoto(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('profilePhotoPreview').src = e.target.result;
+      profilePhotoData = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+async function simpanProfil() {
+  const tempatLahir = document.getElementById('profilTempatLahir').value.trim();
+  const hobi = document.getElementById('profilHobi').value.trim();
+  const cita = document.getElementById('profilCita').value.trim();
+  const alamat = document.getElementById('profilAlamat').value.trim();
+  const foto = profilePhotoData || '';
+  
+  if (!tempatLahir && !hobi && !cita && !alamat && !foto) {
+    showToast('❌ Isi minimal satu data profil', 'error');
+    return;
+  }
+  
+  if (!isOnline) {
+    showToast('⚠️ Koneksi offline', 'error');
+    return;
+  }
+  
+  showLoading('Menyimpan profil...');
+  try {
+    const result = await callAPI('saveProfil', {
+      studentId: currentStudent.id,
+      tempatLahir: tempatLahir,
+      hobi: hobi,
+      citaCita: cita,
+      alamat: alamat,
+      foto: foto
+    });
+    
+    hideLoading();
+    if (result.success) {
+      document.getElementById('profilFeedback').textContent = '✅ Profil berhasil disimpan!';
+      document.getElementById('profilFeedback').classList.remove('hidden');
+      showToast('✅ Profil berhasil disimpan!', 'success');
+      setTimeout(() => {
+        document.getElementById('profilFeedback').classList.add('hidden');
+      }, 3000);
+    } else {
+      showToast('❌ ' + result.error, 'error');
+    }
+  } catch(e) {
+    hideLoading();
+    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
+    showToast('❌ Error: ' + msg, 'error');
+  }
+}
+
+// ============================================================
+// STUDENT FUNCTIONS
 // ============================================================
 async function loadStudentData() {
   if (!isOnline) return;
   try {
     // Load potensi
     const potensi = await callAPI('getPotensi', { studentId: currentStudent.id });
-    const potensiContent = document.getElementById('studentPotensiContent');
     if (potensi && potensi.id) {
-      potensiContent.innerHTML = `
-        <div class="space-y-2 text-white">
-          <div><span class="text-white/60">Minat:</span> ${escapeHtml(potensi.minat || '-')}</div>
-          <div><span class="text-white/60">Gaya Belajar:</span> ${escapeHtml(potensi.gaya_belajar || '-')}</div>
-          <div><span class="text-white/60">Cita-cita:</span> ${escapeHtml(potensi.cita_cita || '-')}</div>
-          <div><span class="text-white/60">Kekuatan Karakter:</span> ${escapeHtml(potensi.kekuatan_karakter || '-')}</div>
-        </div>
-      `;
-    } else {
-      potensiContent.innerHTML = '<div class="text-white/60">Belum mengisi peta potensi. Silakan isi melalui menu Peta Potensi.</div>';
+      document.getElementById('potensiMinat').value = potensi.minat || 'Olahraga';
+      document.getElementById('potensiGaya').value = potensi.gaya_belajar || 'Visual';
+      document.getElementById('potensiCita').value = potensi.cita_cita || '';
+      document.getElementById('potensiKarakter').value = potensi.kekuatan_karakter || 'Pemberani';
     }
     
-    // Load perbuatan baik hari ini
-    const pb = await callAPI('getPerbuatanHariIni', { studentId: currentStudent.id });
-    if (pb && pb.id) {
-      // Update recent activity
+    // Load profil
+    const profil = await callAPI('getProfil', { studentId: currentStudent.id });
+    if (profil && profil.id) {
+      document.getElementById('profilTempatLahir').value = profil.tempat_lahir || '';
+      document.getElementById('profilHobi').value = profil.hobi || '';
+      document.getElementById('profilCita').value = profil.cita_cita || '';
+      document.getElementById('profilAlamat').value = profil.alamat || '';
+      if (profil.foto) {
+        document.getElementById('profilePhotoPreview').src = profil.foto;
+        profilePhotoData = profil.foto;
+      }
     }
     
-    // Load curhat
     await loadRiwayatCurhatSiswa();
   } catch(e) {
     console.warn('Load student data error:', e);
@@ -1932,26 +2094,25 @@ async function kirimBalasanSiswa() {
 // CURHAT FLOW
 // ============================================================
 function openCurhat() {
-  // Pindah ke section curhat
   showStudentSection('studentCurhat');
   
   curhatStep = 0;
   curhatData = {};
-  $('curhatFlow').innerHTML = '<div class="text-white/60">Mulai curhat dengan memilih di bawah</div>';
-  $('curhatOptions').innerHTML = `
+  document.getElementById('curhatFlow').innerHTML = '<div class="text-white/60 curhat-flow-step">Siapa yang bermasalah?</div>';
+  document.getElementById('curhatOptions').innerHTML = `
     <button onclick="curhatStep1('Aku sendiri')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Aku sendiri</button>
     <button onclick="curhatStep1('Untuk temanku')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Untuk temanku</button>
   `;
-  $('curhatTextArea').classList.add('hidden');
-  $('curhatResult').classList.add('hidden');
+  document.getElementById('curhatTextArea').classList.add('hidden');
+  document.getElementById('curhatResult').classList.add('hidden');
 }
 
 function curhatStep1(siapa) {
   curhatData.untuk_siapa = siapa;
-  $('curhatFlow').innerHTML = '<div class="text-white">Kategori masalah?</div>';
-  $('curhatOptions').innerHTML = `
-    <button onclick="curhatStep2('Sekolah')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Sekolah</button>
-    <button onclick="curhatStep2('Rumah')" class="btn-glass btn-glass-warning text-sm py-2 px-4">Rumah</button>
+  document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">Masalah di mana?</div>';
+  document.getElementById('curhatOptions').innerHTML = `
+    <button onclick="curhatStep2('Sekolah')" class="btn-glass btn-glass-primary text-sm py-2 px-4">🏫 Sekolah</button>
+    <button onclick="curhatStep2('Rumah')" class="btn-glass btn-glass-warning text-sm py-2 px-4">🏠 Rumah</button>
   `;
 }
 
@@ -1961,31 +2122,33 @@ function curhatStep2(kategori) {
     ? ['Perundungan', 'Pelajaran', 'Teman', 'Guru']
     : ['Orang tua', 'Saudara', 'Keuangan'];
   
-  $('curhatFlow').innerHTML = '<div class="text-white">Masalah spesifik?</div>';
-  $('curhatOptions').innerHTML = options.map(opt => 
+  document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">Masalah spesifik apa?</div>';
+  document.getElementById('curhatOptions').innerHTML = options.map(opt => 
     `<button onclick="curhatStep3('${opt}')" class="btn-glass btn-glass-primary text-sm py-2 px-4">${opt}</button>`
   ).join('');
 }
 
 function curhatStep3(sub) {
   curhatData.sub = sub;
-  $('curhatFlow').innerHTML = '<div class="text-white">Tingkat darurat?</div>';
-  $('curhatOptions').innerHTML = `
-    <button onclick="curhatStep4('Aku cuma mau cerita')" class="btn-glass text-sm py-2 px-4">Cuma mau cerita</button>
-    <button onclick="curhatStep4('Aku butuh saran')" class="btn-glass btn-glass-warning text-sm py-2 px-4">Butuh saran</button>
-    <button onclick="curhatStep4('Aku butuh bantuan sekarang')" class="btn-glass btn-glass-danger text-sm py-2 px-4">Butuh bantuan sekarang</button>
+  document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">Bagaimana kondisimu?</div>';
+  document.getElementById('curhatOptions').innerHTML = `
+    <button onclick="curhatStep4('Aku cuma mau cerita')" class="btn-glass text-sm py-2 px-4">💬 Cuma mau cerita</button>
+    <button onclick="curhatStep4('Aku butuh saran')" class="btn-glass btn-glass-warning text-sm py-2 px-4">💡 Butuh saran</button>
+    <button onclick="curhatStep4('Aku butuh bantuan sekarang')" class="btn-glass btn-glass-danger text-sm py-2 px-4">🚨 Darurat/Butuh bantuan</button>
   `;
 }
 
 function curhatStep4(darurat) {
   curhatData.darurat = darurat;
-  $('curhatFlow').innerHTML = '<div class="text-white">Ceritakan masalahmu...</div>';
-  $('curhatOptions').innerHTML = '';
-  $('curhatTextArea').classList.remove('hidden');
+  document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">📝 Ceritakan masalahmu secara lengkap di sini</div>';
+  document.getElementById('curhatOptions').innerHTML = '';
+  document.getElementById('curhatTextArea').classList.remove('hidden');
+  document.getElementById('curhatCerita').placeholder = 'Ceritakan masalahmu secara lengkap...\n\nContoh: Saya merasa...';
+  document.getElementById('curhatCerita').focus();
 }
 
 async function submitCurhat() {
-  const cerita = $('curhatCerita').value.trim();
+  const cerita = document.getElementById('curhatCerita').value.trim();
   if (!cerita) {
     alert('Tulis cerita dulu ya');
     return;
@@ -2009,15 +2172,25 @@ async function submitCurhat() {
     
     hideLoading();
     if (result.success) {
-      $('curhatTextArea').classList.add('hidden');
-      $('curhatResult').classList.remove('hidden');
-      $('curhatResult').textContent = '✅ Terima kasih sudah curhat!';
-      $('curhatCerita').value = '';
+      document.getElementById('curhatTextArea').classList.add('hidden');
+      document.getElementById('curhatResult').classList.remove('hidden');
+      document.getElementById('curhatResult').textContent = '✅ Terima kasih sudah curhat!';
+      document.getElementById('curhatCerita').value = '';
       showToast('✅ Curhat berhasil dikirim!', 'success');
       
       if (curhatData.darurat === 'Aku butuh bantuan sekarang') {
         alert('⚠️ Kami akan segera menghubungimu! Tetap tenang ya.');
       }
+      
+      // Reset flow setelah beberapa detik
+      setTimeout(() => {
+        document.getElementById('curhatResult').classList.add('hidden');
+        document.getElementById('curhatFlow').innerHTML = '<div class="text-white/60">Mulai curhat dengan memilih di bawah</div>';
+        document.getElementById('curhatOptions').innerHTML = `
+          <button onclick="curhatStep1('Aku sendiri')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Aku sendiri</button>
+          <button onclick="curhatStep1('Untuk temanku')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Untuk temanku</button>
+        `;
+      }, 3000);
       
       await loadRiwayatCurhatSiswa();
     } else {
@@ -2035,19 +2208,19 @@ async function submitCurhat() {
 // ============================================================
 function openJurnal() {
   showStudentSection('studentJurnal');
-  $('jurnalFeedback').textContent = '';
+  document.getElementById('jurnalFeedback').textContent = '';
 }
 
 function pilihEmoji(emoji) {
-  $('jurnalEmoji').value = emoji;
+  document.getElementById('jurnalEmoji').value = emoji;
   document.querySelectorAll('#studentJurnalSection .text-4xl span').forEach(el => {
     el.style.transform = el.textContent === emoji ? 'scale(1.4)' : 'scale(1)';
   });
 }
 
 async function simpanJurnal() {
-  const emoji = $('jurnalEmoji').value;
-  const cerita = $('jurnalCerita').value.trim() || 'Hari ini biasa saja.';
+  const emoji = document.getElementById('jurnalEmoji').value;
+  const cerita = document.getElementById('jurnalCerita').value.trim() || 'Hari ini biasa saja.';
   
   if (!isOnline) {
     alert('⚠️ Koneksi offline. Periksa internet Anda.');
@@ -2064,11 +2237,11 @@ async function simpanJurnal() {
     
     hideLoading();
     if (result.success) {
-      $('jurnalFeedback').textContent = '✅ Jurnal tersimpan!';
-      $('jurnalCerita').value = '';
+      document.getElementById('jurnalFeedback').textContent = '✅ Jurnal tersimpan!';
+      document.getElementById('jurnalCerita').value = '';
       showToast('✅ Jurnal tersimpan!', 'success');
       setTimeout(() => {
-        $('jurnalFeedback').textContent = '';
+        document.getElementById('jurnalFeedback').textContent = '';
       }, 3000);
     }
   } catch(e) {
@@ -2083,8 +2256,8 @@ async function simpanJurnal() {
 // ============================================================
 function openPerbuatanBaik() {
   showStudentSection('studentPerbuatan');
-  $('perbuatanFeedback').textContent = '';
-  $('perbuatanLain').value = '';
+  document.getElementById('perbuatanFeedback').textContent = '';
+  document.getElementById('perbuatanLain').value = '';
 }
 
 async function catatPerbuatan(action) {
@@ -2108,10 +2281,10 @@ async function catatPerbuatan(action) {
     hideLoading();
     if (result.success) {
       const feedbacks = ['🌟 Good Job!', '💪 Luar biasa!', '😇 Kamu anak baik!', '⚡ Keren!'];
-      $('perbuatanFeedback').textContent = feedbacks[Math.floor(Math.random() * feedbacks.length)];
+      document.getElementById('perbuatanFeedback').textContent = feedbacks[Math.floor(Math.random() * feedbacks.length)];
       showToast('✅ Perbuatan baik dicatat!', 'success');
       setTimeout(() => {
-        $('perbuatanFeedback').textContent = '';
+        document.getElementById('perbuatanFeedback').textContent = '';
       }, 3000);
     } else {
       showToast(result.error || 'Gagal mencatat', 'error');
@@ -2128,13 +2301,14 @@ async function catatPerbuatan(action) {
 // ============================================================
 function openPotensi() {
   showStudentSection('studentPotensi');
+  document.getElementById('potensiFeedback').classList.add('hidden');
 }
 
 async function simpanPotensi() {
-  const minat = $('potensiMinat').value;
-  const gaya = $('potensiGaya').value;
-  const cita = $('potensiCita').value.trim() || 'Belum diisi';
-  const karakter = $('potensiKarakter').value;
+  const minat = document.getElementById('potensiMinat').value;
+  const gaya = document.getElementById('potensiGaya').value;
+  const cita = document.getElementById('potensiCita').value.trim() || 'Belum diisi';
+  const karakter = document.getElementById('potensiKarakter').value;
   
   if (!isOnline) {
     alert('⚠️ Koneksi offline. Periksa internet Anda.');
@@ -2154,9 +2328,12 @@ async function simpanPotensi() {
     
     hideLoading();
     if (result.success) {
+      document.getElementById('potensiFeedback').textContent = '✅ Peta Potensi berhasil disimpan!';
+      document.getElementById('potensiFeedback').classList.remove('hidden');
       showToast('✅ Peta Potensi berhasil disimpan!', 'success');
-      closeModal('potensiModal');
-      await loadStudentData();
+      setTimeout(() => {
+        document.getElementById('potensiFeedback').classList.add('hidden');
+      }, 3000);
     }
   } catch(e) {
     hideLoading();
@@ -2170,7 +2347,7 @@ async function simpanPotensi() {
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
-    $('studentList').innerHTML = '<div class="text-red-400/80 text-center">⚠️ Koneksi offline</div>';
+    document.getElementById('studentList').innerHTML = '<div class="text-red-400/80 text-center">⚠️ Koneksi offline</div>';
     return;
   }
   
@@ -2179,7 +2356,7 @@ async function loadWaliData() {
     const allData = await loadAllDataParallel();
     
     const students = allData.students.filter(s => s.wali_id === currentWali.id);
-    $('totalSiswa').textContent = students.length;
+    document.getElementById('totalSiswa').textContent = students.length;
     
     const studentIds = students.map(s => s.id);
     const waliCurhat = allData.curhat.filter(c => studentIds.includes(c.student_id));
@@ -2192,10 +2369,10 @@ async function loadWaliData() {
     const unread = waliCurhat.filter(c => c.is_read === false || c.is_read === 'FALSE');
     const darurat = waliCurhat.filter(c => c.tingkat_darurat === 'Aku butuh bantuan sekarang');
     
-    $('curhatBelumDibaca').textContent = unread.length;
-    $('curhatDarurat').textContent = darurat.length;
+    document.getElementById('curhatBelumDibaca').textContent = unread.length;
+    document.getElementById('curhatDarurat').textContent = darurat.length;
     
-    renderStudentList(students);
+    renderStudentList(students, allData.profil);
     await loadLaporanKondisi(students);
     await loadPotensiSiswa(students, allData.potensi);
     await loadPerbuatanBaik(students, allData.perbuatan);
@@ -2211,24 +2388,148 @@ async function loadWaliData() {
   }
 }
 
-function renderStudentList(students) {
-  const list = $('studentList');
+function renderStudentList(students, profilData) {
+  const list = document.getElementById('studentList');
   if (!students || students.length === 0) {
     list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada siswa</div>';
     return;
   }
   
-  list.innerHTML = students.map(s => `
-    <div class="glass p-4 flex items-center justify-between hover:bg-white/5 transition">
-      <div>
-        <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
-        <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
+  list.innerHTML = students.map(s => {
+    const profil = profilData ? profilData.find(p => p.student_id === s.id) : null;
+    const foto = profil && profil.foto ? profil.foto : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(s.name) + '&size=50&background=4a9bc7&color=fff';
+    const tempatLahir = profil ? profil.tempat_lahir || '-' : '-';
+    const hobi = profil ? profil.hobi || '-' : '-';
+    const cita = profil ? profil.cita_cita || '-' : '-';
+    const alamat = profil ? profil.alamat || '-' : '-';
+    
+    return `
+      <div class="glass p-4 hover:bg-white/5 transition">
+        <div class="flex items-center gap-3">
+          <img src="${escapeHtml(foto)}" alt="${escapeHtml(s.name)}" class="profile-photo-sm">
+          <div class="flex-1">
+            <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
+            <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
+            <div class="text-xs text-white/40 mt-1">
+              <span class="inline-block mr-2">📍 ${escapeHtml(tempatLahir)}</span>
+              <span class="inline-block mr-2">🎯 ${escapeHtml(cita)}</span>
+              <span class="inline-block">⭐ ${escapeHtml(hobi)}</span>
+            </div>
+            <div class="text-xs text-white/30 mt-0.5">${escapeHtml(alamat)}</div>
+          </div>
+          <div class="flex gap-1">
+            <button onclick="editProfilSiswa('${s.id}')" class="text-blue-400/70 hover:text-blue-400 transition text-xs px-2 py-1">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button onclick="deleteStudent('${s.id}')" class="text-red-400/70 hover:text-red-400 transition text-xs px-2 py-1">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
       </div>
-      <button onclick="deleteStudent('${s.id}')" class="text-red-400/70 hover:text-red-400 transition">
-        <i class="fas fa-trash"></i>
-      </button>
+    `;
+  }).join('');
+}
+
+// ============================================================
+// EDIT PROFIL SISWA (WALI)
+// ============================================================
+function editProfilSiswa(studentId) {
+  // Cari data siswa
+  const student = allStudentsCache.find(s => s.id === studentId);
+  if (!student) {
+    showToast('❌ Siswa tidak ditemukan', 'error');
+    return;
+  }
+  
+  const profil = allProfilCache ? allProfilCache.find(p => p.student_id === studentId) : null;
+  
+  // Buat modal edit sederhana
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.style.display = 'flex';
+  modal.innerHTML = `
+    <div class="modal-glass" style="max-width: 500px;">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-user-edit text-blue-300 mr-2"></i>Edit Profil ${escapeHtml(student.name)}
+        </h3>
+        <button onclick="this.closest('.modal-overlay').remove()" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
+          <input id="editTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010" value="${escapeHtml(profil ? profil.tempat_lahir || '' : '')}">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Hobi</label>
+          <input id="editHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda" value="${escapeHtml(profil ? profil.hobi || '' : '')}">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Cita-cita</label>
+          <input id="editCita" class="input-glass" placeholder="Contoh: Dokter, Pilot" value="${escapeHtml(profil ? profil.cita_cita || '' : '')}">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Alamat</label>
+          <textarea id="editAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap...">${escapeHtml(profil ? profil.alamat || '' : '')}</textarea>
+        </div>
+        <button onclick="simpanEditProfil('${studentId}')" class="btn-glass btn-glass-primary w-full mt-2">
+          <i class="fas fa-save mr-2"></i>Simpan Perubahan
+        </button>
+        <div id="editProfilFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
+      </div>
     </div>
-  `).join('');
+  `;
+  document.body.appendChild(modal);
+  
+  // Tutup modal jika klik overlay
+  modal.addEventListener('click', function(e) {
+    if (e.target === this) this.remove();
+  });
+}
+
+async function simpanEditProfil(studentId) {
+  const tempatLahir = document.getElementById('editTempatLahir').value.trim();
+  const hobi = document.getElementById('editHobi').value.trim();
+  const cita = document.getElementById('editCita').value.trim();
+  const alamat = document.getElementById('editAlamat').value.trim();
+  
+  if (!isOnline) {
+    showToast('⚠️ Koneksi offline', 'error');
+    return;
+  }
+  
+  showLoading('Menyimpan profil...');
+  try {
+    const result = await callAPI('saveProfil', {
+      studentId: studentId,
+      tempatLahir: tempatLahir,
+      hobi: hobi,
+      citaCita: cita,
+      alamat: alamat,
+      foto: ''
+    });
+    
+    hideLoading();
+    if (result.success) {
+      document.getElementById('editProfilFeedback').textContent = '✅ Profil berhasil diperbarui!';
+      document.getElementById('editProfilFeedback').classList.remove('hidden');
+      showToast('✅ Profil berhasil diperbarui!', 'success');
+      
+      // Tutup modal setelah 1.5 detik
+      setTimeout(() => {
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) modal.remove();
+        loadWaliData();
+      }, 1500);
+    } else {
+      showToast('❌ ' + result.error, 'error');
+    }
+  } catch(e) {
+    hideLoading();
+    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
+    showToast('❌ Error: ' + msg, 'error');
+  }
 }
 
 // ============================================================
@@ -2795,7 +3096,7 @@ async function loadJurnalSiswa(students, jurnalData) {
     }
     
     countBadge.textContent = `${totalJurnal} siswa`;
-    $('jurnalHariIni').textContent = totalJurnal;
+    document.getElementById('jurnalHariIni').textContent = totalJurnal;
     
     if (!hasJurnal) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>';
@@ -2950,15 +3251,15 @@ async function simpanLaporanKondisi() {
 // WALI - TAMBAH SISWA & DELETE
 // ============================================================
 function showTambahSiswa() {
-  $('siswaKelas').value = currentWali.class || '';
+  document.getElementById('siswaKelas').value = currentWali.class || '';
   show('tambahSiswaModal');
 }
 
 async function tambahSiswa() {
-  const nis = $('siswaNIS').value.trim();
-  const name = $('siswaNama').value.trim();
-  const kelas = $('siswaKelas').value.trim();
-  const pin = $('siswaPIN').value.trim() || '51sw@qu';
+  const nis = document.getElementById('siswaNIS').value.trim();
+  const name = document.getElementById('siswaNama').value.trim();
+  const kelas = document.getElementById('siswaKelas').value.trim();
+  const pin = document.getElementById('siswaPIN').value.trim() || '51sw@qu';
   
   if (!nis || !name || !kelas) {
     alert('Mohon isi semua data');
@@ -3037,7 +3338,7 @@ async function deleteStudent(id) {
 // ============================================================
 async function loadAdminData() {
   if (!isOnline) {
-    $('waliList').innerHTML = '<div class="text-red-400/80 text-center">⚠️ Koneksi offline</div>';
+    document.getElementById('waliList').innerHTML = '<div class="text-red-400/80 text-center">⚠️ Koneksi offline</div>';
     return;
   }
   
@@ -3048,9 +3349,9 @@ async function loadAdminData() {
     const curhat = await callAPI('getAllCurhat');
     
     const waliUsers = users ? users.filter(u => u.role === 'wali') : [];
-    $('totalWaliAdmin').textContent = waliUsers.length;
-    $('totalSiswaAdmin').textContent = students ? students.length : 0;
-    $('totalCurhatAdmin').textContent = curhat ? curhat.length : 0;
+    document.getElementById('totalWaliAdmin').textContent = waliUsers.length;
+    document.getElementById('totalSiswaAdmin').textContent = students ? students.length : 0;
+    document.getElementById('totalCurhatAdmin').textContent = curhat ? curhat.length : 0;
     
     renderWaliList(waliUsers);
     hideLoading();
@@ -3063,7 +3364,7 @@ async function loadAdminData() {
 }
 
 function renderWaliList(walis) {
-  const list = $('waliList');
+  const list = document.getElementById('waliList');
   if (!walis || walis.length === 0) {
     list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada wali</div>';
     return;
@@ -3087,10 +3388,10 @@ function showTambahWali() {
 }
 
 async function tambahWali() {
-  const name = $('waliNamaBaru').value.trim();
-  const email = $('waliEmailBaru').value.trim();
-  const kelas = $('waliKelasBaru').value.trim();
-  const password = $('waliPasswordBaru').value.trim() || 'd4Rm@app';
+  const name = document.getElementById('waliNamaBaru').value.trim();
+  const email = document.getElementById('waliEmailBaru').value.trim();
+  const kelas = document.getElementById('waliKelasBaru').value.trim();
+  const password = document.getElementById('waliPasswordBaru').value.trim() || 'd4Rm@app';
   
   if (!name || !email || !kelas) {
     alert('Mohon isi semua data');
@@ -3171,17 +3472,17 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v21.0 - SIDEBAR NAVIGATION');
+  console.log('🏫 Wali Digital v22.0 - FULL FEATURES');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
-  console.log('📱 FITUR SIDEBAR:');
-  console.log('  ✅ Sidebar kiri responsif (desktop tetap, HP collapsible)');
-  console.log('  ✅ Menu siswa: Peta Potensi, Curhat, Jurnal, Perbuatan Baik, Riwayat Curhat');
-  console.log('  ✅ Menu wali: Daftar Siswa, Peta Potensi, Perbuatan Baik, Jurnal, Laporan Kondisi, Riwayat Curhat');
-  console.log('  ✅ Hapus menu Curhat Masuk');
+  console.log('💬 FITUR BARU:');
+  console.log('  ✅ Curhat dengan alur pertanyaan lengkap');
+  console.log('  ✅ Profil Diri dengan upload foto');
+  console.log('  ✅ Edit profil siswa oleh wali');
+  console.log('  ✅ Data profil tampil di daftar siswa');
 });
 
 // Enter key untuk login
