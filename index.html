@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -399,6 +399,33 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    
+    /* CV Style */
+    .cv-container {
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .cv-item {
+      display: flex;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .cv-item:last-child {
+      border-bottom: none;
+    }
+    .cv-label {
+      width: 120px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      flex-shrink: 0;
+    }
+    .cv-value {
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+      word-break: break-word;
+    }
   </style>
 </head>
 <body>
@@ -587,36 +614,72 @@
           <h3 class="font-bold text-white mb-4">
             <i class="fas fa-user-circle text-purple-300 mr-2"></i>Profil Diri
           </h3>
-          <div class="flex flex-col items-center mb-4">
-            <div class="relative">
-              <img id="profilePhotoPreview" src="https://ui-avatars.com/api/?name=User&size=100&background=4a9bc7&color=fff" alt="Foto Profil" class="profile-photo">
-              <div class="file-input-wrapper mt-2">
-                <button class="btn-glass btn-glass-cyan text-xs py-1 px-3">📷 Upload Foto</button>
-                <input type="file" id="profilePhotoInput" accept="image/*" onchange="previewProfilePhoto(event)">
+          
+          <!-- Form Profil (hidden jika sudah ada data) -->
+          <div id="profilFormContainer">
+            <div class="flex flex-col items-center mb-4">
+              <div class="relative">
+                <img id="profilePhotoPreview" src="https://ui-avatars.com/api/?name=User&size=100&background=4a9bc7&color=fff" alt="Foto Profil" class="profile-photo">
+                <div class="file-input-wrapper mt-2">
+                  <button class="btn-glass btn-glass-cyan text-xs py-1 px-3">📷 Upload Foto</button>
+                  <input type="file" id="profilePhotoInput" accept="image/*" onchange="previewProfilePhoto(event)">
+                </div>
               </div>
             </div>
+            <div class="space-y-3">
+              <div>
+                <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
+                <input id="profilTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010">
+              </div>
+              <div>
+                <label class="text-sm text-white/60 font-medium">Hobi</label>
+                <input id="profilHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda">
+              </div>
+              <div>
+                <label class="text-sm text-white/60 font-medium">Cita-cita</label>
+                <input id="profilCita" class="input-glass" placeholder="Contoh: Dokter, Pilot">
+              </div>
+              <div>
+                <label class="text-sm text-white/60 font-medium">Alamat</label>
+                <textarea id="profilAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap..."></textarea>
+              </div>
+              <button onclick="simpanProfil()" class="btn-glass btn-glass-primary w-full mt-2">
+                <i class="fas fa-save mr-2"></i>Simpan Profil
+              </button>
+              <div id="profilFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
+            </div>
           </div>
-          <div class="space-y-3">
-            <div>
-              <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
-              <input id="profilTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010">
+          
+          <!-- Tampilan CV (hidden jika belum ada data) -->
+          <div id="profilCVContainer" class="hidden">
+            <div class="cv-container">
+              <div class="flex items-center gap-4 mb-4">
+                <img id="cvFoto" src="https://ui-avatars.com/api/?name=User&size=100&background=4a9bc7&color=fff" alt="Foto" class="profile-photo">
+                <div>
+                  <h4 class="text-xl font-bold text-white" id="cvNama">-</h4>
+                  <p class="text-sm text-white/60" id="cvKelas">-</p>
+                </div>
+              </div>
+              <div class="cv-item">
+                <span class="cv-label">📍 Tempat, Tgl Lahir</span>
+                <span class="cv-value" id="cvTempatLahir">-</span>
+              </div>
+              <div class="cv-item">
+                <span class="cv-label">⭐ Hobi</span>
+                <span class="cv-value" id="cvHobi">-</span>
+              </div>
+              <div class="cv-item">
+                <span class="cv-label">🎯 Cita-cita</span>
+                <span class="cv-value" id="cvCita">-</span>
+              </div>
+              <div class="cv-item">
+                <span class="cv-label">🏠 Alamat</span>
+                <span class="cv-value" id="cvAlamat">-</span>
+              </div>
             </div>
-            <div>
-              <label class="text-sm text-white/60 font-medium">Hobi</label>
-              <input id="profilHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda">
-            </div>
-            <div>
-              <label class="text-sm text-white/60 font-medium">Cita-cita</label>
-              <input id="profilCita" class="input-glass" placeholder="Contoh: Dokter, Pilot">
-            </div>
-            <div>
-              <label class="text-sm text-white/60 font-medium">Alamat</label>
-              <textarea id="profilAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap..."></textarea>
-            </div>
-            <button onclick="simpanProfil()" class="btn-glass btn-glass-primary w-full mt-2">
-              <i class="fas fa-save mr-2"></i>Simpan Profil
+            <button onclick="editProfil()" class="btn-glass btn-glass-primary w-full mt-4">
+              <i class="fas fa-edit mr-2"></i>Edit Profil
             </button>
-            <div id="profilFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
           </div>
         </div>
       </div>
@@ -1160,6 +1223,7 @@ let currentStudentSection = 'studentPotensi';
 let currentWaliSection = 'waliSiswa';
 let currentAdminSection = 'adminWali';
 let profilePhotoData = null;
+let profilDataLoaded = false;
 
 // ============================================================
 // SIDEBAR FUNCTIONS
@@ -1193,6 +1257,11 @@ function showStudentSection(section) {
   
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
+  
+  // Jika section curhat, inisialisasi flow
+  if (section === 'studentCurhat') {
+    initCurhat();
+  }
   
   currentStudentSection = section;
   closeSidebar();
@@ -1758,6 +1827,45 @@ function previewProfilePhoto(event) {
   }
 }
 
+function showProfilForm() {
+  document.getElementById('profilFormContainer').classList.remove('hidden');
+  document.getElementById('profilCVContainer').classList.add('hidden');
+}
+
+function showProfilCV(profil) {
+  document.getElementById('profilFormContainer').classList.add('hidden');
+  document.getElementById('profilCVContainer').classList.remove('hidden');
+  
+  document.getElementById('cvNama').textContent = currentStudent.name || '-';
+  document.getElementById('cvKelas').textContent = currentStudent.class || '-';
+  document.getElementById('cvTempatLahir').textContent = profil.tempat_lahir || '-';
+  document.getElementById('cvHobi').textContent = profil.hobi || '-';
+  document.getElementById('cvCita').textContent = profil.cita_cita || '-';
+  document.getElementById('cvAlamat').textContent = profil.alamat || '-';
+  
+  if (profil.foto) {
+    document.getElementById('cvFoto').src = profil.foto;
+  } else {
+    document.getElementById('cvFoto').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentStudent.name) + '&size=100&background=4a9bc7&color=fff';
+  }
+}
+
+function editProfil() {
+  // Load data profil ke form
+  const profil = allProfilCache.find(p => p.student_id === currentStudent.id);
+  if (profil) {
+    document.getElementById('profilTempatLahir').value = profil.tempat_lahir || '';
+    document.getElementById('profilHobi').value = profil.hobi || '';
+    document.getElementById('profilCita').value = profil.cita_cita || '';
+    document.getElementById('profilAlamat').value = profil.alamat || '';
+    if (profil.foto) {
+      document.getElementById('profilePhotoPreview').src = profil.foto;
+      profilePhotoData = profil.foto;
+    }
+  }
+  showProfilForm();
+}
+
 async function simpanProfil() {
   const tempatLahir = document.getElementById('profilTempatLahir').value.trim();
   const hobi = document.getElementById('profilHobi').value.trim();
@@ -1791,6 +1899,10 @@ async function simpanProfil() {
       document.getElementById('profilFeedback').textContent = '✅ Profil berhasil disimpan!';
       document.getElementById('profilFeedback').classList.remove('hidden');
       showToast('✅ Profil berhasil disimpan!', 'success');
+      
+      // Refresh data profil
+      await loadStudentData();
+      
       setTimeout(() => {
         document.getElementById('profilFeedback').classList.add('hidden');
       }, 3000);
@@ -1822,14 +1934,19 @@ async function loadStudentData() {
     // Load profil
     const profil = await callAPI('getProfil', { studentId: currentStudent.id });
     if (profil && profil.id) {
-      document.getElementById('profilTempatLahir').value = profil.tempat_lahir || '';
-      document.getElementById('profilHobi').value = profil.hobi || '';
-      document.getElementById('profilCita').value = profil.cita_cita || '';
-      document.getElementById('profilAlamat').value = profil.alamat || '';
-      if (profil.foto) {
-        document.getElementById('profilePhotoPreview').src = profil.foto;
-        profilePhotoData = profil.foto;
+      // Tampilkan CV
+      showProfilCV(profil);
+      
+      // Simpan ke cache
+      const existingIdx = allProfilCache.findIndex(p => p.student_id === currentStudent.id);
+      if (existingIdx >= 0) {
+        allProfilCache[existingIdx] = profil;
+      } else {
+        allProfilCache.push(profil);
       }
+    } else {
+      // Tampilkan form
+      showProfilForm();
     }
     
     await loadRiwayatCurhatSiswa();
@@ -2093,9 +2210,14 @@ async function kirimBalasanSiswa() {
 // ============================================================
 // CURHAT FLOW
 // ============================================================
+function initCurhat() {
+  // Inisialisasi curhat jika belum
+  if (!document.getElementById('curhatFlow').innerHTML) {
+    openCurhat();
+  }
+}
+
 function openCurhat() {
-  showStudentSection('studentCurhat');
-  
   curhatStep = 0;
   curhatData = {};
   document.getElementById('curhatFlow').innerHTML = '<div class="text-white/60 curhat-flow-step">Siapa yang bermasalah?</div>';
@@ -2435,7 +2557,6 @@ function renderStudentList(students, profilData) {
 // EDIT PROFIL SISWA (WALI)
 // ============================================================
 function editProfilSiswa(studentId) {
-  // Cari data siswa
   const student = allStudentsCache.find(s => s.id === studentId);
   if (!student) {
     showToast('❌ Siswa tidak ditemukan', 'error');
@@ -2444,7 +2565,6 @@ function editProfilSiswa(studentId) {
   
   const profil = allProfilCache ? allProfilCache.find(p => p.student_id === studentId) : null;
   
-  // Buat modal edit sederhana
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
   modal.style.display = 'flex';
@@ -2482,7 +2602,6 @@ function editProfilSiswa(studentId) {
   `;
   document.body.appendChild(modal);
   
-  // Tutup modal jika klik overlay
   modal.addEventListener('click', function(e) {
     if (e.target === this) this.remove();
   });
@@ -2516,10 +2635,10 @@ async function simpanEditProfil(studentId) {
       document.getElementById('editProfilFeedback').classList.remove('hidden');
       showToast('✅ Profil berhasil diperbarui!', 'success');
       
-      // Tutup modal setelah 1.5 detik
       setTimeout(() => {
         const modal = document.querySelector('.modal-overlay');
         if (modal) modal.remove();
+        dataLoaded = false;
         loadWaliData();
       }, 1500);
     } else {
@@ -2783,6 +2902,7 @@ async function kirimBalasanWaliDariChat() {
       }, 1000);
       
       setTimeout(() => {
+        dataLoaded = false;
         loadWaliData();
       }, 1500);
     } else {
@@ -3472,7 +3592,7 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v22.0 - FULL FEATURES');
+  console.log('🏫 Wali Digital v23.0 - FULL FEATURES');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
@@ -3480,8 +3600,9 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('💬 FITUR BARU:');
   console.log('  ✅ Curhat dengan alur pertanyaan lengkap');
-  console.log('  ✅ Profil Diri dengan upload foto');
-  console.log('  ✅ Edit profil siswa oleh wali');
+  console.log('  ✅ Profil Diri dengan upload foto (1x isi, tampil CV)');
+  console.log('  ✅ Edit profil dengan tombol Edit');
+  console.log('  ✅ Tampilan CV seperti curriculum vitae');
   console.log('  ✅ Data profil tampil di daftar siswa');
 });
 
