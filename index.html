@@ -1188,8 +1188,8 @@
 const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbx0S-fG9vIpr02dlnCn8q_amM-DGF4lY89zQG-JsMFmcj6OOTefINxiCUXiEUkdyWH18A/exec',
   USE_API: true,
-  RETRY_COUNT: 1,
-  RETRY_DELAY: 300
+  RETRY_COUNT: 2,
+  RETRY_DELAY: 500
 };
 
 // ============================================================
@@ -1223,6 +1223,7 @@ let currentStudentSection = 'studentPotensi';
 let currentWaliSection = 'waliSiswa';
 let currentAdminSection = 'adminWali';
 let profilePhotoData = null;
+let isPhotoUploaded = false;
 
 // ============================================================
 // SIDEBAR FUNCTIONS
@@ -1257,7 +1258,6 @@ function showStudentSection(section) {
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
   
-  // Jika section curhat, inisialisasi flow
   if (section === 'studentCurhat') {
     initCurhat();
   }
@@ -1371,7 +1371,7 @@ async function callAPI(action, params = {}, retryCount = 0) {
     console.log('📡 API Call:', action);
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
     
     fetch(url, { 
       method: 'GET',
@@ -1812,15 +1812,22 @@ function updateDateTime() {
 }
 
 // ============================================================
-// PROFIL FUNCTIONS
+// PROFIL FUNCTIONS - DENGAN OPTIMASI FOTO
 // ============================================================
 function previewProfilePhoto(event) {
   const file = event.target.files[0];
   if (file) {
+    // Validasi ukuran file (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      showToast('❌ Ukuran foto maksimal 2MB', 'error');
+      event.target.value = '';
+      return;
+    }
     const reader = new FileReader();
     reader.onload = function(e) {
       document.getElementById('profilePhotoPreview').src = e.target.result;
       profilePhotoData = e.target.result;
+      isPhotoUploaded = true;
     };
     reader.readAsDataURL(file);
   }
@@ -1842,7 +1849,7 @@ function showProfilCV(profil) {
   document.getElementById('cvCita').textContent = profil.cita_cita || '-';
   document.getElementById('cvAlamat').textContent = profil.alamat || '-';
   
-  if (profil.foto) {
+  if (profil.foto && profil.foto.startsWith('data:image')) {
     document.getElementById('cvFoto').src = profil.foto;
   } else {
     document.getElementById('cvFoto').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentStudent.name) + '&size=100&background=4a9bc7&color=fff';
@@ -1850,16 +1857,16 @@ function showProfilCV(profil) {
 }
 
 function editProfil() {
-  // Load data profil ke form
   const profil = allProfilCache.find(p => p.student_id === currentStudent.id);
   if (profil) {
     document.getElementById('profilTempatLahir').value = profil.tempat_lahir || '';
     document.getElementById('profilHobi').value = profil.hobi || '';
     document.getElementById('profilCita').value = profil.cita_cita || '';
     document.getElementById('profilAlamat').value = profil.alamat || '';
-    if (profil.foto) {
+    if (profil.foto && profil.foto.startsWith('data:image')) {
       document.getElementById('profilePhotoPreview').src = profil.foto;
       profilePhotoData = profil.foto;
+      isPhotoUploaded = true;
     }
   }
   showProfilForm();
@@ -1870,7 +1877,9 @@ async function simpanProfil() {
   const hobi = document.getElementById('profilHobi').value.trim();
   const cita = document.getElementById('profilCita').value.trim();
   const alamat = document.getElementById('profilAlamat').value.trim();
-  const foto = profilePhotoData || '';
+  
+  // Kirim foto hanya jika ada upload baru
+  const foto = isPhotoUploaded ? profilePhotoData : '';
   
   if (!tempatLahir && !hobi && !cita && !alamat && !foto) {
     showToast('❌ Isi minimal satu data profil', 'error');
@@ -1899,7 +1908,7 @@ async function simpanProfil() {
       document.getElementById('profilFeedback').classList.remove('hidden');
       showToast('✅ Profil berhasil disimpan!', 'success');
       
-      // Refresh data
+      isPhotoUploaded = false;
       dataLoaded = false;
       await loadStudentData();
       
@@ -1923,7 +1932,6 @@ async function simpanProfil() {
 async function loadStudentData() {
   if (!isOnline) return;
   try {
-    // Load potensi
     const potensi = await callAPI('getPotensi', { studentId: currentStudent.id });
     if (potensi && potensi.id) {
       document.getElementById('potensiMinat').value = potensi.minat || 'Olahraga';
@@ -1932,13 +1940,9 @@ async function loadStudentData() {
       document.getElementById('potensiKarakter').value = potensi.kekuatan_karakter || 'Pemberani';
     }
     
-    // Load profil
     const profil = await callAPI('getProfil', { studentId: currentStudent.id });
     if (profil && profil.id) {
-      // Tampilkan CV
       showProfilCV(profil);
-      
-      // Simpan ke cache
       const existingIdx = allProfilCache.findIndex(p => p.student_id === currentStudent.id);
       if (existingIdx >= 0) {
         allProfilCache[existingIdx] = profil;
@@ -1946,7 +1950,6 @@ async function loadStudentData() {
         allProfilCache.push(profil);
       }
     } else {
-      // Tampilkan form
       showProfilForm();
     }
     
@@ -2303,7 +2306,6 @@ async function submitCurhat() {
         alert('⚠️ Kami akan segera menghubungimu! Tetap tenang ya.');
       }
       
-      // Reset flow setelah beberapa detik
       setTimeout(() => {
         document.getElementById('curhatResult').classList.add('hidden');
         document.getElementById('curhatFlow').innerHTML = '<div class="text-white/60">Mulai curhat dengan memilih di bawah</div>';
@@ -2472,7 +2474,7 @@ async function simpanPotensi() {
 }
 
 // ============================================================
-// WALI FUNCTIONS - TANPA DATA PROFIL DI DAFTAR SISWA
+// WALI FUNCTIONS - DENGAN DATA PROFIL DI DAFTAR SISWA
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
@@ -2501,8 +2503,8 @@ async function loadWaliData() {
     document.getElementById('curhatBelumDibaca').textContent = unread.length;
     document.getElementById('curhatDarurat').textContent = darurat.length;
     
-    // Render daftar siswa TANPA data profil
-    renderStudentList(students);
+    // Render daftar siswa DENGAN data profil
+    renderStudentList(students, allData.profil);
     await loadLaporanKondisi(students);
     await loadPotensiSiswa(students, allData.potensi);
     await loadPerbuatanBaik(students, allData.perbuatan);
@@ -2518,33 +2520,149 @@ async function loadWaliData() {
   }
 }
 
-function renderStudentList(students) {
+function renderStudentList(students, profilData) {
   const list = document.getElementById('studentList');
   if (!students || students.length === 0) {
     list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada siswa</div>';
     return;
   }
   
-  list.innerHTML = students.map(s => `
-    <div class="glass p-4 hover:bg-white/5 transition">
-      <div class="flex items-center justify-between">
-        <div>
-          <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
-          <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
-        </div>
-        <div class="flex gap-1">
-          <button onclick="deleteStudent('${s.id}')" class="text-red-400/70 hover:text-red-400 transition text-xs px-2 py-1">
-            <i class="fas fa-trash"></i>
-          </button>
+  list.innerHTML = students.map(s => {
+    const profil = profilData ? profilData.find(p => p.student_id === s.id) : null;
+    const foto = (profil && profil.foto && profil.foto.startsWith('data:image')) 
+      ? profil.foto 
+      : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(s.name) + '&size=50&background=4a9bc7&color=fff';
+    const tempatLahir = profil ? profil.tempat_lahir || '-' : '-';
+    const hobi = profil ? profil.hobi || '-' : '-';
+    const cita = profil ? profil.cita_cita || '-' : '-';
+    const alamat = profil ? profil.alamat || '-' : '-';
+    
+    return `
+      <div class="glass p-4 hover:bg-white/5 transition">
+        <div class="flex items-center gap-3">
+          <img src="${escapeHtml(foto)}" alt="${escapeHtml(s.name)}" class="profile-photo-sm">
+          <div class="flex-1">
+            <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
+            <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
+            <div class="text-xs text-white/40 mt-1">
+              <span class="inline-block mr-2">📍 ${escapeHtml(tempatLahir)}</span>
+              <span class="inline-block mr-2">🎯 ${escapeHtml(cita)}</span>
+              <span class="inline-block">⭐ ${escapeHtml(hobi)}</span>
+            </div>
+            <div class="text-xs text-white/30 mt-0.5">${escapeHtml(alamat)}</div>
+          </div>
+          <div class="flex gap-1">
+            <button onclick="editProfilSiswa('${s.id}')" class="text-blue-400/70 hover:text-blue-400 transition text-xs px-2 py-1">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button onclick="deleteStudent('${s.id}')" class="text-red-400/70 hover:text-red-400 transition text-xs px-2 py-1">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 // ============================================================
-// EDIT PROFIL SISWA (WALI) - HAPUS KARENA TIDAK DIPERLUKAN
+// EDIT PROFIL SISWA (WALI)
 // ============================================================
+function editProfilSiswa(studentId) {
+  const student = allStudentsCache.find(s => s.id === studentId);
+  if (!student) {
+    showToast('❌ Siswa tidak ditemukan', 'error');
+    return;
+  }
+  
+  const profil = allProfilCache ? allProfilCache.find(p => p.student_id === studentId) : null;
+  
+  const modal = document.createElement('div');
+  modal.className = 'modal-overlay';
+  modal.style.display = 'flex';
+  modal.innerHTML = `
+    <div class="modal-glass" style="max-width: 500px;">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-user-edit text-blue-300 mr-2"></i>Edit Profil ${escapeHtml(student.name)}
+        </h3>
+        <button onclick="this.closest('.modal-overlay').remove()" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
+          <input id="editTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010" value="${escapeHtml(profil ? profil.tempat_lahir || '' : '')}">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Hobi</label>
+          <input id="editHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda" value="${escapeHtml(profil ? profil.hobi || '' : '')}">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Cita-cita</label>
+          <input id="editCita" class="input-glass" placeholder="Contoh: Dokter, Pilot" value="${escapeHtml(profil ? profil.cita_cita || '' : '')}">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Alamat</label>
+          <textarea id="editAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap...">${escapeHtml(profil ? profil.alamat || '' : '')}</textarea>
+        </div>
+        <button onclick="simpanEditProfil('${studentId}')" class="btn-glass btn-glass-primary w-full mt-2">
+          <i class="fas fa-save mr-2"></i>Simpan Perubahan
+        </button>
+        <div id="editProfilFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  
+  modal.addEventListener('click', function(e) {
+    if (e.target === this) this.remove();
+  });
+}
+
+async function simpanEditProfil(studentId) {
+  const tempatLahir = document.getElementById('editTempatLahir').value.trim();
+  const hobi = document.getElementById('editHobi').value.trim();
+  const cita = document.getElementById('editCita').value.trim();
+  const alamat = document.getElementById('editAlamat').value.trim();
+  
+  if (!isOnline) {
+    showToast('⚠️ Koneksi offline', 'error');
+    return;
+  }
+  
+  showLoading('Menyimpan profil...');
+  try {
+    const result = await callAPI('saveProfil', {
+      studentId: studentId,
+      tempatLahir: tempatLahir,
+      hobi: hobi,
+      citaCita: cita,
+      alamat: alamat,
+      foto: ''
+    });
+    
+    hideLoading();
+    if (result && result.success) {
+      document.getElementById('editProfilFeedback').textContent = '✅ Profil berhasil diperbarui!';
+      document.getElementById('editProfilFeedback').classList.remove('hidden');
+      showToast('✅ Profil berhasil diperbarui!', 'success');
+      
+      setTimeout(() => {
+        const modal = document.querySelector('.modal-overlay');
+        if (modal) modal.remove();
+        dataLoaded = false;
+        loadWaliData();
+      }, 1500);
+    } else {
+      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan profil';
+      showToast('❌ ' + errorMsg, 'error');
+    }
+  } catch(e) {
+    hideLoading();
+    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
+    showToast('❌ Error: ' + msg, 'error');
+  }
+}
 
 // ============================================================
 // CHAT HISTORY
@@ -3493,19 +3611,19 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v24.0 - FULL FEATURES');
+  console.log('🏫 Wali Digital v25.0 - FULL FIXED');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
-  console.log('💬 FITUR BARU:');
-  console.log('  ✅ Profil Diri (1x isi, tampil CV)');
-  console.log('  ✅ Edit profil dengan tombol Edit');
-  console.log('  ✅ Tampilan CV seperti curriculum vitae');
-  console.log('  ✅ Data profil TIDAK tampil di daftar siswa wali');
-  console.log('  ✅ Curhat dengan alur pertanyaan lengkap');
-  console.log('  ✅ Upload foto profil');
+  console.log('🔧 PERBAIKAN:');
+  console.log('  ✅ Upload foto profil dengan optimasi (max 2MB)');
+  console.log('  ✅ Data profil tampil di daftar siswa wali');
+  console.log('  ✅ Edit profil siswa oleh wali');
+  console.log('  ✅ Profil hanya 1x isi, tampil CV');
+  console.log('  ✅ Timeout API 15 detik');
+  console.log('  ✅ Retry 2x dengan delay 500ms');
 });
 
 // Enter key untuk login
