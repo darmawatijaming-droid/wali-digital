@@ -1223,7 +1223,6 @@ let currentStudentSection = 'studentPotensi';
 let currentWaliSection = 'waliSiswa';
 let currentAdminSection = 'adminWali';
 let profilePhotoData = null;
-let profilDataLoaded = false;
 
 // ============================================================
 // SIDEBAR FUNCTIONS
@@ -1895,19 +1894,21 @@ async function simpanProfil() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       document.getElementById('profilFeedback').textContent = '✅ Profil berhasil disimpan!';
       document.getElementById('profilFeedback').classList.remove('hidden');
       showToast('✅ Profil berhasil disimpan!', 'success');
       
-      // Refresh data profil
+      // Refresh data
+      dataLoaded = false;
       await loadStudentData();
       
       setTimeout(() => {
         document.getElementById('profilFeedback').classList.add('hidden');
       }, 3000);
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan profil';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -2181,7 +2182,7 @@ async function kirimBalasanSiswa() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       showToast('✅ Balasan terkirim!', 'success');
       document.getElementById('siswaBalasanText').value = '';
       document.getElementById('siswaBalasFeedback').textContent = '✅ Balasan berhasil dikirim!';
@@ -2198,7 +2199,8 @@ async function kirimBalasanSiswa() {
         closeModal('detailCurhatSiswaModal');
       }, 2000);
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal mengirim balasan';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -2211,10 +2213,7 @@ async function kirimBalasanSiswa() {
 // CURHAT FLOW
 // ============================================================
 function initCurhat() {
-  // Inisialisasi curhat jika belum
-  if (!document.getElementById('curhatFlow').innerHTML) {
-    openCurhat();
-  }
+  openCurhat();
 }
 
 function openCurhat() {
@@ -2293,7 +2292,7 @@ async function submitCurhat() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       document.getElementById('curhatTextArea').classList.add('hidden');
       document.getElementById('curhatResult').classList.remove('hidden');
       document.getElementById('curhatResult').textContent = '✅ Terima kasih sudah curhat!';
@@ -2316,7 +2315,8 @@ async function submitCurhat() {
       
       await loadRiwayatCurhatSiswa();
     } else {
-      showToast('❌ Gagal: ' + (result.error || 'Unknown error'), 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal mengirim curhat';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -2358,13 +2358,16 @@ async function simpanJurnal() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       document.getElementById('jurnalFeedback').textContent = '✅ Jurnal tersimpan!';
       document.getElementById('jurnalCerita').value = '';
       showToast('✅ Jurnal tersimpan!', 'success');
       setTimeout(() => {
         document.getElementById('jurnalFeedback').textContent = '';
       }, 3000);
+    } else {
+      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan jurnal';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -2401,7 +2404,7 @@ async function catatPerbuatan(action) {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       const feedbacks = ['🌟 Good Job!', '💪 Luar biasa!', '😇 Kamu anak baik!', '⚡ Keren!'];
       document.getElementById('perbuatanFeedback').textContent = feedbacks[Math.floor(Math.random() * feedbacks.length)];
       showToast('✅ Perbuatan baik dicatat!', 'success');
@@ -2409,7 +2412,8 @@ async function catatPerbuatan(action) {
         document.getElementById('perbuatanFeedback').textContent = '';
       }, 3000);
     } else {
-      showToast(result.error || 'Gagal mencatat', 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal mencatat';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -2449,13 +2453,16 @@ async function simpanPotensi() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       document.getElementById('potensiFeedback').textContent = '✅ Peta Potensi berhasil disimpan!';
       document.getElementById('potensiFeedback').classList.remove('hidden');
       showToast('✅ Peta Potensi berhasil disimpan!', 'success');
       setTimeout(() => {
         document.getElementById('potensiFeedback').classList.add('hidden');
       }, 3000);
+    } else {
+      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan potensi';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -2465,7 +2472,7 @@ async function simpanPotensi() {
 }
 
 // ============================================================
-// WALI FUNCTIONS
+// WALI FUNCTIONS - TANPA DATA PROFIL DI DAFTAR SISWA
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
@@ -2494,7 +2501,8 @@ async function loadWaliData() {
     document.getElementById('curhatBelumDibaca').textContent = unread.length;
     document.getElementById('curhatDarurat').textContent = darurat.length;
     
-    renderStudentList(students, allData.profil);
+    // Render daftar siswa TANPA data profil
+    renderStudentList(students);
     await loadLaporanKondisi(students);
     await loadPotensiSiswa(students, allData.potensi);
     await loadPerbuatanBaik(students, allData.perbuatan);
@@ -2510,146 +2518,33 @@ async function loadWaliData() {
   }
 }
 
-function renderStudentList(students, profilData) {
+function renderStudentList(students) {
   const list = document.getElementById('studentList');
   if (!students || students.length === 0) {
     list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada siswa</div>';
     return;
   }
   
-  list.innerHTML = students.map(s => {
-    const profil = profilData ? profilData.find(p => p.student_id === s.id) : null;
-    const foto = profil && profil.foto ? profil.foto : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(s.name) + '&size=50&background=4a9bc7&color=fff';
-    const tempatLahir = profil ? profil.tempat_lahir || '-' : '-';
-    const hobi = profil ? profil.hobi || '-' : '-';
-    const cita = profil ? profil.cita_cita || '-' : '-';
-    const alamat = profil ? profil.alamat || '-' : '-';
-    
-    return `
-      <div class="glass p-4 hover:bg-white/5 transition">
-        <div class="flex items-center gap-3">
-          <img src="${escapeHtml(foto)}" alt="${escapeHtml(s.name)}" class="profile-photo-sm">
-          <div class="flex-1">
-            <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
-            <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
-            <div class="text-xs text-white/40 mt-1">
-              <span class="inline-block mr-2">📍 ${escapeHtml(tempatLahir)}</span>
-              <span class="inline-block mr-2">🎯 ${escapeHtml(cita)}</span>
-              <span class="inline-block">⭐ ${escapeHtml(hobi)}</span>
-            </div>
-            <div class="text-xs text-white/30 mt-0.5">${escapeHtml(alamat)}</div>
-          </div>
-          <div class="flex gap-1">
-            <button onclick="editProfilSiswa('${s.id}')" class="text-blue-400/70 hover:text-blue-400 transition text-xs px-2 py-1">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button onclick="deleteStudent('${s.id}')" class="text-red-400/70 hover:text-red-400 transition text-xs px-2 py-1">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-// ============================================================
-// EDIT PROFIL SISWA (WALI)
-// ============================================================
-function editProfilSiswa(studentId) {
-  const student = allStudentsCache.find(s => s.id === studentId);
-  if (!student) {
-    showToast('❌ Siswa tidak ditemukan', 'error');
-    return;
-  }
-  
-  const profil = allProfilCache ? allProfilCache.find(p => p.student_id === studentId) : null;
-  
-  const modal = document.createElement('div');
-  modal.className = 'modal-overlay';
-  modal.style.display = 'flex';
-  modal.innerHTML = `
-    <div class="modal-glass" style="max-width: 500px;">
-      <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-white">
-          <i class="fas fa-user-edit text-blue-300 mr-2"></i>Edit Profil ${escapeHtml(student.name)}
-        </h3>
-        <button onclick="this.closest('.modal-overlay').remove()" class="text-white/60 hover:text-white text-xl transition">✕</button>
-      </div>
-      <div class="space-y-3">
+  list.innerHTML = students.map(s => `
+    <div class="glass p-4 hover:bg-white/5 transition">
+      <div class="flex items-center justify-between">
         <div>
-          <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
-          <input id="editTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010" value="${escapeHtml(profil ? profil.tempat_lahir || '' : '')}">
+          <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
+          <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
         </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Hobi</label>
-          <input id="editHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda" value="${escapeHtml(profil ? profil.hobi || '' : '')}">
+        <div class="flex gap-1">
+          <button onclick="deleteStudent('${s.id}')" class="text-red-400/70 hover:text-red-400 transition text-xs px-2 py-1">
+            <i class="fas fa-trash"></i>
+          </button>
         </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Cita-cita</label>
-          <input id="editCita" class="input-glass" placeholder="Contoh: Dokter, Pilot" value="${escapeHtml(profil ? profil.cita_cita || '' : '')}">
-        </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Alamat</label>
-          <textarea id="editAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap...">${escapeHtml(profil ? profil.alamat || '' : '')}</textarea>
-        </div>
-        <button onclick="simpanEditProfil('${studentId}')" class="btn-glass btn-glass-primary w-full mt-2">
-          <i class="fas fa-save mr-2"></i>Simpan Perubahan
-        </button>
-        <div id="editProfilFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
       </div>
     </div>
-  `;
-  document.body.appendChild(modal);
-  
-  modal.addEventListener('click', function(e) {
-    if (e.target === this) this.remove();
-  });
+  `).join('');
 }
 
-async function simpanEditProfil(studentId) {
-  const tempatLahir = document.getElementById('editTempatLahir').value.trim();
-  const hobi = document.getElementById('editHobi').value.trim();
-  const cita = document.getElementById('editCita').value.trim();
-  const alamat = document.getElementById('editAlamat').value.trim();
-  
-  if (!isOnline) {
-    showToast('⚠️ Koneksi offline', 'error');
-    return;
-  }
-  
-  showLoading('Menyimpan profil...');
-  try {
-    const result = await callAPI('saveProfil', {
-      studentId: studentId,
-      tempatLahir: tempatLahir,
-      hobi: hobi,
-      citaCita: cita,
-      alamat: alamat,
-      foto: ''
-    });
-    
-    hideLoading();
-    if (result.success) {
-      document.getElementById('editProfilFeedback').textContent = '✅ Profil berhasil diperbarui!';
-      document.getElementById('editProfilFeedback').classList.remove('hidden');
-      showToast('✅ Profil berhasil diperbarui!', 'success');
-      
-      setTimeout(() => {
-        const modal = document.querySelector('.modal-overlay');
-        if (modal) modal.remove();
-        dataLoaded = false;
-        loadWaliData();
-      }, 1500);
-    } else {
-      showToast('❌ ' + result.error, 'error');
-    }
-  } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
-}
+// ============================================================
+// EDIT PROFIL SISWA (WALI) - HAPUS KARENA TIDAK DIPERLUKAN
+// ============================================================
 
 // ============================================================
 // CHAT HISTORY
@@ -2890,7 +2785,7 @@ async function kirimBalasanWaliDariChat() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       showToast('✅ Balasan terkirim!', 'success');
       document.getElementById('chatBalasanText').value = '';
       document.getElementById('chatBalasFeedback').textContent = '✅ Balasan berhasil dikirim!';
@@ -2906,7 +2801,8 @@ async function kirimBalasanWaliDariChat() {
         loadWaliData();
       }, 1500);
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal mengirim balasan';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -3352,13 +3248,14 @@ async function simpanLaporanKondisi() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       showToast('✅ Laporan kondisi berhasil disimpan!', 'success');
       closeModal('tambahLaporanModal');
       const students = await callAPI('getStudentsByWali', { waliId: currentWali.id });
       await loadLaporanKondisi(students);
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan laporan';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -3412,13 +3309,14 @@ async function tambahSiswa() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       showToast('✅ Siswa berhasil ditambahkan!', 'success');
       closeModal('tambahSiswaModal');
       dataLoaded = false;
       loadWaliData();
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal menambahkan siswa';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -3439,12 +3337,13 @@ async function deleteStudent(id) {
   try {
     const result = await callAPI('deleteStudent', { studentId: id });
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       showToast('✅ Siswa dihapus', 'success');
       dataLoaded = false;
       loadWaliData();
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal menghapus siswa';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -3544,12 +3443,13 @@ async function tambahWali() {
     });
     
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       showToast('✅ Wali berhasil ditambahkan!', 'success');
       closeModal('tambahWaliModal');
       loadAdminData();
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal menambahkan wali';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -3570,11 +3470,12 @@ async function deleteWali(id) {
   try {
     const result = await callAPI('deleteUser', { userId: id });
     hideLoading();
-    if (result.success) {
+    if (result && result.success) {
       showToast('✅ Wali dihapus', 'success');
       loadAdminData();
     } else {
-      showToast('❌ ' + result.error, 'error');
+      const errorMsg = result && result.error ? result.error : 'Gagal menghapus wali';
+      showToast('❌ ' + errorMsg, 'error');
     }
   } catch(e) {
     hideLoading();
@@ -3592,18 +3493,19 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v23.0 - FULL FEATURES');
+  console.log('🏫 Wali Digital v24.0 - FULL FEATURES');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('💬 FITUR BARU:');
-  console.log('  ✅ Curhat dengan alur pertanyaan lengkap');
-  console.log('  ✅ Profil Diri dengan upload foto (1x isi, tampil CV)');
+  console.log('  ✅ Profil Diri (1x isi, tampil CV)');
   console.log('  ✅ Edit profil dengan tombol Edit');
   console.log('  ✅ Tampilan CV seperti curriculum vitae');
-  console.log('  ✅ Data profil tampil di daftar siswa');
+  console.log('  ✅ Data profil TIDAK tampil di daftar siswa wali');
+  console.log('  ✅ Curhat dengan alur pertanyaan lengkap');
+  console.log('  ✅ Upload foto profil');
 });
 
 // Enter key untuk login
