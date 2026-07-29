@@ -33,6 +33,8 @@
     .btn-glass-orange:hover { background: rgba(251,146,60,0.3); border-color: rgba(251,146,60,0.35); box-shadow: 0 8px 32px rgba(251,146,60,0.3); }
     .btn-glass-pink { background: rgba(236,72,153,0.2); border-color: rgba(236,72,153,0.25); }
     .btn-glass-pink:hover { background: rgba(236,72,153,0.3); border-color: rgba(236,72,153,0.35); box-shadow: 0 8px 32px rgba(236,72,153,0.3); }
+    .btn-glass-cyan { background: rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.25); }
+    .btn-glass-cyan:hover { background: rgba(6,182,212,0.3); border-color: rgba(6,182,212,0.35); box-shadow: 0 8px 32px rgba(6,182,212,0.3); }
     .input-glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 18px; width: 100%; font-size: 14px; color: white; transition: all 0.3s; font-family: 'Inter', sans-serif; }
     .input-glass::placeholder { color: rgba(255,255,255,0.4); }
     .input-glass:focus { outline: none; border-color: rgba(74,155,199,0.5); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 4px rgba(74,155,199,0.1); }
@@ -42,6 +44,7 @@
     .text-glass { color: rgba(255,255,255,0.9); text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
     .text-glass-muted { color: rgba(255,255,255,0.5); }
     .text-white { color: #ffffff !important; }
+    .text-white-important { color: #ffffff !important; }
     .badge-glass { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); letter-spacing: 0.3px; }
     .badge-glass-red { background: rgba(232,132,138,0.2); border-color: rgba(232,132,138,0.2); color: #f0a0a5; }
     .badge-glass-yellow { background: rgba(212,160,23,0.2); border-color: rgba(212,160,23,0.2); color: #d4a017; }
@@ -50,6 +53,7 @@
     .badge-glass-purple { background: rgba(123,156,214,0.2); border-color: rgba(123,156,214,0.2); color: #9db8e8; }
     .badge-glass-pink { background: rgba(236,72,153,0.2); border-color: rgba(236,72,153,0.2); color: #f472b6; }
     .badge-glass-orange { background: rgba(251,146,60,0.2); border-color: rgba(251,146,60,0.2); color: #fb923c; }
+    .badge-glass-cyan { background: rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.2); color: #22d3ee; }
     .status-indicator { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
     .status-dot.online { background: #4a9b7a; box-shadow: 0 0 12px rgba(74,155,122,0.4); }
@@ -82,10 +86,12 @@
     .border-blue-400 { border-color: rgba(96,165,250,0.5); }
     .border-green-400 { border-color: rgba(52,211,153,0.5); }
     .border-orange-400 { border-color: rgba(251,146,60,0.5); }
+    .border-cyan-400 { border-color: rgba(6,182,212,0.5); }
     .bg-purple-500\/10 { background: rgba(168,85,247,0.1); }
     .bg-blue-500\/10 { background: rgba(59,130,246,0.1); }
     .bg-green-500\/10 { background: rgba(52,211,153,0.1); }
     .bg-orange-500\/10 { background: rgba(251,146,60,0.1); }
+    .bg-cyan-500\/10 { background: rgba(6,182,212,0.1); }
     .text-purple-300 { color: #d8b4fe; }
     .text-blue-300 { color: #93c5fd; }
     .text-green-300 { color: #6ee7b7; }
@@ -93,16 +99,27 @@
     .text-red-300 { color: #fca5a5; }
     .text-pink-300 { color: #f9a8d4; }
     .text-orange-300 { color: #fdba74; }
+    .text-cyan-300 { color: #67e8f9; }
     .max-h-60 { max-height: 240px; }
+    .max-h-96 { max-height: 384px; }
     .overflow-y-auto { overflow-y: auto; }
     .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: #4a9bc7; animation: spin 0.8s ease-in-out infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 4000; }
     .loading-box { background: rgba(15,15,26,0.9); padding: 30px 40px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+    /* Reply styles */
     .reply-wali { background: rgba(168,85,247,0.15); border-left: 3px solid rgba(168,85,247,0.5); }
     .reply-siswa { background: rgba(59,130,246,0.15); border-left: 3px solid rgba(59,130,246,0.5); }
-    .laporan-card { transition: all 0.3s; }
-    .laporan-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .reply-wali .text-white, .reply-wali .text-white\/90, .reply-wali .text-white\/60,
+    .reply-siswa .text-white, .reply-siswa .text-white\/90, .reply-siswa .text-white\/60 {
+      color: #ffffff !important;
+    }
+    .reply-wali .text-purple-300 { color: #d8b4fe !important; }
+    .reply-siswa .text-blue-300 { color: #93c5fd !important; }
+    /* Chat styles */
+    .chat-bubble-wali { background: rgba(168,85,247,0.2); border: 1px solid rgba(168,85,247,0.3); border-radius: 16px 16px 16px 4px; padding: 10px 14px; margin-bottom: 8px; }
+    .chat-bubble-siswa { background: rgba(59,130,246,0.2); border: 1px solid rgba(59,130,246,0.3); border-radius: 16px 16px 4px 16px; padding: 10px 14px; margin-bottom: 8px; }
+    .chat-time { font-size: 10px; opacity: 0.6; }
     /* Warna teks putih untuk semua elemen curhat */
     .curhat-text { color: #ffffff !important; }
     .curhat-text * { color: #ffffff !important; }
@@ -115,19 +132,23 @@
     .curhat-text .badge-glass-blue { color: #6db8e0 !important; }
     .curhat-text .badge-glass-purple { color: #9db8e8 !important; }
     .curhat-text .badge-glass-pink { color: #f472b6 !important; }
+    .curhat-text .badge-glass-orange { color: #fb923c !important; }
+    .curhat-text .badge-glass-cyan { color: #22d3ee !important; }
     .curhat-text .text-purple-300 { color: #d8b4fe !important; }
     .curhat-text .text-blue-300 { color: #93c5fd !important; }
     .curhat-text .text-green-300 { color: #6ee7b7 !important; }
     .curhat-text .text-yellow-300 { color: #fcd34d !important; }
     .curhat-text .text-red-300 { color: #fca5a5 !important; }
     .curhat-text .text-pink-300 { color: #f9a8d4 !important; }
-    /* Warna untuk reply */
-    .reply-wali .text-white, .reply-wali .text-white\\/90, .reply-wali .text-white\\/60,
-    .reply-siswa .text-white, .reply-siswa .text-white\\/90, .reply-siswa .text-white\\/60 {
-      color: #ffffff !important;
-    }
-    .reply-wali .text-purple-300 { color: #d8b4fe !important; }
-    .reply-siswa .text-blue-300 { color: #93c5fd !important; }
+    .curhat-text .text-cyan-300 { color: #67e8f9 !important; }
+    .curhat-text .text-orange-300 { color: #fdba74 !important; }
+    .laporan-card { transition: all 0.3s; }
+    .laporan-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    /* Chat container */
+    .chat-container { max-height: 400px; overflow-y: auto; padding-right: 4px; }
+    .chat-container::-webkit-scrollbar { width: 3px; }
+    .chat-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+    .chat-date-divider { text-align: center; padding: 8px 0; font-size: 11px; opacity: 0.5; }
   </style>
 </head>
 <body>
@@ -309,6 +330,19 @@
       </div>
     </div>
 
+    <!-- ===== RIWAYAT CURHAT - SEPERTI APLIKASI CHATTING ===== -->
+    <div class="glass p-5 mb-4">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-white">
+          <i class="fas fa-comments text-cyan-300 mr-2"></i>Riwayat Percakapan
+        </h3>
+        <span class="badge-glass badge-glass-cyan" id="chatCount">0 percakapan</span>
+      </div>
+      <div id="chatHistoryContainer" class="space-y-3 max-h-96 overflow-y-auto chat-container">
+        <div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>
+      </div>
+    </div>
+
     <!-- Student List -->
     <div class="glass p-5 mb-4">
       <div class="flex justify-between items-center mb-4">
@@ -317,7 +351,7 @@
           <i class="fas fa-plus mr-1"></i> Tambah
         </button>
       </div>
-      <div id="studentList" class="space-y-2"></div>
+      <div id="studentList" class="space-y-2 max-h-60 overflow-y-auto"></div>
     </div>
 
     <!-- ===== LAPORAN KONDISI SISWA ===== -->
@@ -369,7 +403,7 @@
     <!-- Curhat Inbox -->
     <div class="glass p-5 curhat-text">
       <h3 class="font-bold text-white mb-4"><i class="fas fa-inbox mr-2"></i>Curhat Masuk</h3>
-      <div id="curhatInbox" class="space-y-2"></div>
+      <div id="curhatInbox" class="space-y-2 max-h-60 overflow-y-auto"></div>
     </div>
   </div>
 
@@ -412,7 +446,7 @@
           <i class="fas fa-plus mr-1"></i> Tambah
         </button>
       </div>
-      <div id="waliList" class="space-y-2"></div>
+      <div id="waliList" class="space-y-2 max-h-60 overflow-y-auto"></div>
     </div>
   </div>
 
@@ -676,6 +710,43 @@
     </div>
   </div>
 
+  <!-- ===== MODAL DETAIL PERCAKAPAN (CHAT) ===== -->
+  <div id="chatDetailModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('chatDetailModal')">
+    <div class="modal-glass curhat-text">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-comments text-cyan-300 mr-2"></i>
+          <span id="chatDetailTitle">Percakapan</span>
+        </h3>
+        <button onclick="closeModal('chatDetailModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      
+      <!-- Student Info -->
+      <div class="glass p-3 mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-xl">👤</div>
+          <div>
+            <div class="font-semibold text-white" id="chatDetailStudentName">Siswa</div>
+            <div class="text-xs text-white/60" id="chatDetailStudentClass">Kelas</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Chat Messages -->
+      <h4 class="font-semibold text-white mb-3">
+        <i class="fas fa-comment-dots text-purple-300 mr-2"></i>Percakapan
+      </h4>
+      <div id="chatDetailMessages" class="space-y-2 max-h-60 overflow-y-auto chat-container">
+        <div class="text-white/60 text-sm text-center py-4">Belum ada pesan</div>
+      </div>
+      
+      <!-- Tombol Tutup -->
+      <button onclick="closeModal('chatDetailModal')" class="btn-glass btn-glass-primary w-full mt-4">
+        <i class="fas fa-check mr-2"></i>Tutup
+      </button>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -704,6 +775,7 @@ let currentCurhatId = null;
 let laporanDataCache = [];
 let potensiDataCache = [];
 let perbuatanDataCache = [];
+let chatDataCache = [];
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -1623,7 +1695,7 @@ async function simpanPotensi() {
 }
 
 // ============================================================
-// WALI FUNCTIONS - DENGAN LAPORAN KONDISI, POTENSI, PERBUATAN BAIK
+// WALI FUNCTIONS - DENGAN CHAT HISTORY, LAPORAN KONDISI, POTENSI, PERBUATAN BAIK
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
@@ -1651,9 +1723,11 @@ async function loadWaliData() {
     renderStudentList(students);
     renderCurhatInbox(waliCurhat);
     
+    // Load semua data
     await loadLaporanKondisi(students);
     await loadPotensiSiswa(students);
     await loadPerbuatanBaik(students);
+    await loadChatHistory(students);
     
     hideLoading();
   } catch(e) {
@@ -1707,6 +1781,202 @@ function renderCurhatInbox(curhats) {
       </button>
     </div>
   `).join('');
+}
+
+// ============================================================
+// CHAT HISTORY - SEPERTI APLIKASI CHATTING
+// ============================================================
+async function loadChatHistory(students) {
+  try {
+    const container = document.getElementById('chatHistoryContainer');
+    const countBadge = document.getElementById('chatCount');
+    chatDataCache = [];
+    
+    if (!students || students.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
+      countBadge.textContent = '0 percakapan';
+      return;
+    }
+    
+    let html = '';
+    let totalChats = 0;
+    
+    for (const student of students) {
+      try {
+        const curhats = await callAPI('getCurhatByStudent', { studentId: student.id });
+        
+        if (curhats && curhats.length > 0) {
+          totalChats++;
+          
+          // Ambil curhat terakhir untuk preview
+          const lastCurhat = curhats.sort((a, b) => 
+            new Date(b.created_at) - new Date(a.created_at)
+          )[0];
+          
+          // Ambil balasan terakhir
+          const replies = await callAPI('getCurhatReplies', { curhatId: lastCurhat.id });
+          const lastReply = replies && replies.length > 0 
+            ? replies.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0]
+            : null;
+          
+          const lastMessage = lastReply ? lastReply.message : lastCurhat.cerita;
+          const lastSender = lastReply 
+            ? (lastReply.is_wali === true || lastReply.is_wali === 'TRUE' ? 'Wali' : student.name)
+            : student.name;
+          const lastTime = lastReply ? lastReply.created_at : lastCurhat.created_at;
+          
+          // Hitung unread
+          const unreadCount = curhats.filter(c => c.is_read === false || c.is_read === 'FALSE').length;
+          
+          // Warna status
+          const statusColor = unreadCount > 0 ? 'text-cyan-300' : 'text-white/60';
+          const statusIcon = unreadCount > 0 ? '🔵' : '⚪';
+          
+          html += `
+            <div class="glass p-3 cursor-pointer hover:bg-white/5 transition border-l-4 border-cyan-400" 
+                 onclick="openChatDetail('${student.id}', '${escapeHtml(student.name)}', '${escapeHtml(student.class)}')">
+              <div class="flex justify-between items-start">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold text-white">${escapeHtml(student.name)}</span>
+                    <span class="text-xs text-white/60">${escapeHtml(student.class)}</span>
+                    ${unreadCount > 0 ? `<span class="badge-glass badge-glass-cyan">${unreadCount} baru</span>` : ''}
+                  </div>
+                  <div class="text-sm text-white/70 mt-1 truncate">
+                    ${escapeHtml(lastMessage.substring(0, 60))}${lastMessage.length > 60 ? '...' : ''}
+                  </div>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span class="text-xs text-white/40">${new Date(lastTime).toLocaleString()}</span>
+                    <span class="text-xs ${statusColor}">${statusIcon} ${lastSender}</span>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end gap-1 ml-2">
+                  <span class="badge-glass badge-glass-cyan">${curhats.length} pesan</span>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      } catch(e) {
+        console.warn('Error loading chat for student:', student.name, e);
+      }
+    }
+    
+    countBadge.textContent = `${totalChats} percakapan`;
+    
+    if (totalChats === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>';
+    } else {
+      container.innerHTML = html;
+    }
+    
+  } catch(e) {
+    console.warn('Load chat history error:', e);
+    document.getElementById('chatHistoryContainer').innerHTML = 
+      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat percakapan</div>';
+  }
+}
+
+// ============================================================
+// OPEN CHAT DETAIL - TAMPILKAN PERCAKAPAN LENGKAP
+// ============================================================
+async function openChatDetail(studentId, studentName, studentClass) {
+  try {
+    showLoading('Memuat percakapan...');
+    
+    document.getElementById('chatDetailTitle').textContent = `💬 ${studentName}`;
+    document.getElementById('chatDetailStudentName').textContent = studentName;
+    document.getElementById('chatDetailStudentClass').textContent = `Kelas ${studentClass}`;
+    
+    const curhats = await callAPI('getCurhatByStudent', { studentId: studentId });
+    
+    if (!curhats || curhats.length === 0) {
+      document.getElementById('chatDetailMessages').innerHTML = 
+        '<div class="text-white/60 text-sm text-center py-4">Belum ada pesan</div>';
+      hideLoading();
+      document.getElementById('chatDetailModal').classList.remove('hidden');
+      return;
+    }
+    
+    let html = '';
+    let lastDate = '';
+    
+    for (const curhat of curhats) {
+      const curhatDate = new Date(curhat.created_at);
+      const dateStr = curhatDate.toLocaleDateString('id-ID', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      
+      if (dateStr !== lastDate) {
+        html += `<div class="chat-date-divider text-white/40">${dateStr}</div>`;
+        lastDate = dateStr;
+      }
+      
+      // Pesan dari siswa (curhat)
+      html += `
+        <div class="chat-bubble-siswa text-white">
+          <div class="flex justify-between items-start gap-2">
+            <div class="flex-1">
+              <div class="flex items-center gap-2">
+                <span class="font-semibold text-blue-300">👤 ${escapeHtml(studentName)}</span>
+                <span class="badge-glass badge-glass-blue">${escapeHtml(curhat.kategori)}</span>
+                ${curhat.tingkat_darurat === 'Aku butuh bantuan sekarang' ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>' : ''}
+              </div>
+              <div class="mt-1 text-white/90">${escapeHtml(curhat.cerita)}</div>
+            </div>
+            <span class="chat-time text-white/40 whitespace-nowrap">${curhatDate.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'})}</span>
+          </div>
+        </div>
+      `;
+      
+      // Ambil balasan untuk curhat ini
+      const replies = await callAPI('getCurhatReplies', { curhatId: curhat.id });
+      
+      if (replies && replies.length > 0) {
+        for (const reply of replies) {
+          const replyDate = new Date(reply.created_at);
+          const isWali = reply.is_wali === true || reply.is_wali === 'TRUE';
+          const senderName = isWali ? 'Wali Kelas' : studentName;
+          const bubbleClass = isWali ? 'chat-bubble-wali text-white' : 'chat-bubble-siswa text-white';
+          const nameColor = isWali ? 'text-purple-300' : 'text-blue-300';
+          const icon = isWali ? '👨‍🏫' : '👤';
+          
+          html += `
+            <div class="${bubbleClass}">
+              <div class="flex justify-between items-start gap-2">
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold ${nameColor}">${icon} ${escapeHtml(senderName)}</span>
+                    ${isWali ? '<span class="badge-glass badge-glass-purple">Wali</span>' : ''}
+                  </div>
+                  <div class="mt-1 text-white/90">${escapeHtml(reply.message)}</div>
+                </div>
+                <span class="chat-time text-white/40 whitespace-nowrap">${replyDate.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'})}</span>
+              </div>
+            </div>
+          `;
+        }
+      }
+    }
+    
+    document.getElementById('chatDetailMessages').innerHTML = html;
+    hideLoading();
+    document.getElementById('chatDetailModal').classList.remove('hidden');
+    
+    // Scroll ke bawah
+    setTimeout(() => {
+      const container = document.getElementById('chatDetailMessages');
+      container.scrollTop = container.scrollHeight;
+    }, 100);
+    
+  } catch(e) {
+    hideLoading();
+    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
+    showToast('❌ Gagal memuat percakapan: ' + msg, 'error');
+  }
 }
 
 // ============================================================
@@ -1957,7 +2227,6 @@ function exportLaporanExcel() {
       return;
     }
     
-    // Data untuk Excel
     const excelData = [
       ['LAPORAN KONDISI SISWA'],
       [''],
@@ -1977,30 +2246,20 @@ function exportLaporanExcel() {
       ]);
     });
     
-    // Tambahkan footer
     excelData.push(['']);
     excelData.push(['Dicetak pada:', new Date().toLocaleString('id-ID')]);
     excelData.push(['Total Siswa:', laporanDataCache.length]);
     
-    // Buat workbook
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(excelData);
     
-    // Style header
     ws['!cols'] = [
-      { wch: 5 },  // No
-      { wch: 20 }, // Nama
-      { wch: 15 }, // NIS
-      { wch: 12 }, // Kelas
-      { wch: 15 }, // Nilai
-      { wch: 15 }, // Sikap
-      { wch: 30 }, // Catatan
-      { wch: 15 }  // Periode
+      { wch: 5 }, { wch: 20 }, { wch: 15 }, { wch: 12 }, 
+      { wch: 15 }, { wch: 15 }, { wch: 30 }, { wch: 15 }
     ];
     
     XLSX.utils.book_append_sheet(wb, ws, 'Laporan Kondisi');
     
-    // Generate file
     const fileName = `Laporan_Kondisi_Siswa_${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(wb, fileName);
     
@@ -2351,19 +2610,19 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v16.0 - FULL FEATURES');
+  console.log('🏫 Wali Digital v17.0 - FULL FEATURES');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('💬 FITUR BARU:');
-  console.log('  ✅ Warna tulisan putih di semua menu curhat & balasan');
+  console.log('  ✅ Riwayat Curhat seperti aplikasi chatting');
+  console.log('  ✅ Laporan Perbuatan Baik di dashboard wali');
+  console.log('  ✅ Laporan Peta Potensi di dashboard wali');
+  console.log('  ✅ Warna tulisan putih jelas di semua menu');
+  console.log('  ✅ Detail percakapan lengkap dengan balasan');
   console.log('  ✅ Export laporan kondisi ke Excel');
-  console.log('  ✅ Peta Potensi siswa di dashboard wali');
-  console.log('  ✅ Perbuatan Baik siswa di dashboard wali');
-  console.log('  ✅ Siswa bisa membalas balasan wali di curhat');
-  console.log('  ✅ Laporan kondisi siswa di dashboard wali');
 });
 
 // Enter key untuk login
