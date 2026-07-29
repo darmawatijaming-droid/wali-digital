@@ -341,15 +341,16 @@
       </div>
     </div>
 
+    <!-- ===== JURNAL SISWA (TERHUBUNG DARI DASHBOARD SISWA) ===== -->
     <div class="glass p-5 mb-4">
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-white">
-          <i class="fas fa-book-open text-rose-300 mr-2"></i>Jurnal Perasaan Hari Ini
+          <i class="fas fa-book-open text-rose-300 mr-2"></i>Jurnal Siswa
         </h3>
         <span class="badge-glass badge-glass-rose" id="jurnalCount">0 siswa</span>
       </div>
       <div id="jurnalContainer" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-white/60 text-sm text-center py-4">Belum ada jurnal hari ini</div>
+        <div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>
       </div>
     </div>
 
@@ -394,6 +395,7 @@
       </div>
     </div>
 
+    <!-- ===== PERBUATAN BAIK SISWA (TERHUBUNG DARI DASHBOARD SISWA) ===== -->
     <div class="glass p-5 mb-4">
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-white">
@@ -753,8 +755,8 @@
 const CONFIG = {
   API_URL: 'https://script.google.com/macros/s/AKfycbx0S-fG9vIpr02dlnCn8q_amM-DGF4lY89zQG-JsMFmcj6OOTefINxiCUXiEUkdyWH18A/exec',
   USE_API: true,
-  RETRY_COUNT: 2,
-  RETRY_DELAY: 500
+  RETRY_COUNT: 1,
+  RETRY_DELAY: 300
 };
 
 // ============================================================
@@ -782,6 +784,7 @@ let allJurnalCache = [];
 let allPerbuatanCache = [];
 let allPotensiCache = [];
 let dataLoaded = false;
+let loginInProgress = false;
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -856,7 +859,7 @@ async function callAPI(action, params = {}, retryCount = 0) {
     console.log('📡 API Call:', action);
     
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
     
     fetch(url, { 
       method: 'GET',
@@ -1011,17 +1014,22 @@ function setRole(role) {
 // LOGIN FUNCTIONS - DENGAN LOADING OPTIMASI
 // ============================================================
 async function loginStudent() {
+  if (loginInProgress) return;
+  loginInProgress = true;
+  
   const name = $('studentName').value.trim();
   const class_ = $('studentClass').value.trim();
   const password = $('studentPassword').value || '51sw@qu';
   
   if (!name || !class_) {
     showLoginError('Mohon isi nama dan kelas');
+    loginInProgress = false;
     return;
   }
   
   if (!isOnline) {
     showLoginError('⚠️ Koneksi offline. Periksa internet Anda.');
+    loginInProgress = false;
     return;
   }
   
@@ -1035,12 +1043,14 @@ async function loginStudent() {
     if (!student || !student.id) {
       showLoginError('❌ Siswa tidak ditemukan. Periksa nama dan kelas.');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
     if (student.password !== password) {
       showLoginError('❌ PIN salah. Default: 51sw@qu');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
@@ -1049,26 +1059,33 @@ async function loginStudent() {
     currentRole = 'student';
     $('loginError').classList.add('hidden');
     hideLoading();
+    loginInProgress = false;
     showStudentDashboard();
     showToast('✅ Selamat datang, ' + student.name + '!', 'success');
   } catch(e) {
     hideLoading();
+    loginInProgress = false;
     const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
     showLoginError('❌ Error: ' + msg);
   }
 }
 
 async function loginWali() {
+  if (loginInProgress) return;
+  loginInProgress = true;
+  
   const email = $('waliEmail').value.trim();
   const password = $('waliPassword').value || 'd4Rm@app';
   
   if (!email) {
     showLoginError('Mohon isi email');
+    loginInProgress = false;
     return;
   }
   
   if (!isOnline) {
     showLoginError('⚠️ Koneksi offline. Periksa internet Anda.');
+    loginInProgress = false;
     return;
   }
   
@@ -1079,18 +1096,21 @@ async function loginWali() {
     if (!user || !user.id) {
       showLoginError('❌ Email tidak ditemukan');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
     if (user.password !== password) {
       showLoginError('❌ Password salah. Default: d4Rm@app');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
     if (user.role !== 'wali') {
       showLoginError('❌ Akun ini bukan Wali Kelas');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
@@ -1099,26 +1119,33 @@ async function loginWali() {
     currentRole = 'wali';
     $('loginError').classList.add('hidden');
     hideLoading();
+    loginInProgress = false;
     showWaliDashboard();
     showToast('✅ Selamat datang, ' + user.name + '!', 'success');
   } catch(e) {
     hideLoading();
+    loginInProgress = false;
     const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
     showLoginError('❌ Error: ' + msg);
   }
 }
 
 async function loginAdmin() {
+  if (loginInProgress) return;
+  loginInProgress = true;
+  
   const email = $('adminEmail').value.trim();
   const password = $('adminPassword').value || 'd4Rm@app';
   
   if (!email) {
     showLoginError('Mohon isi email');
+    loginInProgress = false;
     return;
   }
   
   if (!isOnline) {
     showLoginError('⚠️ Koneksi offline. Periksa internet Anda.');
+    loginInProgress = false;
     return;
   }
   
@@ -1129,18 +1156,21 @@ async function loginAdmin() {
     if (!user || !user.id) {
       showLoginError('❌ Email tidak ditemukan');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
     if (user.password !== password) {
       showLoginError('❌ Password salah. Default: d4Rm@app');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
     if (user.role !== 'super_admin') {
       showLoginError('❌ Akun ini bukan Admin Super');
       hideLoading();
+      loginInProgress = false;
       return;
     }
     
@@ -1148,10 +1178,12 @@ async function loginAdmin() {
     currentRole = 'admin';
     $('loginError').classList.add('hidden');
     hideLoading();
+    loginInProgress = false;
     showAdminDashboard();
     showToast('✅ Selamat datang, ' + user.name + '!', 'success');
   } catch(e) {
     hideLoading();
+    loginInProgress = false;
     const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
     showLoginError('❌ Error: ' + msg);
   }
@@ -1789,7 +1821,7 @@ async function loadWaliData() {
     await loadPotensiSiswa(students, allData.potensi);
     await loadPerbuatanBaik(students, allData.perbuatan);
     await loadChatHistory(students, allData.curhat);
-    await loadJurnalHariIni(students, allData.jurnal);
+    await loadJurnalSiswa(students, allData.jurnal);
     
     hideLoading();
   } catch(e) {
@@ -2102,9 +2134,9 @@ async function kirimBalasanWaliDariChat() {
 }
 
 // ============================================================
-// LAPORAN JURNAL PERASAAN HARI INI - DARI CACHE
+// JURNAL SISWA - DARI CACHE (TERHUBUNG DARI DASHBOARD SISWA)
 // ============================================================
-async function loadJurnalHariIni(students, jurnalData) {
+async function loadJurnalSiswa(students, jurnalData) {
   try {
     const container = document.getElementById('jurnalContainer');
     const countBadge = document.getElementById('jurnalCount');
@@ -2121,14 +2153,18 @@ async function loadJurnalHariIni(students, jurnalData) {
     const today = new Date().toISOString().split('T')[0];
     
     for (const student of students) {
-      const todayJurnal = jurnalData ? jurnalData.find(j => j.student_id === student.id && j.date === today) : null;
+      // Ambil semua jurnal siswa (bukan hanya hari ini)
+      const studentJurnals = jurnalData ? jurnalData.filter(j => j.student_id === student.id) : [];
+      const sortedJurnals = studentJurnals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const latestJurnal = sortedJurnals.length > 0 ? sortedJurnals[0] : null;
       
-      if (todayJurnal) {
+      if (latestJurnal) {
         hasJurnal = true;
         totalJurnal++;
         
-        const emoji = todayJurnal.emoji || '😊';
-        const cerita = todayJurnal.cerita || 'Hari ini biasa saja';
+        const emoji = latestJurnal.emoji || '😊';
+        const cerita = latestJurnal.cerita || 'Hari ini biasa saja';
+        const date = latestJurnal.date || latestJurnal.created_at ? new Date(latestJurnal.created_at).toLocaleDateString('id-ID') : 'Tanggal tidak diketahui';
         
         html += `
           <div class="jurnal-card glass p-3 border-l-4 border-rose-400">
@@ -2138,12 +2174,15 @@ async function loadJurnalHariIni(students, jurnalData) {
                   <span class="font-semibold text-white">${escapeHtml(student.name)}</span>
                   <span class="text-xs text-white/60">${escapeHtml(student.class)}</span>
                 </div>
-                <div class="text-xs text-white/60">${escapeHtml(todayJurnal.date || today)}</div>
+                <div class="text-xs text-white/60">${escapeHtml(date)}</div>
               </div>
               <span class="text-2xl">${escapeHtml(emoji)}</span>
             </div>
             <div class="text-sm text-white/90 mt-1">
               <i class="fas fa-book-open text-rose-300 mr-1"></i> ${escapeHtml(cerita)}
+            </div>
+            <div class="text-xs text-white/40 mt-1">
+              <i class="fas fa-clock mr-1"></i> ${new Date(latestJurnal.created_at).toLocaleString('id-ID')}
             </div>
           </div>
         `;
@@ -2154,7 +2193,7 @@ async function loadJurnalHariIni(students, jurnalData) {
     $('jurnalHariIni').textContent = totalJurnal;
     
     if (!hasJurnal) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal hari ini</div>';
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>';
     } else {
       container.innerHTML = html;
     }
@@ -2331,7 +2370,7 @@ async function loadPotensiSiswa(students, potensiData) {
 }
 
 // ============================================================
-// PERBUATAN BAIK SISWA - DARI CACHE
+// PERBUATAN BAIK SISWA - DARI CACHE (TERHUBUNG DARI DASHBOARD SISWA)
 // ============================================================
 async function loadPerbuatanBaik(students, perbuatanData) {
   try {
@@ -2351,40 +2390,58 @@ async function loadPerbuatanBaik(students, perbuatanData) {
     const today = new Date().toISOString().split('T')[0];
     
     for (const student of students) {
+      // Ambil perbuatan baik hari ini
       const perbuatan = perbuatanData ? perbuatanData.find(p => p.student_id === student.id && p.date === today) : null;
       
-      if (perbuatan && perbuatan.id) {
+      // Jika tidak ada hari ini, ambil yang terakhir
+      let displayPerbuatan = perbuatan;
+      if (!displayPerbuatan) {
+        const allPerbuatan = perbuatanData ? perbuatanData.filter(p => p.student_id === student.id) : [];
+        const sorted = allPerbuatan.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        displayPerbuatan = sorted.length > 0 ? sorted[0] : null;
+      }
+      
+      if (displayPerbuatan && displayPerbuatan.id) {
         hasPerbuatan = true;
         totalPerbuatan++;
         
         perbuatanDataCache.push({
           nama: student.name,
           kelas: student.class,
-          action: perbuatan.action || '-',
-          date: perbuatan.date || today
+          action: displayPerbuatan.action || '-',
+          date: displayPerbuatan.date || today
         });
+        
+        const isToday = displayPerbuatan.date === today;
+        const dateLabel = isToday ? 'Hari ini' : displayPerbuatan.date || today;
         
         html += `
           <div class="glass p-3 border-l-4 border-yellow-400">
             <div class="flex justify-between items-start">
               <div>
-                <div class="font-semibold text-white">${escapeHtml(student.name)}</div>
-                <div class="text-xs text-white/60">${escapeHtml(student.class)}</div>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-white">${escapeHtml(student.name)}</span>
+                  <span class="text-xs text-white/60">${escapeHtml(student.class)}</span>
+                </div>
+                <div class="text-xs text-white/60">${isToday ? '⭐ Hari ini' : escapeHtml(dateLabel)}</div>
               </div>
-              <span class="badge-glass badge-glass-yellow">⭐ ${escapeHtml(perbuatan.date || today)}</span>
+              <span class="badge-glass badge-glass-yellow">${isToday ? '✨ Baru' : '📅'}</span>
             </div>
             <div class="text-sm text-white/90 mt-1">
-              <i class="fas fa-star text-yellow-300 mr-1"></i> ${escapeHtml(perbuatan.action)}
+              <i class="fas fa-star text-yellow-300 mr-1"></i> ${escapeHtml(displayPerbuatan.action)}
+            </div>
+            <div class="text-xs text-white/40 mt-1">
+              <i class="fas fa-clock mr-1"></i> ${new Date(displayPerbuatan.created_at).toLocaleString('id-ID')}
             </div>
           </div>
         `;
       }
     }
     
-    countBadge.textContent = `${totalPerbuatan} hari ini`;
+    countBadge.textContent = `${totalPerbuatan} siswa`;
     
     if (!hasPerbuatan) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik hari ini</div>';
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik</div>';
     } else {
       container.innerHTML = html;
     }
@@ -2757,22 +2814,22 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v19.0 - OPTIMIZED');
+  console.log('🏫 Wali Digital v20.0 - FULL OPTIMIZED');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('⚡ OPTIMASI:');
+  console.log('  ✅ Login lebih cepat (timeout 10s, retry 1x)');
   console.log('  ✅ Data dimuat paralel (5x lebih cepat)');
   console.log('  ✅ Cache data untuk mengurangi request');
-  console.log('  ✅ Timeout lebih singkat (15 detik)');
-  console.log('  ✅ Retry lebih cepat (2x, 500ms)');
+  console.log('  ✅ Login lock prevent double click');
   console.log('💬 FITUR:');
+  console.log('  ✅ Jurnal terhubung dari dashboard siswa');
+  console.log('  ✅ Perbuatan Baik terhubung dari dashboard siswa');
   console.log('  ✅ Balas langsung dari riwayat curhat');
-  console.log('  ✅ Laporan Jurnal Perasaan Hari Ini');
-  console.log('  ✅ Perbuatan Baik dari dashboard student');
-  console.log('  ✅ Peta Potensi dari dashboard student');
+  console.log('  ✅ Peta Potensi dari dashboard siswa');
 });
 
 // Enter key untuk login
