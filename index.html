@@ -7,6 +7,8 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <!-- SheetJS untuk export Excel -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; min-height: 100vh; background: #0f0f1a; position: relative; overflow-x: hidden; }
@@ -28,6 +30,8 @@
     .btn-glass-warning:hover { background: rgba(212,160,23,0.3); border-color: rgba(212,160,23,0.35); box-shadow: 0 8px 32px rgba(212,160,23,0.3); }
     .btn-glass-purple { background: rgba(168,85,247,0.2); border-color: rgba(168,85,247,0.25); }
     .btn-glass-purple:hover { background: rgba(168,85,247,0.3); border-color: rgba(168,85,247,0.35); box-shadow: 0 8px 32px rgba(168,85,247,0.3); }
+    .btn-glass-orange { background: rgba(251,146,60,0.2); border-color: rgba(251,146,60,0.25); }
+    .btn-glass-orange:hover { background: rgba(251,146,60,0.3); border-color: rgba(251,146,60,0.35); box-shadow: 0 8px 32px rgba(251,146,60,0.3); }
     .input-glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 18px; width: 100%; font-size: 14px; color: white; transition: all 0.3s; font-family: 'Inter', sans-serif; }
     .input-glass::placeholder { color: rgba(255,255,255,0.4); }
     .input-glass:focus { outline: none; border-color: rgba(74,155,199,0.5); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 4px rgba(74,155,199,0.1); }
@@ -36,6 +40,7 @@
     .select-glass option { background: #1a1a2e; color: white; }
     .text-glass { color: rgba(255,255,255,0.9); text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
     .text-glass-muted { color: rgba(255,255,255,0.5); }
+    .text-white { color: #ffffff !important; }
     .badge-glass { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); letter-spacing: 0.3px; }
     .badge-glass-red { background: rgba(232,132,138,0.2); border-color: rgba(232,132,138,0.2); color: #f0a0a5; }
     .badge-glass-yellow { background: rgba(212,160,23,0.2); border-color: rgba(212,160,23,0.2); color: #d4a017; }
@@ -43,6 +48,7 @@
     .badge-glass-blue { background: rgba(74,155,199,0.2); border-color: rgba(74,155,199,0.2); color: #6db8e0; }
     .badge-glass-purple { background: rgba(123,156,214,0.2); border-color: rgba(123,156,214,0.2); color: #9db8e8; }
     .badge-glass-pink { background: rgba(236,72,153,0.2); border-color: rgba(236,72,153,0.2); color: #f472b6; }
+    .badge-glass-orange { background: rgba(251,146,60,0.2); border-color: rgba(251,146,60,0.2); color: #fb923c; }
     .status-indicator { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
     .status-dot.online { background: #4a9b7a; box-shadow: 0 0 12px rgba(74,155,122,0.4); }
@@ -74,15 +80,18 @@
     .border-purple-400 { border-color: rgba(168,85,247,0.5); }
     .border-blue-400 { border-color: rgba(96,165,250,0.5); }
     .border-green-400 { border-color: rgba(52,211,153,0.5); }
+    .border-orange-400 { border-color: rgba(251,146,60,0.5); }
     .bg-purple-500\/10 { background: rgba(168,85,247,0.1); }
     .bg-blue-500\/10 { background: rgba(59,130,246,0.1); }
     .bg-green-500\/10 { background: rgba(52,211,153,0.1); }
+    .bg-orange-500\/10 { background: rgba(251,146,60,0.1); }
     .text-purple-300 { color: #d8b4fe; }
     .text-blue-300 { color: #93c5fd; }
     .text-green-300 { color: #6ee7b7; }
     .text-yellow-300 { color: #fcd34d; }
     .text-red-300 { color: #fca5a5; }
     .text-pink-300 { color: #f9a8d4; }
+    .text-orange-300 { color: #fdba74; }
     .max-h-60 { max-height: 240px; }
     .overflow-y-auto { overflow-y: auto; }
     .spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; border-top-color: #4a9bc7; animation: spin 0.8s ease-in-out infinite; }
@@ -93,6 +102,18 @@
     .reply-siswa { background: rgba(59,130,246,0.1); border-left: 3px solid rgba(59,130,246,0.5); }
     .laporan-card { transition: all 0.3s; }
     .laporan-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    /* Warna teks putih untuk semua elemen teks */
+    .text-white-force { color: #ffffff !important; }
+    .text-white-force * { color: #ffffff !important; }
+    .curhat-text { color: #ffffff !important; }
+    .curhat-text .text-glass-muted { color: rgba(255,255,255,0.6) !important; }
+    .curhat-text .text-glass { color: #ffffff !important; }
+    .curhat-text .text-glass-muted { color: rgba(255,255,255,0.6) !important; }
+    .curhat-text .badge-glass { color: rgba(255,255,255,0.8) !important; }
+    .curhat-text .badge-glass-red { color: #f0a0a5 !important; }
+    .curhat-text .badge-glass-yellow { color: #d4a017 !important; }
+    .curhat-text .badge-glass-green { color: #6db8a0 !important; }
+    .curhat-text .badge-glass-blue { color: #6db8e0 !important; }
   </style>
 </head>
 <body>
@@ -123,7 +144,7 @@
   <div class="flex justify-end items-center gap-3 mb-4">
     <div class="status-indicator">
       <span class="status-dot offline" id="statusDot"></span>
-      <span id="statusText">Offline</span>
+      <span id="statusText" class="text-white">Offline</span>
     </div>
     <button onclick="manualCheck()" class="text-glass-muted hover:text-white transition text-sm">
       <i class="fas fa-sync-alt"></i>
@@ -134,8 +155,8 @@
   <div id="loginPage" class="glass p-8 mt-2">
     <div class="text-center mb-8">
       <div class="text-6xl mb-3">🏫</div>
-      <h1 class="text-4xl font-bold text-glass" style="font-weight:800;letter-spacing:-0.5px;">Wali Digital</h1>
-      <p class="text-glass-muted text-sm mt-1" style="letter-spacing:0.5px;">Sistem Manajemen Siswa Premium</p>
+      <h1 class="text-4xl font-bold text-white" style="font-weight:800;letter-spacing:-0.5px;">Wali Digital</h1>
+      <p class="text-white/60 text-sm mt-1" style="letter-spacing:0.5px;">Sistem Manajemen Siswa Premium</p>
     </div>
 
     <!-- Role Selector -->
@@ -187,10 +208,10 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
       <div>
-        <h2 class="text-2xl font-bold text-glass">
+        <h2 class="text-2xl font-bold text-white">
           Halo, <span id="studentNameDisplay" class="text-blue-300">Siswa</span> 👋
         </h2>
-        <p class="text-glass-muted text-sm" id="dateDisplay"></p>
+        <p class="text-white/60 text-sm" id="dateDisplay"></p>
       </div>
       <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
         <i class="fas fa-sign-out-alt"></i>
@@ -201,44 +222,44 @@
     <div class="grid grid-cols-2 gap-3 mb-4">
       <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openCurhat()">
         <i class="fas fa-comment-dots text-3xl text-purple-300"></i>
-        <div class="font-semibold text-sm mt-2 text-glass">Curhat</div>
-        <div class="text-xs text-glass-muted">Ceritakan</div>
+        <div class="font-semibold text-sm mt-2 text-white">Curhat</div>
+        <div class="text-xs text-white/60">Ceritakan</div>
       </div>
       <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openJurnal()">
         <i class="fas fa-book-open text-3xl text-blue-300"></i>
-        <div class="font-semibold text-sm mt-2 text-glass">Jurnal</div>
-        <div class="text-xs text-glass-muted">Catat perasaan</div>
+        <div class="font-semibold text-sm mt-2 text-white">Jurnal</div>
+        <div class="text-xs text-white/60">Catat perasaan</div>
       </div>
       <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openPerbuatanBaik()">
         <i class="fas fa-star text-3xl text-yellow-300"></i>
-        <div class="font-semibold text-sm mt-2 text-glass">Perbuatan Baik</div>
-        <div class="text-xs text-glass-muted">Kebaikan hari ini</div>
+        <div class="font-semibold text-sm mt-2 text-white">Perbuatan Baik</div>
+        <div class="text-xs text-white/60">Kebaikan hari ini</div>
       </div>
       <div class="glass p-5 text-center cursor-pointer hover:scale-105 transition" onclick="openPotensi()">
         <i class="fas fa-compass text-3xl text-green-300"></i>
-        <div class="font-semibold text-sm mt-2 text-glass">Peta Potensi</div>
-        <div class="text-xs text-glass-muted">Cita-citamu</div>
+        <div class="font-semibold text-sm mt-2 text-white">Peta Potensi</div>
+        <div class="text-xs text-white/60">Cita-citamu</div>
       </div>
     </div>
 
     <!-- Recent Activity -->
     <div class="glass p-5 mb-4">
-      <h3 class="font-bold text-glass mb-3">
+      <h3 class="font-bold text-white mb-3">
         <i class="fas fa-bolt text-yellow-300 mr-2"></i>Aktivitas Terakhir
       </h3>
-      <div id="recentActivity" class="text-sm text-glass-muted">Belum ada aktivitas</div>
+      <div id="recentActivity" class="text-sm text-white/60">Belum ada aktivitas</div>
     </div>
 
     <!-- ===== RIWAYAT CURHAT SISWA ===== -->
-    <div class="glass p-5">
+    <div class="glass p-5 curhat-text">
       <div class="flex justify-between items-center mb-3">
-        <h3 class="font-bold text-glass">
+        <h3 class="font-bold text-white">
           <i class="fas fa-comment-dots text-purple-300 mr-2"></i>Riwayat Curhat
         </h3>
         <span id="curhatBadge" class="badge-glass badge-glass-red hidden">📩 Balasan Baru</span>
       </div>
       <div id="riwayatCurhatSiswa" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-glass-muted text-sm text-center py-4">Belum ada curhat</div>
+        <div class="text-white/60 text-sm text-center py-4">Belum ada curhat</div>
       </div>
     </div>
   </div>
@@ -248,10 +269,10 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
       <div>
-        <h2 class="text-2xl font-bold text-glass">
+        <h2 class="text-2xl font-bold text-white">
           👨‍🏫 <span id="waliNameDisplay" class="text-blue-300">Wali</span>
         </h2>
-        <p class="text-glass-muted text-sm">Dashboard Wali Kelas</p>
+        <p class="text-white/60 text-sm">Dashboard Wali Kelas</p>
       </div>
       <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
         <i class="fas fa-sign-out-alt"></i>
@@ -262,22 +283,22 @@
     <div class="grid grid-cols-3 gap-2 mb-4">
       <div class="glass p-4 text-center">
         <div class="text-2xl font-bold text-blue-300" id="totalSiswa">0</div>
-        <div class="text-xs text-glass-muted">Siswa</div>
+        <div class="text-xs text-white/60">Siswa</div>
       </div>
       <div class="glass p-4 text-center">
         <div class="text-2xl font-bold text-red-300" id="curhatBelumDibaca">0</div>
-        <div class="text-xs text-glass-muted">Belum Dibaca</div>
+        <div class="text-xs text-white/60">Belum Dibaca</div>
       </div>
       <div class="glass p-4 text-center">
         <div class="text-2xl font-bold text-yellow-300" id="curhatDarurat">0</div>
-        <div class="text-xs text-glass-muted">Darurat</div>
+        <div class="text-xs text-white/60">Darurat</div>
       </div>
     </div>
 
     <!-- Student List -->
     <div class="glass p-5 mb-4">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-glass"><i class="fas fa-users mr-2"></i>Daftar Siswa</h3>
+        <h3 class="font-bold text-white"><i class="fas fa-users mr-2"></i>Daftar Siswa</h3>
         <button onclick="showTambahSiswa()" class="btn-glass btn-glass-success text-sm py-1.5 px-4">
           <i class="fas fa-plus mr-1"></i> Tambah
         </button>
@@ -288,21 +309,26 @@
     <!-- ===== LAPORAN KONDISI SISWA ===== -->
     <div class="glass p-5 mb-4">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-glass">
+        <h3 class="font-bold text-white">
           <i class="fas fa-clipboard-list text-green-300 mr-2"></i>Laporan Kondisi Siswa
         </h3>
-        <button onclick="showTambahLaporan()" class="btn-glass btn-glass-purple text-sm py-1.5 px-4">
-          <i class="fas fa-plus mr-1"></i> Tambah
-        </button>
+        <div class="flex gap-2">
+          <button onclick="exportLaporanExcel()" class="btn-glass btn-glass-success text-sm py-1.5 px-3">
+            <i class="fas fa-file-excel mr-1"></i> Export
+          </button>
+          <button onclick="showTambahLaporan()" class="btn-glass btn-glass-purple text-sm py-1.5 px-3">
+            <i class="fas fa-plus mr-1"></i> Tambah
+          </button>
+        </div>
       </div>
       <div id="laporanKondisiContainer" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-glass-muted text-sm text-center py-4">Belum ada laporan</div>
+        <div class="text-white/60 text-sm text-center py-4">Belum ada laporan</div>
       </div>
     </div>
 
     <!-- Curhat Inbox -->
-    <div class="glass p-5">
-      <h3 class="font-bold text-glass mb-4"><i class="fas fa-inbox mr-2"></i>Curhat Masuk</h3>
+    <div class="glass p-5 curhat-text">
+      <h3 class="font-bold text-white mb-4"><i class="fas fa-inbox mr-2"></i>Curhat Masuk</h3>
       <div id="curhatInbox" class="space-y-2"></div>
     </div>
   </div>
@@ -312,10 +338,10 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
       <div>
-        <h2 class="text-2xl font-bold text-glass">
+        <h2 class="text-2xl font-bold text-white">
           🛡️ <span id="adminNameDisplay" class="text-purple-300">Admin</span>
         </h2>
-        <p class="text-glass-muted text-sm">Dashboard Super Admin</p>
+        <p class="text-white/60 text-sm">Dashboard Super Admin</p>
       </div>
       <button onclick="logout()" class="btn-glass btn-glass-danger text-sm py-2 px-4">
         <i class="fas fa-sign-out-alt"></i>
@@ -326,22 +352,22 @@
     <div class="grid grid-cols-3 gap-2 mb-4">
       <div class="glass p-4 text-center">
         <div class="text-2xl font-bold text-blue-300" id="totalWaliAdmin">0</div>
-        <div class="text-xs text-glass-muted">Wali</div>
+        <div class="text-xs text-white/60">Wali</div>
       </div>
       <div class="glass p-4 text-center">
         <div class="text-2xl font-bold text-purple-300" id="totalSiswaAdmin">0</div>
-        <div class="text-xs text-glass-muted">Siswa</div>
+        <div class="text-xs text-white/60">Siswa</div>
       </div>
       <div class="glass p-4 text-center">
         <div class="text-2xl font-bold text-green-300" id="totalCurhatAdmin">0</div>
-        <div class="text-xs text-glass-muted">Curhat</div>
+        <div class="text-xs text-white/60">Curhat</div>
       </div>
     </div>
 
     <!-- Wali List -->
     <div class="glass p-5">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="font-bold text-glass"><i class="fas fa-chalkboard-teacher mr-2"></i>Wali Kelas</h3>
+        <h3 class="font-bold text-white"><i class="fas fa-chalkboard-teacher mr-2"></i>Wali Kelas</h3>
         <button onclick="showTambahWali()" class="btn-glass btn-glass-success text-sm py-1.5 px-4">
           <i class="fas fa-plus mr-1"></i> Tambah
         </button>
@@ -354,14 +380,14 @@
   
   <!-- Curhat Modal -->
   <div id="curhatModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('curhatModal')">
-    <div class="modal-glass">
+    <div class="modal-glass curhat-text">
       <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-comment-dots text-purple-300 mr-2"></i>Curhat
         </h3>
-        <button onclick="closeModal('curhatModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('curhatModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
-      <div id="curhatFlow" class="space-y-2 text-sm text-glass"></div>
+      <div id="curhatFlow" class="space-y-2 text-sm text-white"></div>
       <div id="curhatOptions" class="flex flex-wrap gap-2 mt-4"></div>
       <div id="curhatTextArea" class="hidden mt-4">
         <textarea id="curhatCerita" class="input-glass" rows="3" placeholder="Ceritakan masalahmu..."></textarea>
@@ -377,10 +403,10 @@
   <div id="jurnalModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('jurnalModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-book-open text-blue-300 mr-2"></i>Jurnal Harian
         </h3>
-        <button onclick="closeModal('jurnalModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('jurnalModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       <div class="text-center text-4xl mb-4">
         <span class="cursor-pointer hover:scale-125 inline-block transition mx-1.5" onclick="pilihEmoji('😊')">😊</span>
@@ -402,23 +428,23 @@
   <div id="perbuatanModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('perbuatanModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-star text-yellow-300 mr-2"></i>Perbuatan Baik
         </h3>
-        <button onclick="closeModal('perbuatanModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('perbuatanModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       <div class="grid grid-cols-2 gap-2">
         <button onclick="catatPerbuatan('Membantu teman')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          🤝 <div class="text-xs text-glass mt-1">Membantu teman</div>
+          🤝 <div class="text-xs text-white mt-1">Membantu teman</div>
         </button>
         <button onclick="catatPerbuatan('Berbagi makanan')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          🍱 <div class="text-xs text-glass mt-1">Berbagi makanan</div>
+          🍱 <div class="text-xs text-white mt-1">Berbagi makanan</div>
         </button>
         <button onclick="catatPerbuatan('Menjaga kebersihan')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          🧹 <div class="text-xs text-glass mt-1">Menjaga kebersihan</div>
+          🧹 <div class="text-xs text-white mt-1">Menjaga kebersihan</div>
         </button>
         <button onclick="catatPerbuatan('Berkata jujur')" class="glass p-3 rounded-xl text-center hover:scale-105 transition">
-          💬 <div class="text-xs text-glass mt-1">Berkata jujur</div>
+          💬 <div class="text-xs text-white mt-1">Berkata jujur</div>
         </button>
       </div>
       <div class="mt-4">
@@ -435,30 +461,30 @@
   <div id="potensiModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('potensiModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-compass text-green-300 mr-2"></i>Peta Potensi
         </h3>
-        <button onclick="closeModal('potensiModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('potensiModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       <div class="space-y-3">
         <div>
-          <label class="text-sm text-glass-muted font-medium">Minat</label>
+          <label class="text-sm text-white/60 font-medium">Minat</label>
           <select id="potensiMinat" class="select-glass">
             <option>Olahraga</option><option>Seni</option><option>Sains</option><option>Teknologi</option><option>Bahasa</option>
           </select>
         </div>
         <div>
-          <label class="text-sm text-glass-muted font-medium">Gaya Belajar</label>
+          <label class="text-sm text-white/60 font-medium">Gaya Belajar</label>
           <select id="potensiGaya" class="select-glass">
             <option>Visual</option><option>Auditori</option><option>Kinestetik</option>
           </select>
         </div>
         <div>
-          <label class="text-sm text-glass-muted font-medium">Cita-cita</label>
+          <label class="text-sm text-white/60 font-medium">Cita-cita</label>
           <input id="potensiCita" class="input-glass" placeholder="Cita-citamu">
         </div>
         <div>
-          <label class="text-sm text-glass-muted font-medium">Kekuatan Karakter</label>
+          <label class="text-sm text-white/60 font-medium">Kekuatan Karakter</label>
           <select id="potensiKarakter" class="select-glass">
             <option>Pemberani</option><option>Baik Hati</option><option>Kreatif</option><option>Pantang Menyerah</option><option>Disiplin</option>
           </select>
@@ -474,10 +500,10 @@
   <div id="tambahSiswaModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahSiswaModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-user-plus text-green-300 mr-2"></i>Tambah Siswa
         </h3>
-        <button onclick="closeModal('tambahSiswaModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('tambahSiswaModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       <div class="space-y-3">
         <input id="siswaNIS" class="input-glass" placeholder="NIS">
@@ -495,10 +521,10 @@
   <div id="tambahWaliModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahWaliModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-user-plus text-purple-300 mr-2"></i>Tambah Wali
         </h3>
-        <button onclick="closeModal('tambahWaliModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('tambahWaliModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       <div class="space-y-3">
         <input id="waliNamaBaru" class="input-glass" placeholder="Nama Wali">
@@ -512,24 +538,24 @@
     </div>
   </div>
 
-  <!-- ===== DETAIL CURHAT SISWA MODAL DENGAN FITUR BALAS BALASAN ===== -->
+  <!-- ===== DETAIL CURHAT SISWA MODAL ===== -->
   <div id="detailCurhatSiswaModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('detailCurhatSiswaModal')">
-    <div class="modal-glass">
+    <div class="modal-glass curhat-text">
       <div class="flex justify-between items-center mb-4">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-comment-dots text-purple-300 mr-2"></i>
           <span id="detailCurhatJudul">Curhat</span>
         </h3>
-        <button onclick="closeModal('detailCurhatSiswaModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('detailCurhatSiswaModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       
       <!-- Detail Curhat -->
       <div class="glass p-4 mb-4">
         <div class="flex justify-between items-start">
           <div class="flex-1">
-            <div class="text-sm text-glass/80" id="detailCurhatCerita"></div>
+            <div class="text-sm text-white/80" id="detailCurhatCerita"></div>
             <div class="flex items-center gap-2 mt-2 flex-wrap">
-              <span class="text-xs text-glass-muted" id="detailCurhatWaktu"></span>
+              <span class="text-xs text-white/60" id="detailCurhatWaktu"></span>
               <span id="detailCurhatStatus"></span>
               <span id="detailCurhatReplyStatus" class="badge-glass badge-glass-blue hidden">💬 Ada balasan</span>
             </div>
@@ -538,17 +564,17 @@
       </div>
       
       <!-- Balasan -->
-      <h4 class="font-semibold text-glass mb-3">
+      <h4 class="font-semibold text-white mb-3">
         <i class="fas fa-reply-all text-blue-300 mr-2"></i>Balasan
       </h4>
       <div id="detailCurhatReplies" class="space-y-2 max-h-60 overflow-y-auto">
-        <div class="text-glass-muted text-sm text-center py-4">Belum ada balasan</div>
+        <div class="text-white/60 text-sm text-center py-4">Belum ada balasan</div>
       </div>
       
       <!-- ===== AREA BALAS BALASAN UNTUK SISWA ===== -->
       <div id="siswaBalasArea" class="hidden mt-4">
         <div class="border-t border-white/10 pt-4">
-          <h4 class="font-semibold text-glass mb-2 text-sm">
+          <h4 class="font-semibold text-white mb-2 text-sm">
             <i class="fas fa-pencil-alt text-pink-300 mr-2"></i>Balas Balasan
           </h4>
           <textarea id="siswaBalasanText" class="input-glass" rows="2" placeholder="Tulis balasanmu untuk wali..."></textarea>
@@ -570,24 +596,24 @@
   <div id="tambahLaporanModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahLaporanModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
-        <h3 class="text-xl font-bold text-glass">
+        <h3 class="text-xl font-bold text-white">
           <i class="fas fa-clipboard-list text-green-300 mr-2"></i>Tambah Laporan Kondisi
         </h3>
-        <button onclick="closeModal('tambahLaporanModal')" class="text-glass-muted hover:text-white text-xl transition">✕</button>
+        <button onclick="closeModal('tambahLaporanModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       <div class="space-y-3">
         <div>
-          <label class="text-sm text-glass-muted font-medium">Pilih Siswa</label>
+          <label class="text-sm text-white/60 font-medium">Pilih Siswa</label>
           <select id="laporanSiswaSelect" class="select-glass">
             <option value="">-- Pilih Siswa --</option>
           </select>
         </div>
         <div>
-          <label class="text-sm text-glass-muted font-medium">Nilai Akademik</label>
+          <label class="text-sm text-white/60 font-medium">Nilai Akademik</label>
           <input id="laporanNilai" class="input-glass" placeholder="Contoh: 85" type="number" min="0" max="100">
         </div>
         <div>
-          <label class="text-sm text-glass-muted font-medium">Sikap</label>
+          <label class="text-sm text-white/60 font-medium">Sikap</label>
           <select id="laporanSikap" class="select-glass">
             <option>Sangat Baik</option>
             <option>Baik</option>
@@ -596,11 +622,11 @@
           </select>
         </div>
         <div>
-          <label class="text-sm text-glass-muted font-medium">Catatan Khusus</label>
+          <label class="text-sm text-white/60 font-medium">Catatan Khusus</label>
           <textarea id="laporanCatatan" class="input-glass" rows="2" placeholder="Catatan khusus tentang siswa..."></textarea>
         </div>
         <div>
-          <label class="text-sm text-glass-muted font-medium">Periode</label>
+          <label class="text-sm text-white/60 font-medium">Periode</label>
           <input id="laporanPeriode" class="input-glass" placeholder="Contoh: Semester 1" value="Semester 1">
         </div>
         <button onclick="simpanLaporanKondisi()" class="btn-glass btn-glass-success w-full mt-2">
@@ -635,6 +661,7 @@ let curhatStep = 0;
 let curhatData = {};
 let dateInterval = null;
 let currentCurhatId = null;
+let laporanDataCache = [];
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -1083,7 +1110,7 @@ async function loadRiwayatCurhatSiswa() {
     const badge = document.getElementById('curhatBadge');
     
     if (!curhatList || curhatList.length === 0) {
-      container.innerHTML = '<div class="text-glass-muted text-sm text-center py-4">Belum ada curhat</div>';
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada curhat</div>';
       badge.classList.add('hidden');
       return;
     }
@@ -1110,7 +1137,7 @@ async function loadRiwayatCurhatSiswa() {
         : '<span class="badge-glass badge-glass-yellow">⏳ Menunggu balasan</span>';
       
       const lastReplyText = lastReply 
-        ? `<div class="text-xs text-glass-muted mt-1">
+        ? `<div class="text-xs text-white/60 mt-1">
              <i class="fas fa-reply mr-1"></i> Balasan terakhir: "${escapeHtml(lastReply.message.substring(0, 40))}${lastReply.message.length > 40 ? '...' : ''}"
              <span class="block text-[10px]">dari ${escapeHtml(lastReply.sender_name)} · ${new Date(lastReply.created_at).toLocaleString()}</span>
            </div>`
@@ -1122,11 +1149,11 @@ async function loadRiwayatCurhatSiswa() {
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="text-sm font-semibold text-glass">${escapeHtml(curhat.kategori)} · ${escapeHtml(curhat.sub_kategori)}</span>
+                <span class="text-sm font-semibold text-white">${escapeHtml(curhat.kategori)} · ${escapeHtml(curhat.sub_kategori)}</span>
                 ${daruratBadge}
               </div>
-              <div class="text-sm text-glass/80 mt-1">${escapeHtml(curhat.cerita)}</div>
-              <div class="text-xs text-glass-muted mt-1">${new Date(curhat.created_at).toLocaleString()}</div>
+              <div class="text-sm text-white/80 mt-1">${escapeHtml(curhat.cerita)}</div>
+              <div class="text-xs text-white/60 mt-1">${new Date(curhat.created_at).toLocaleString()}</div>
               ${lastReplyText}
             </div>
             <div class="flex flex-col items-end gap-1 ml-2">
@@ -1153,7 +1180,7 @@ async function loadRiwayatCurhatSiswa() {
 }
 
 // ============================================================
-// OPEN DETAIL CURHAT SISWA - DENGAN FITUR BALAS BALASAN
+// OPEN DETAIL CURHAT SISWA
 // ============================================================
 async function openDetailCurhatSiswa(curhatId) {
   currentCurhatId = curhatId;
@@ -1184,13 +1211,12 @@ async function openDetailCurhatSiswa(curhatId) {
     
     if (!replies || replies.length === 0) {
       repliesContainer.innerHTML = `
-        <div class="text-glass-muted text-sm text-center py-4">
+        <div class="text-white/60 text-sm text-center py-4">
           <i class="fas fa-clock text-2xl block mb-2"></i>
           Belum ada balasan. Tunggu balasan dari Wali ya 😊
         </div>
       `;
     } else {
-      // Cek apakah ada balasan dari wali
       hasWaliReply = replies.some(r => r.is_wali === true || r.is_wali === 'TRUE');
       
       repliesContainer.innerHTML = replies.map(r => {
@@ -1206,26 +1232,23 @@ async function openDetailCurhatSiswa(curhatId) {
           <div class="${bubbleClass}">
             <div class="flex items-center gap-2">
               <span class="font-semibold text-sm ${isWali ? 'text-purple-300' : 'text-blue-300'}">${icon} ${escapeHtml(name)}</span>
-              <span class="text-xs text-glass-muted">${time}</span>
+              <span class="text-xs text-white/60">${time}</span>
             </div>
-            <div class="text-sm text-glass/90 mt-1">${escapeHtml(r.message)}</div>
+            <div class="text-sm text-white/90 mt-1">${escapeHtml(r.message)}</div>
             <div class="text-xs ${labelClass} mt-1"><i class="fas fa-check-circle"></i> ${label}</div>
           </div>
         `;
       }).join('');
     }
     
-    // ===== TAMPILKAN AREA BALAS BALASAN UNTUK SISWA =====
+    // Tampilkan area balas balasan
     const siswaBalasArea = document.getElementById('siswaBalasArea');
     const siswaBalasFeedback = document.getElementById('siswaBalasFeedback');
     
-    // Reset feedback
     siswaBalasFeedback.classList.add('hidden');
     siswaBalasFeedback.textContent = '';
     
-    // Cek apakah siswa bisa membalas (hanya jika ada balasan dari wali)
     if (hasWaliReply) {
-      // Cek apakah siswa sudah membalas setelah wali
       const canReply = await callAPI('canStudentReplyToCurhat', {
         studentId: currentStudent.id,
         curhatId: curhatId
@@ -1236,7 +1259,6 @@ async function openDetailCurhatSiswa(curhatId) {
         document.getElementById('siswaBalasanText').value = '';
       } else {
         siswaBalasArea.classList.add('hidden');
-        // Tampilkan pesan jika sudah membalas
         if (replies && replies.some(r => r.is_wali === false || r.is_wali === 'FALSE')) {
           siswaBalasFeedback.textContent = '✅ Kamu sudah membalas balasan ini';
           siswaBalasFeedback.classList.remove('hidden');
@@ -1247,7 +1269,6 @@ async function openDetailCurhatSiswa(curhatId) {
       siswaBalasArea.classList.add('hidden');
     }
     
-    // Mark as read jika belum dibaca
     if (!curhatData.is_read || curhatData.is_read === 'FALSE') {
       try {
         await callAPI('markCurhatAsRead', { 
@@ -1306,15 +1327,12 @@ async function kirimBalasanSiswa() {
       document.getElementById('siswaBalasFeedback').classList.remove('hidden');
       document.getElementById('siswaBalasFeedback').className = 'text-xs text-green-300 mt-2';
       
-      // Sembunyikan area balas setelah berhasil
       setTimeout(() => {
         document.getElementById('siswaBalasArea').classList.add('hidden');
       }, 1500);
       
-      // Refresh riwayat curhat
       await loadRiwayatCurhatSiswa();
       
-      // Tutup modal setelah 2 detik
       setTimeout(() => {
         closeModal('detailCurhatSiswaModal');
       }, 2000);
@@ -1335,7 +1353,7 @@ function openCurhat() {
   curhatStep = 0;
   curhatData = {};
   show('curhatModal');
-  $('curhatFlow').innerHTML = '<div class="text-glass-muted">Mulai curhat dengan memilih di bawah</div>';
+  $('curhatFlow').innerHTML = '<div class="text-white/60">Mulai curhat dengan memilih di bawah</div>';
   $('curhatOptions').innerHTML = `
     <button onclick="curhatStep1('Aku sendiri')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Aku sendiri</button>
     <button onclick="curhatStep1('Untuk temanku')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Untuk temanku</button>
@@ -1346,7 +1364,7 @@ function openCurhat() {
 
 function curhatStep1(siapa) {
   curhatData.untuk_siapa = siapa;
-  $('curhatFlow').innerHTML = '<div class="text-glass">Kategori masalah?</div>';
+  $('curhatFlow').innerHTML = '<div class="text-white">Kategori masalah?</div>';
   $('curhatOptions').innerHTML = `
     <button onclick="curhatStep2('Sekolah')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Sekolah</button>
     <button onclick="curhatStep2('Rumah')" class="btn-glass btn-glass-warning text-sm py-2 px-4">Rumah</button>
@@ -1359,7 +1377,7 @@ function curhatStep2(kategori) {
     ? ['Perundungan', 'Pelajaran', 'Teman', 'Guru']
     : ['Orang tua', 'Saudara', 'Keuangan'];
   
-  $('curhatFlow').innerHTML = '<div class="text-glass">Masalah spesifik?</div>';
+  $('curhatFlow').innerHTML = '<div class="text-white">Masalah spesifik?</div>';
   $('curhatOptions').innerHTML = options.map(opt => 
     `<button onclick="curhatStep3('${opt}')" class="btn-glass btn-glass-primary text-sm py-2 px-4">${opt}</button>`
   ).join('');
@@ -1367,7 +1385,7 @@ function curhatStep2(kategori) {
 
 function curhatStep3(sub) {
   curhatData.sub = sub;
-  $('curhatFlow').innerHTML = '<div class="text-glass">Tingkat darurat?</div>';
+  $('curhatFlow').innerHTML = '<div class="text-white">Tingkat darurat?</div>';
   $('curhatOptions').innerHTML = `
     <button onclick="curhatStep4('Aku cuma mau cerita')" class="btn-glass text-sm py-2 px-4">Cuma mau cerita</button>
     <button onclick="curhatStep4('Aku butuh saran')" class="btn-glass btn-glass-warning text-sm py-2 px-4">Butuh saran</button>
@@ -1377,7 +1395,7 @@ function curhatStep3(sub) {
 
 function curhatStep4(darurat) {
   curhatData.darurat = darurat;
-  $('curhatFlow').innerHTML = '<div class="text-glass">Ceritakan masalahmu...</div>';
+  $('curhatFlow').innerHTML = '<div class="text-white">Ceritakan masalahmu...</div>';
   $('curhatOptions').innerHTML = '';
   $('curhatTextArea').classList.remove('hidden');
 }
@@ -1591,7 +1609,6 @@ async function loadWaliData() {
     renderStudentList(students);
     renderCurhatInbox(waliCurhat);
     
-    // ===== LOAD LAPORAN KONDISI =====
     await loadLaporanKondisi(students);
     
     hideLoading();
@@ -1606,15 +1623,15 @@ async function loadWaliData() {
 function renderStudentList(students) {
   const list = $('studentList');
   if (!students || students.length === 0) {
-    list.innerHTML = '<div class="text-glass-muted text-center py-4">Belum ada siswa</div>';
+    list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada siswa</div>';
     return;
   }
   
   list.innerHTML = students.map(s => `
     <div class="glass p-4 flex items-center justify-between hover:bg-white/5 transition">
       <div>
-        <div class="font-semibold text-glass">${escapeHtml(s.name)}</div>
-        <div class="text-xs text-glass-muted">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
+        <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
+        <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
       </div>
       <button onclick="deleteStudent('${s.id}')" class="text-red-400/70 hover:text-red-400 transition">
         <i class="fas fa-trash"></i>
@@ -1626,17 +1643,17 @@ function renderStudentList(students) {
 function renderCurhatInbox(curhats) {
   const inbox = $('curhatInbox');
   if (!curhats || curhats.length === 0) {
-    inbox.innerHTML = '<div class="text-glass-muted text-center py-4">Belum ada curhat masuk</div>';
+    inbox.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada curhat masuk</div>';
     return;
   }
   
   inbox.innerHTML = curhats.slice(0, 5).map(c => `
     <div class="glass p-4 ${c.is_read ? 'opacity-60' : 'border-l-4 border-blue-400/50'}">
       <div class="flex justify-between items-start">
-        <span class="font-semibold text-glass">${escapeHtml(c.student_name || 'Siswa')}</span>
-        <span class="text-xs text-glass-muted">${new Date(c.created_at).toLocaleString()}</span>
+        <span class="font-semibold text-white">${escapeHtml(c.student_name || 'Siswa')}</span>
+        <span class="text-xs text-white/60">${new Date(c.created_at).toLocaleString()}</span>
       </div>
-      <div class="text-sm text-glass/80 mt-1">${escapeHtml(c.cerita)}</div>
+      <div class="text-sm text-white/80 mt-1">${escapeHtml(c.cerita)}</div>
       <div class="flex gap-2 mt-2">
         <span class="badge-glass badge-glass-blue">${escapeHtml(c.kategori)}</span>
         ${c.tingkat_darurat === 'Aku butuh bantuan sekarang' ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>' : ''}
@@ -1654,9 +1671,10 @@ function renderCurhatInbox(curhats) {
 async function loadLaporanKondisi(students) {
   try {
     const container = document.getElementById('laporanKondisiContainer');
+    laporanDataCache = [];
     
     if (!students || students.length === 0) {
-      container.innerHTML = '<div class="text-glass-muted text-sm text-center py-4">Belum ada siswa</div>';
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
       return;
     }
     
@@ -1674,7 +1692,16 @@ async function loadLaporanKondisi(students) {
           const catatan = laporan.catatan_khusus || '-';
           const periode = laporan.periode || 'Semester 1';
           
-          // Warna untuk nilai
+          laporanDataCache.push({
+            nama: student.name,
+            nis: student.nis,
+            kelas: student.class,
+            nilai: nilai,
+            sikap: sikap,
+            catatan: catatan,
+            periode: periode
+          });
+          
           let nilaiColor = 'text-green-300';
           if (nilai !== '-') {
             const numNilai = parseInt(nilai);
@@ -1682,7 +1709,6 @@ async function loadLaporanKondisi(students) {
             else if (numNilai < 75) nilaiColor = 'text-yellow-300';
           }
           
-          // Warna untuk sikap
           let sikapColor = 'text-green-300';
           if (sikap === 'Kurang') sikapColor = 'text-red-300';
           else if (sikap === 'Cukup') sikapColor = 'text-yellow-300';
@@ -1691,22 +1717,22 @@ async function loadLaporanKondisi(students) {
             <div class="laporan-card glass p-3 border-l-4 border-green-400">
               <div class="flex justify-between items-start">
                 <div>
-                  <div class="font-semibold text-glass">${escapeHtml(student.name)}</div>
-                  <div class="text-xs text-glass-muted">${escapeHtml(student.class)} · ${escapeHtml(periode)}</div>
+                  <div class="font-semibold text-white">${escapeHtml(student.name)}</div>
+                  <div class="text-xs text-white/60">${escapeHtml(student.class)} · ${escapeHtml(periode)}</div>
                 </div>
                 <span class="badge-glass badge-glass-green">${escapeHtml(sikap)}</span>
               </div>
               <div class="grid grid-cols-2 gap-2 mt-2">
                 <div>
-                  <div class="text-xs text-glass-muted">Nilai Akademik</div>
+                  <div class="text-xs text-white/60">Nilai Akademik</div>
                   <div class="text-sm font-semibold ${nilaiColor}">${escapeHtml(nilai)}</div>
                 </div>
                 <div>
-                  <div class="text-xs text-glass-muted">Sikap</div>
+                  <div class="text-xs text-white/60">Sikap</div>
                   <div class="text-sm font-semibold ${sikapColor}">${escapeHtml(sikap)}</div>
                 </div>
               </div>
-              ${catatan !== '-' ? `<div class="text-xs text-glass-muted mt-1">📝 ${escapeHtml(catatan)}</div>` : ''}
+              ${catatan !== '-' ? `<div class="text-xs text-white/60 mt-1">📝 ${escapeHtml(catatan)}</div>` : ''}
             </div>
           `;
         }
@@ -1716,7 +1742,7 @@ async function loadLaporanKondisi(students) {
     }
     
     if (!hasLaporan) {
-      container.innerHTML = '<div class="text-glass-muted text-sm text-center py-4">Belum ada laporan kondisi</div>';
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada laporan kondisi</div>';
     } else {
       container.innerHTML = html;
     }
@@ -1729,14 +1755,76 @@ async function loadLaporanKondisi(students) {
 }
 
 // ============================================================
+// EXPORT LAPORAN KE EXCEL
+// ============================================================
+function exportLaporanExcel() {
+  try {
+    if (!laporanDataCache || laporanDataCache.length === 0) {
+      showToast('❌ Tidak ada data laporan untuk diexport', 'error');
+      return;
+    }
+    
+    // Data untuk Excel
+    const excelData = [
+      ['LAPORAN KONDISI SISWA'],
+      [''],
+      ['No', 'Nama Siswa', 'NIS', 'Kelas', 'Nilai Akademik', 'Sikap', 'Catatan Khusus', 'Periode']
+    ];
+    
+    laporanDataCache.forEach((item, index) => {
+      excelData.push([
+        index + 1,
+        item.nama || '-',
+        item.nis || '-',
+        item.kelas || '-',
+        item.nilai || '-',
+        item.sikap || '-',
+        item.catatan || '-',
+        item.periode || '-'
+      ]);
+    });
+    
+    // Tambahkan footer
+    excelData.push(['']);
+    excelData.push(['Dicetak pada:', new Date().toLocaleString('id-ID')]);
+    excelData.push(['Total Siswa:', laporanDataCache.length]);
+    
+    // Buat workbook
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(excelData);
+    
+    // Style header
+    ws['!cols'] = [
+      { wch: 5 },  // No
+      { wch: 20 }, // Nama
+      { wch: 15 }, // NIS
+      { wch: 12 }, // Kelas
+      { wch: 15 }, // Nilai
+      { wch: 15 }, // Sikap
+      { wch: 30 }, // Catatan
+      { wch: 15 }  // Periode
+    ];
+    
+    XLSX.utils.book_append_sheet(wb, ws, 'Laporan Kondisi');
+    
+    // Generate file
+    const fileName = `Laporan_Kondisi_Siswa_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+    
+    showToast(`✅ Laporan berhasil diexport: ${fileName}`, 'success');
+  } catch(e) {
+    console.error('Export error:', e);
+    showToast('❌ Gagal export: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
 // TAMBAH LAPORAN KONDISI
 // ============================================================
 function showTambahLaporan() {
-  // Populate student select
   const select = document.getElementById('laporanSiswaSelect');
   select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
   
-  // Get students from wali
   callAPI('getStudentsByWali', { waliId: currentWali.id })
     .then(students => {
       if (students && students.length > 0) {
@@ -1757,7 +1845,6 @@ function showTambahLaporan() {
       console.warn('Error loading students:', e);
     });
   
-  // Reset form
   document.getElementById('laporanNilai').value = '';
   document.getElementById('laporanSikap').value = 'Baik';
   document.getElementById('laporanCatatan').value = '';
@@ -1802,7 +1889,6 @@ async function simpanLaporanKondisi() {
     if (result.success) {
       showToast('✅ Laporan kondisi berhasil disimpan!', 'success');
       closeModal('tambahLaporanModal');
-      // Refresh laporan
       const students = await callAPI('getStudentsByWali', { waliId: currentWali.id });
       await loadLaporanKondisi(students);
     } else {
@@ -1966,15 +2052,15 @@ async function loadAdminData() {
 function renderWaliList(walis) {
   const list = $('waliList');
   if (!walis || walis.length === 0) {
-    list.innerHTML = '<div class="text-glass-muted text-center py-4">Belum ada wali</div>';
+    list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada wali</div>';
     return;
   }
   
   list.innerHTML = walis.map(w => `
     <div class="glass p-4 flex items-center justify-between hover:bg-white/5 transition">
       <div>
-        <div class="font-semibold text-glass">${escapeHtml(w.name)}</div>
-        <div class="text-xs text-glass-muted">${escapeHtml(w.email)} · Kelas: ${escapeHtml(w.class)}</div>
+        <div class="font-semibold text-white">${escapeHtml(w.name)}</div>
+        <div class="text-xs text-white/60">${escapeHtml(w.email)} · Kelas: ${escapeHtml(w.class)}</div>
       </div>
       <button onclick="deleteWali('${w.id}')" class="text-red-400/70 hover:text-red-400 transition">
         <i class="fas fa-trash"></i>
@@ -2072,19 +2158,19 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v14.0 - FULL FEATURES');
+  console.log('🏫 Wali Digital v15.0 - FULL FEATURES');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('💬 FITUR BARU:');
+  console.log('  ✅ Warna tulisan putih di semua menu curhat');
+  console.log('  ✅ Export laporan kondisi ke Excel');
   console.log('  ✅ Siswa bisa membalas balasan wali di curhat');
   console.log('  ✅ Laporan kondisi siswa di dashboard wali');
   console.log('  ✅ Nilai akademik, sikap, catatan khusus');
   console.log('  ✅ Tambah laporan kondisi dari dashboard wali');
-  console.log('  ✅ Balasan ditandai sebagai wali atau siswa');
-  console.log('  ✅ Validasi: siswa hanya bisa balas setelah wali membalas');
 });
 
 // Enter key untuk login
