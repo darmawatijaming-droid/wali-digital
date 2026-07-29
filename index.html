@@ -35,6 +35,8 @@
     .btn-glass-pink:hover { background: rgba(236,72,153,0.3); border-color: rgba(236,72,153,0.35); box-shadow: 0 8px 32px rgba(236,72,153,0.3); }
     .btn-glass-cyan { background: rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.25); }
     .btn-glass-cyan:hover { background: rgba(6,182,212,0.3); border-color: rgba(6,182,212,0.35); box-shadow: 0 8px 32px rgba(6,182,212,0.3); }
+    .btn-glass-rose { background: rgba(244,63,94,0.2); border-color: rgba(244,63,94,0.25); }
+    .btn-glass-rose:hover { background: rgba(244,63,94,0.3); border-color: rgba(244,63,94,0.35); box-shadow: 0 8px 32px rgba(244,63,94,0.3); }
     .input-glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 18px; width: 100%; font-size: 14px; color: white; transition: all 0.3s; font-family: 'Inter', sans-serif; }
     .input-glass::placeholder { color: rgba(255,255,255,0.4); }
     .input-glass:focus { outline: none; border-color: rgba(74,155,199,0.5); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 4px rgba(74,155,199,0.1); }
@@ -44,7 +46,6 @@
     .text-glass { color: rgba(255,255,255,0.9); text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
     .text-glass-muted { color: rgba(255,255,255,0.5); }
     .text-white { color: #ffffff !important; }
-    .text-white-important { color: #ffffff !important; }
     .badge-glass { display: inline-block; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); letter-spacing: 0.3px; }
     .badge-glass-red { background: rgba(232,132,138,0.2); border-color: rgba(232,132,138,0.2); color: #f0a0a5; }
     .badge-glass-yellow { background: rgba(212,160,23,0.2); border-color: rgba(212,160,23,0.2); color: #d4a017; }
@@ -54,6 +55,7 @@
     .badge-glass-pink { background: rgba(236,72,153,0.2); border-color: rgba(236,72,153,0.2); color: #f472b6; }
     .badge-glass-orange { background: rgba(251,146,60,0.2); border-color: rgba(251,146,60,0.2); color: #fb923c; }
     .badge-glass-cyan { background: rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.2); color: #22d3ee; }
+    .badge-glass-rose { background: rgba(244,63,94,0.2); border-color: rgba(244,63,94,0.2); color: #fb7185; }
     .status-indicator { display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08); color: rgba(255,255,255,0.7); }
     .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 2s infinite; }
     .status-dot.online { background: #4a9b7a; box-shadow: 0 0 12px rgba(74,155,122,0.4); }
@@ -87,11 +89,13 @@
     .border-green-400 { border-color: rgba(52,211,153,0.5); }
     .border-orange-400 { border-color: rgba(251,146,60,0.5); }
     .border-cyan-400 { border-color: rgba(6,182,212,0.5); }
+    .border-rose-400 { border-color: rgba(244,63,94,0.5); }
     .bg-purple-500\/10 { background: rgba(168,85,247,0.1); }
     .bg-blue-500\/10 { background: rgba(59,130,246,0.1); }
     .bg-green-500\/10 { background: rgba(52,211,153,0.1); }
     .bg-orange-500\/10 { background: rgba(251,146,60,0.1); }
     .bg-cyan-500\/10 { background: rgba(6,182,212,0.1); }
+    .bg-rose-500\/10 { background: rgba(244,63,94,0.1); }
     .text-purple-300 { color: #d8b4fe; }
     .text-blue-300 { color: #93c5fd; }
     .text-green-300 { color: #6ee7b7; }
@@ -100,6 +104,7 @@
     .text-pink-300 { color: #f9a8d4; }
     .text-orange-300 { color: #fdba74; }
     .text-cyan-300 { color: #67e8f9; }
+    .text-rose-300 { color: #fda4af; }
     .max-h-60 { max-height: 240px; }
     .max-h-96 { max-height: 384px; }
     .overflow-y-auto { overflow-y: auto; }
@@ -134,6 +139,7 @@
     .curhat-text .badge-glass-pink { color: #f472b6 !important; }
     .curhat-text .badge-glass-orange { color: #fb923c !important; }
     .curhat-text .badge-glass-cyan { color: #22d3ee !important; }
+    .curhat-text .badge-glass-rose { color: #fb7185 !important; }
     .curhat-text .text-purple-300 { color: #d8b4fe !important; }
     .curhat-text .text-blue-300 { color: #93c5fd !important; }
     .curhat-text .text-green-300 { color: #6ee7b7 !important; }
@@ -142,6 +148,7 @@
     .curhat-text .text-pink-300 { color: #f9a8d4 !important; }
     .curhat-text .text-cyan-300 { color: #67e8f9 !important; }
     .curhat-text .text-orange-300 { color: #fdba74 !important; }
+    .curhat-text .text-rose-300 { color: #fda4af !important; }
     .laporan-card { transition: all 0.3s; }
     .laporan-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
     /* Chat container */
@@ -149,6 +156,9 @@
     .chat-container::-webkit-scrollbar { width: 3px; }
     .chat-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
     .chat-date-divider { text-align: center; padding: 8px 0; font-size: 11px; opacity: 0.5; }
+    /* Jurnal card */
+    .jurnal-card { transition: all 0.3s; }
+    .jurnal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
   </style>
 </head>
 <body>
@@ -315,18 +325,22 @@
     </div>
 
     <!-- Stats -->
-    <div class="grid grid-cols-3 gap-2 mb-4">
-      <div class="glass p-4 text-center">
-        <div class="text-2xl font-bold text-blue-300" id="totalSiswa">0</div>
+    <div class="grid grid-cols-4 gap-2 mb-4">
+      <div class="glass p-3 text-center">
+        <div class="text-xl font-bold text-blue-300" id="totalSiswa">0</div>
         <div class="text-xs text-white/60">Siswa</div>
       </div>
-      <div class="glass p-4 text-center">
-        <div class="text-2xl font-bold text-red-300" id="curhatBelumDibaca">0</div>
+      <div class="glass p-3 text-center">
+        <div class="text-xl font-bold text-red-300" id="curhatBelumDibaca">0</div>
         <div class="text-xs text-white/60">Belum Dibaca</div>
       </div>
-      <div class="glass p-4 text-center">
-        <div class="text-2xl font-bold text-yellow-300" id="curhatDarurat">0</div>
+      <div class="glass p-3 text-center">
+        <div class="text-xl font-bold text-yellow-300" id="curhatDarurat">0</div>
         <div class="text-xs text-white/60">Darurat</div>
+      </div>
+      <div class="glass p-3 text-center">
+        <div class="text-xl font-bold text-rose-300" id="jurnalHariIni">0</div>
+        <div class="text-xs text-white/60">Jurnal Hari Ini</div>
       </div>
     </div>
 
@@ -334,12 +348,25 @@
     <div class="glass p-5 mb-4">
       <div class="flex justify-between items-center mb-4">
         <h3 class="font-bold text-white">
-          <i class="fas fa-comments text-cyan-300 mr-2"></i>Riwayat Percakapan
+          <i class="fas fa-comments text-cyan-300 mr-2"></i>Riwayat Curhat
         </h3>
         <span class="badge-glass badge-glass-cyan" id="chatCount">0 percakapan</span>
       </div>
       <div id="chatHistoryContainer" class="space-y-3 max-h-96 overflow-y-auto chat-container">
         <div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>
+      </div>
+    </div>
+
+    <!-- ===== LAPORAN JURNAL PERASAAN HARI INI ===== -->
+    <div class="glass p-5 mb-4">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-white">
+          <i class="fas fa-book-open text-rose-300 mr-2"></i>Jurnal Perasaan Hari Ini
+        </h3>
+        <span class="badge-glass badge-glass-rose" id="jurnalCount">0 siswa</span>
+      </div>
+      <div id="jurnalContainer" class="space-y-2 max-h-60 overflow-y-auto">
+        <div class="text-white/60 text-sm text-center py-4">Belum ada jurnal hari ini</div>
       </div>
     </div>
 
@@ -400,7 +427,7 @@
       </div>
     </div>
 
-    <!-- Curhat Inbox -->
+    <!-- ===== CURHAT MASUK (TANPA TOMBOL BALAS) ===== -->
     <div class="glass p-5 curhat-text">
       <h3 class="font-bold text-white mb-4"><i class="fas fa-inbox mr-2"></i>Curhat Masuk</h3>
       <div id="curhatInbox" class="space-y-2 max-h-60 overflow-y-auto"></div>
@@ -710,7 +737,7 @@
     </div>
   </div>
 
-  <!-- ===== MODAL DETAIL PERCAKAPAN (CHAT) ===== -->
+  <!-- ===== MODAL DETAIL PERCAKAPAN (CHAT) DENGAN BALAS LANGSUNG ===== -->
   <div id="chatDetailModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('chatDetailModal')">
     <div class="modal-glass curhat-text">
       <div class="flex justify-between items-center mb-4">
@@ -738,6 +765,18 @@
       </h4>
       <div id="chatDetailMessages" class="space-y-2 max-h-60 overflow-y-auto chat-container">
         <div class="text-white/60 text-sm text-center py-4">Belum ada pesan</div>
+      </div>
+      
+      <!-- ===== AREA BALAS LANGSUNG OLEH WALI ===== -->
+      <div class="mt-4 border-t border-white/10 pt-4">
+        <h4 class="font-semibold text-white mb-2 text-sm">
+          <i class="fas fa-reply text-purple-300 mr-2"></i>Balas Percakapan
+        </h4>
+        <textarea id="chatBalasanText" class="input-glass" rows="2" placeholder="Tulis balasan untuk siswa..."></textarea>
+        <button onclick="kirimBalasanWaliDariChat()" class="btn-glass btn-glass-purple w-full mt-2">
+          <i class="fas fa-paper-plane mr-2"></i>Kirim Balasan
+        </button>
+        <div id="chatBalasFeedback" class="text-xs text-green-300 mt-2 hidden"></div>
       </div>
       
       <!-- Tombol Tutup -->
@@ -776,6 +815,9 @@ let laporanDataCache = [];
 let potensiDataCache = [];
 let perbuatanDataCache = [];
 let chatDataCache = [];
+let chatCurrentStudentId = null;
+let chatCurrentStudentName = '';
+let chatCurrentStudentClass = '';
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -1695,7 +1737,7 @@ async function simpanPotensi() {
 }
 
 // ============================================================
-// WALI FUNCTIONS - DENGAN CHAT HISTORY, LAPORAN KONDISI, POTENSI, PERBUATAN BAIK
+// WALI FUNCTIONS - DENGAN CHAT HISTORY, JURNAL, LAPORAN KONDISI, POTENSI, PERBUATAN BAIK
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
@@ -1728,6 +1770,7 @@ async function loadWaliData() {
     await loadPotensiSiswa(students);
     await loadPerbuatanBaik(students);
     await loadChatHistory(students);
+    await loadJurnalHariIni(students);
     
     hideLoading();
   } catch(e) {
@@ -1776,9 +1819,6 @@ function renderCurhatInbox(curhats) {
         <span class="badge-glass badge-glass-blue">${escapeHtml(c.kategori)}</span>
         ${c.tingkat_darurat === 'Aku butuh bantuan sekarang' ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>' : ''}
       </div>
-      <button onclick="balasCurhat('${c.id}')" class="btn-glass btn-glass-primary text-xs py-1.5 px-4 mt-3">
-        <i class="fas fa-reply mr-1"></i> Balas
-      </button>
     </div>
   `).join('');
 }
@@ -1878,15 +1918,24 @@ async function loadChatHistory(students) {
 }
 
 // ============================================================
-// OPEN CHAT DETAIL - TAMPILKAN PERCAKAPAN LENGKAP
+// OPEN CHAT DETAIL - TAMPILKAN PERCAKAPAN LENGKAP DENGAN BALAS LANGSUNG
 // ============================================================
 async function openChatDetail(studentId, studentName, studentClass) {
   try {
     showLoading('Memuat percakapan...');
     
+    chatCurrentStudentId = studentId;
+    chatCurrentStudentName = studentName;
+    chatCurrentStudentClass = studentClass;
+    
     document.getElementById('chatDetailTitle').textContent = `💬 ${studentName}`;
     document.getElementById('chatDetailStudentName').textContent = studentName;
     document.getElementById('chatDetailStudentClass').textContent = `Kelas ${studentClass}`;
+    
+    // Reset feedback
+    document.getElementById('chatBalasFeedback').classList.add('hidden');
+    document.getElementById('chatBalasFeedback').textContent = '';
+    document.getElementById('chatBalasanText').value = '';
     
     const curhats = await callAPI('getCurhatByStudent', { studentId: studentId });
     
@@ -1976,6 +2025,147 @@ async function openChatDetail(studentId, studentName, studentClass) {
     hideLoading();
     const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
     showToast('❌ Gagal memuat percakapan: ' + msg, 'error');
+  }
+}
+
+// ============================================================
+// KIRIM BALASAN WALI DARI CHAT DETAIL
+// ============================================================
+async function kirimBalasanWaliDariChat() {
+  const message = document.getElementById('chatBalasanText').value.trim();
+  if (!message) {
+    showToast('Tulis balasan dulu ya', 'warning');
+    return;
+  }
+  
+  if (!isOnline) {
+    showToast('⚠️ Koneksi offline', 'error');
+    return;
+  }
+  
+  if (!chatCurrentStudentId) {
+    showToast('❌ Siswa tidak ditemukan', 'error');
+    return;
+  }
+  
+  // Cari curhat terbaru dari siswa ini
+  try {
+    const curhats = await callAPI('getCurhatByStudent', { studentId: chatCurrentStudentId });
+    if (!curhats || curhats.length === 0) {
+      showToast('❌ Belum ada curhat dari siswa ini', 'error');
+      return;
+    }
+    
+    // Ambil curhat terbaru
+    const latestCurhat = curhats.sort((a, b) => 
+      new Date(b.created_at) - new Date(a.created_at)
+    )[0];
+    
+    showLoading('Mengirim balasan...');
+    const result = await callAPI('addCurhatReply', {
+      curhatId: latestCurhat.id,
+      studentId: currentWali.id,
+      sender: 'wali',
+      senderName: currentWali.name,
+      message: message,
+      isWali: 'true'
+    });
+    
+    hideLoading();
+    if (result.success) {
+      showToast('✅ Balasan terkirim!', 'success');
+      document.getElementById('chatBalasanText').value = '';
+      document.getElementById('chatBalasFeedback').textContent = '✅ Balasan berhasil dikirim!';
+      document.getElementById('chatBalasFeedback').classList.remove('hidden');
+      document.getElementById('chatBalasFeedback').className = 'text-xs text-green-300 mt-2';
+      
+      // Refresh chat detail
+      setTimeout(() => {
+        openChatDetail(chatCurrentStudentId, chatCurrentStudentName, chatCurrentStudentClass);
+      }, 1000);
+      
+      // Refresh semua data
+      setTimeout(() => {
+        loadWaliData();
+      }, 1500);
+    } else {
+      showToast('❌ ' + result.error, 'error');
+    }
+  } catch(e) {
+    hideLoading();
+    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
+    showToast('❌ Error: ' + msg, 'error');
+  }
+}
+
+// ============================================================
+// LAPORAN JURNAL PERASAAN HARI INI
+// ============================================================
+async function loadJurnalHariIni(students) {
+  try {
+    const container = document.getElementById('jurnalContainer');
+    const countBadge = document.getElementById('jurnalCount');
+    
+    if (!students || students.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
+      countBadge.textContent = '0 siswa';
+      return;
+    }
+    
+    let html = '';
+    let hasJurnal = false;
+    let totalJurnal = 0;
+    const today = new Date().toISOString().split('T')[0];
+    
+    for (const student of students) {
+      try {
+        // Ambil jurnal terakhir untuk hari ini
+        const jurnals = await callAPI('getJurnalByStudent', { studentId: student.id });
+        const todayJurnal = jurnals ? jurnals.find(j => j.date === today) : null;
+        
+        if (todayJurnal) {
+          hasJurnal = true;
+          totalJurnal++;
+          
+          const emoji = todayJurnal.emoji || '😊';
+          const cerita = todayJurnal.cerita || 'Hari ini biasa saja';
+          
+          html += `
+            <div class="jurnal-card glass p-3 border-l-4 border-rose-400">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2">
+                    <span class="font-semibold text-white">${escapeHtml(student.name)}</span>
+                    <span class="text-xs text-white/60">${escapeHtml(student.class)}</span>
+                  </div>
+                  <div class="text-xs text-white/60">${escapeHtml(todayJurnal.date || today)}</div>
+                </div>
+                <span class="text-2xl">${escapeHtml(emoji)}</span>
+              </div>
+              <div class="text-sm text-white/90 mt-1">
+                <i class="fas fa-book-open text-rose-300 mr-1"></i> ${escapeHtml(cerita)}
+              </div>
+            </div>
+          `;
+        }
+      } catch(e) {
+        console.warn('Error loading jurnal for student:', student.name, e);
+      }
+    }
+    
+    countBadge.textContent = `${totalJurnal} siswa`;
+    $('jurnalHariIni').textContent = totalJurnal;
+    
+    if (!hasJurnal) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal hari ini</div>';
+    } else {
+      container.innerHTML = html;
+    }
+    
+  } catch(e) {
+    console.warn('Load jurnal error:', e);
+    document.getElementById('jurnalContainer').innerHTML = 
+      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat jurnal</div>';
   }
 }
 
@@ -2354,7 +2544,7 @@ async function simpanLaporanKondisi() {
 }
 
 // ============================================================
-// WALI - TAMBAH SISWA & BALAS CURHAT
+// WALI - TAMBAH SISWA
 // ============================================================
 function showTambahSiswa() {
   $('siswaKelas').value = currentWali.class || '';
@@ -2426,40 +2616,6 @@ async function deleteStudent(id) {
     hideLoading();
     if (result.success) {
       showToast('✅ Siswa dihapus', 'success');
-      loadWaliData();
-    } else {
-      showToast('❌ ' + result.error, 'error');
-    }
-  } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
-}
-
-async function balasCurhat(curhatId) {
-  const message = prompt('Tulis balasan untuk curhat ini:');
-  if (!message) return;
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
-  showLoading('Mengirim balasan...');
-  try {
-    const result = await callAPI('addCurhatReply', {
-      curhatId: curhatId,
-      studentId: currentWali.id,
-      sender: 'wali',
-      senderName: currentWali.name,
-      message: message,
-      isWali: 'true'
-    });
-    
-    hideLoading();
-    if (result.success) {
-      showToast('✅ Balasan terkirim!', 'success');
       loadWaliData();
     } else {
       showToast('❌ ' + result.error, 'error');
@@ -2610,19 +2766,19 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v17.0 - FULL FEATURES');
+  console.log('🏫 Wali Digital v18.0 - FULL FEATURES');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('💬 FITUR BARU:');
-  console.log('  ✅ Riwayat Curhat seperti aplikasi chatting');
-  console.log('  ✅ Laporan Perbuatan Baik di dashboard wali');
-  console.log('  ✅ Laporan Peta Potensi di dashboard wali');
+  console.log('  ✅ Balas langsung dari riwayat curhat');
+  console.log('  ✅ Nama "Riwayat Percakapan" → "Riwayat Curhat"');
+  console.log('  ✅ Hapus tombol balas di curhat masuk');
+  console.log('  ✅ Laporan Jurnal Perasaan Hari Ini');
   console.log('  ✅ Warna tulisan putih jelas di semua menu');
   console.log('  ✅ Detail percakapan lengkap dengan balasan');
-  console.log('  ✅ Export laporan kondisi ke Excel');
 });
 
 // Enter key untuk login
