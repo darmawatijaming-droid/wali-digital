@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-  <!-- SheetJS untuk export Excel -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,6 +31,8 @@
     .btn-glass-purple:hover { background: rgba(168,85,247,0.3); border-color: rgba(168,85,247,0.35); box-shadow: 0 8px 32px rgba(168,85,247,0.3); }
     .btn-glass-orange { background: rgba(251,146,60,0.2); border-color: rgba(251,146,60,0.25); }
     .btn-glass-orange:hover { background: rgba(251,146,60,0.3); border-color: rgba(251,146,60,0.35); box-shadow: 0 8px 32px rgba(251,146,60,0.3); }
+    .btn-glass-pink { background: rgba(236,72,153,0.2); border-color: rgba(236,72,153,0.25); }
+    .btn-glass-pink:hover { background: rgba(236,72,153,0.3); border-color: rgba(236,72,153,0.35); box-shadow: 0 8px 32px rgba(236,72,153,0.3); }
     .input-glass { background: rgba(255,255,255,0.06); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 18px; width: 100%; font-size: 14px; color: white; transition: all 0.3s; font-family: 'Inter', sans-serif; }
     .input-glass::placeholder { color: rgba(255,255,255,0.4); }
     .input-glass:focus { outline: none; border-color: rgba(74,155,199,0.5); background: rgba(255,255,255,0.1); box-shadow: 0 0 0 4px rgba(74,155,199,0.1); }
@@ -98,22 +99,35 @@
     @keyframes spin { to { transform: rotate(360deg); } }
     .loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 4000; }
     .loading-box { background: rgba(15,15,26,0.9); padding: 30px 40px; border-radius: 20px; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
-    .reply-wali { background: rgba(168,85,247,0.1); border-left: 3px solid rgba(168,85,247,0.5); }
-    .reply-siswa { background: rgba(59,130,246,0.1); border-left: 3px solid rgba(59,130,246,0.5); }
+    .reply-wali { background: rgba(168,85,247,0.15); border-left: 3px solid rgba(168,85,247,0.5); }
+    .reply-siswa { background: rgba(59,130,246,0.15); border-left: 3px solid rgba(59,130,246,0.5); }
     .laporan-card { transition: all 0.3s; }
     .laporan-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-    /* Warna teks putih untuk semua elemen teks */
-    .text-white-force { color: #ffffff !important; }
-    .text-white-force * { color: #ffffff !important; }
+    /* Warna teks putih untuk semua elemen curhat */
     .curhat-text { color: #ffffff !important; }
+    .curhat-text * { color: #ffffff !important; }
     .curhat-text .text-glass-muted { color: rgba(255,255,255,0.6) !important; }
     .curhat-text .text-glass { color: #ffffff !important; }
-    .curhat-text .text-glass-muted { color: rgba(255,255,255,0.6) !important; }
     .curhat-text .badge-glass { color: rgba(255,255,255,0.8) !important; }
     .curhat-text .badge-glass-red { color: #f0a0a5 !important; }
     .curhat-text .badge-glass-yellow { color: #d4a017 !important; }
     .curhat-text .badge-glass-green { color: #6db8a0 !important; }
     .curhat-text .badge-glass-blue { color: #6db8e0 !important; }
+    .curhat-text .badge-glass-purple { color: #9db8e8 !important; }
+    .curhat-text .badge-glass-pink { color: #f472b6 !important; }
+    .curhat-text .text-purple-300 { color: #d8b4fe !important; }
+    .curhat-text .text-blue-300 { color: #93c5fd !important; }
+    .curhat-text .text-green-300 { color: #6ee7b7 !important; }
+    .curhat-text .text-yellow-300 { color: #fcd34d !important; }
+    .curhat-text .text-red-300 { color: #fca5a5 !important; }
+    .curhat-text .text-pink-300 { color: #f9a8d4 !important; }
+    /* Warna untuk reply */
+    .reply-wali .text-white, .reply-wali .text-white\\/90, .reply-wali .text-white\\/60,
+    .reply-siswa .text-white, .reply-siswa .text-white\\/90, .reply-siswa .text-white\\/60 {
+      color: #ffffff !important;
+    }
+    .reply-wali .text-purple-300 { color: #d8b4fe !important; }
+    .reply-siswa .text-blue-300 { color: #93c5fd !important; }
   </style>
 </head>
 <body>
@@ -323,6 +337,32 @@
       </div>
       <div id="laporanKondisiContainer" class="space-y-2 max-h-60 overflow-y-auto">
         <div class="text-white/60 text-sm text-center py-4">Belum ada laporan</div>
+      </div>
+    </div>
+
+    <!-- ===== PETA POTENSI SISWA ===== -->
+    <div class="glass p-5 mb-4">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-white">
+          <i class="fas fa-compass text-orange-300 mr-2"></i>Peta Potensi Siswa
+        </h3>
+        <span class="badge-glass badge-glass-orange" id="potensiCount">0 siswa</span>
+      </div>
+      <div id="potensiContainer" class="space-y-2 max-h-60 overflow-y-auto">
+        <div class="text-white/60 text-sm text-center py-4">Belum ada data potensi</div>
+      </div>
+    </div>
+
+    <!-- ===== PERBUATAN BAIK SISWA ===== -->
+    <div class="glass p-5 mb-4">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="font-bold text-white">
+          <i class="fas fa-star text-yellow-300 mr-2"></i>Perbuatan Baik Siswa
+        </h3>
+        <span class="badge-glass badge-glass-yellow" id="perbuatanCount">0 hari ini</span>
+      </div>
+      <div id="perbuatanContainer" class="space-y-2 max-h-60 overflow-y-auto">
+        <div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik</div>
       </div>
     </div>
 
@@ -662,6 +702,8 @@ let curhatData = {};
 let dateInterval = null;
 let currentCurhatId = null;
 let laporanDataCache = [];
+let potensiDataCache = [];
+let perbuatanDataCache = [];
 
 // ============================================================
 // UTILITY FUNCTIONS
@@ -1581,7 +1623,7 @@ async function simpanPotensi() {
 }
 
 // ============================================================
-// WALI FUNCTIONS - DENGAN LAPORAN KONDISI
+// WALI FUNCTIONS - DENGAN LAPORAN KONDISI, POTENSI, PERBUATAN BAIK
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
@@ -1610,6 +1652,8 @@ async function loadWaliData() {
     renderCurhatInbox(waliCurhat);
     
     await loadLaporanKondisi(students);
+    await loadPotensiSiswa(students);
+    await loadPerbuatanBaik(students);
     
     hideLoading();
   } catch(e) {
@@ -1751,6 +1795,155 @@ async function loadLaporanKondisi(students) {
     console.warn('Load laporan kondisi error:', e);
     document.getElementById('laporanKondisiContainer').innerHTML = 
       '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat laporan</div>';
+  }
+}
+
+// ============================================================
+// PETA POTENSI SISWA - LOAD & DISPLAY
+// ============================================================
+async function loadPotensiSiswa(students) {
+  try {
+    const container = document.getElementById('potensiContainer');
+    const countBadge = document.getElementById('potensiCount');
+    potensiDataCache = [];
+    
+    if (!students || students.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
+      countBadge.textContent = '0 siswa';
+      return;
+    }
+    
+    let html = '';
+    let hasPotensi = false;
+    let potensiCount = 0;
+    
+    for (const student of students) {
+      try {
+        const potensi = await callAPI('getPotensi', { studentId: student.id });
+        
+        if (potensi && potensi.id) {
+          hasPotensi = true;
+          potensiCount++;
+          
+          potensiDataCache.push({
+            nama: student.name,
+            kelas: student.class,
+            minat: potensi.minat || '-',
+            gayaBelajar: potensi.gaya_belajar || '-',
+            citaCita: potensi.cita_cita || '-',
+            karakter: potensi.kekuatan_karakter || '-'
+          });
+          
+          html += `
+            <div class="glass p-3 border-l-4 border-orange-400">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-semibold text-white">${escapeHtml(student.name)}</div>
+                  <div class="text-xs text-white/60">${escapeHtml(student.class)}</div>
+                </div>
+                <span class="badge-glass badge-glass-orange">🎯 ${escapeHtml(potensi.minat || 'Belum diisi')}</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 mt-2">
+                <div>
+                  <div class="text-xs text-white/60">Gaya Belajar</div>
+                  <div class="text-sm text-white">${escapeHtml(potensi.gaya_belajar || '-')}</div>
+                </div>
+                <div>
+                  <div class="text-xs text-white/60">Karakter</div>
+                  <div class="text-sm text-white">${escapeHtml(potensi.kekuatan_karakter || '-')}</div>
+                </div>
+              </div>
+              <div class="text-xs text-white/60 mt-1">💭 Cita-cita: ${escapeHtml(potensi.cita_cita || 'Belum diisi')}</div>
+            </div>
+          `;
+        }
+      } catch(e) {
+        console.warn('Error loading potensi for student:', student.name, e);
+      }
+    }
+    
+    countBadge.textContent = `${potensiCount} siswa`;
+    
+    if (!hasPotensi) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada data potensi</div>';
+    } else {
+      container.innerHTML = html;
+    }
+    
+  } catch(e) {
+    console.warn('Load potensi error:', e);
+    document.getElementById('potensiContainer').innerHTML = 
+      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat data potensi</div>';
+  }
+}
+
+// ============================================================
+// PERBUATAN BAIK SISWA - LOAD & DISPLAY
+// ============================================================
+async function loadPerbuatanBaik(students) {
+  try {
+    const container = document.getElementById('perbuatanContainer');
+    const countBadge = document.getElementById('perbuatanCount');
+    perbuatanDataCache = [];
+    
+    if (!students || students.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
+      countBadge.textContent = '0 hari ini';
+      return;
+    }
+    
+    let html = '';
+    let hasPerbuatan = false;
+    let totalPerbuatan = 0;
+    const today = new Date().toISOString().split('T')[0];
+    
+    for (const student of students) {
+      try {
+        const perbuatan = await callAPI('getPerbuatanHariIni', { studentId: student.id });
+        
+        if (perbuatan && perbuatan.id) {
+          hasPerbuatan = true;
+          totalPerbuatan++;
+          
+          perbuatanDataCache.push({
+            nama: student.name,
+            kelas: student.class,
+            action: perbuatan.action || '-',
+            date: perbuatan.date || today
+          });
+          
+          html += `
+            <div class="glass p-3 border-l-4 border-yellow-400">
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="font-semibold text-white">${escapeHtml(student.name)}</div>
+                  <div class="text-xs text-white/60">${escapeHtml(student.class)}</div>
+                </div>
+                <span class="badge-glass badge-glass-yellow">⭐ ${escapeHtml(perbuatan.date || today)}</span>
+              </div>
+              <div class="text-sm text-white/90 mt-1">
+                <i class="fas fa-star text-yellow-300 mr-1"></i> ${escapeHtml(perbuatan.action)}
+              </div>
+            </div>
+          `;
+        }
+      } catch(e) {
+        console.warn('Error loading perbuatan for student:', student.name, e);
+      }
+    }
+    
+    countBadge.textContent = `${totalPerbuatan} hari ini`;
+    
+    if (!hasPerbuatan) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik hari ini</div>';
+    } else {
+      container.innerHTML = html;
+    }
+    
+  } catch(e) {
+    console.warn('Load perbuatan error:', e);
+    document.getElementById('perbuatanContainer').innerHTML = 
+      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat data perbuatan baik</div>';
   }
 }
 
@@ -2158,19 +2351,19 @@ document.addEventListener('DOMContentLoaded', function() {
   setTimeout(checkConnection, 1500);
   setInterval(checkConnection, 30000);
   
-  console.log('🏫 Wali Digital v15.0 - FULL FEATURES');
+  console.log('🏫 Wali Digital v16.0 - FULL FEATURES');
   console.log('📌 Default Login:');
   console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
   console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
   console.log('  Wali: wali@walidigital.com / d4Rm@app');
   console.log('  Admin: admin@walidigital.com / d4Rm@app');
   console.log('💬 FITUR BARU:');
-  console.log('  ✅ Warna tulisan putih di semua menu curhat');
+  console.log('  ✅ Warna tulisan putih di semua menu curhat & balasan');
   console.log('  ✅ Export laporan kondisi ke Excel');
+  console.log('  ✅ Peta Potensi siswa di dashboard wali');
+  console.log('  ✅ Perbuatan Baik siswa di dashboard wali');
   console.log('  ✅ Siswa bisa membalas balasan wali di curhat');
   console.log('  ✅ Laporan kondisi siswa di dashboard wali');
-  console.log('  ✅ Nilai akademik, sikap, catatan khusus');
-  console.log('  ✅ Tambah laporan kondisi dari dashboard wali');
 });
 
 // Enter key untuk login
