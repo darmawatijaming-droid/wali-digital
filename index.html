@@ -2,8 +2,19 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
   <title>Wali Digital - Premium</title>
+  
+  <!-- PWA META TAGS -->
+  <meta name="theme-color" content="#0f0f1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wali Digital">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Sistem Manajemen Siswa Premium - Wali Digital">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='40' fill='%234a9bc7'/%3E%3Ctext x='96' y='130' font-size='100' text-anchor='middle' fill='white'%3E%F0%9F%8F%AB%3C/text%3E%3C/svg%3E">
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -11,7 +22,23 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: #0f0f1a; position: relative; overflow-x: hidden; }
+    body { font-family: 'Inter', sans-serif; min-height: 100vh; background: #0f0f1a; position: relative; overflow-x: hidden; -webkit-tap-highlight-color: transparent; -webkit-font-smoothing: antialiased; }
+    
+    /* ===== PWA / MOBILE SAFE AREA ===== */
+    body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); }
+    .safe-bottom { padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+    
+    /* ===== MOBILE RESPONSIVE IMPROVEMENTS ===== */
+    @media (max-width: 767px) {
+      input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
+      .btn-glass { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+      .sidebar-menu-item { min-height: 48px; }
+      .modal-glass { max-height: 85vh; max-height: 85dvh; }
+      .glass:active { transform: scale(0.98); }
+      .chat-container { max-height: 50vh; }
+      .dashboard-content { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
+    }
+    
     .bg-hero { position: fixed; inset: 0; z-index: 0; background: url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1920&q=80') center/cover no-repeat; filter: brightness(0.6) saturate(0.8); transform: scale(1.05); }
     .bg-overlay { position: fixed; inset: 0; z-index: 1; background: radial-gradient(ellipse at 20% 50%, rgba(74,155,199,0.3) 0%, transparent 60%), radial-gradient(ellipse at 80% 50%, rgba(123,156,214,0.2) 0%, transparent 60%), linear-gradient(180deg, rgba(15,15,26,0.4) 0%, rgba(15,15,26,0.6) 100%); backdrop-filter: blur(2px); }
     .glass { background: rgba(255,255,255,0.08); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); border: 1px solid rgba(255,255,255,0.12); border-radius: 24px; box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1); transition: all 0.4s cubic-bezier(0.4,0,0.2,1); }
@@ -77,7 +104,7 @@
     ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.25); }
     .hidden { display: none !important; }
-    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 16px; font-weight: 600; font-size: 14px; z-index: 3000; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1); max-width: 90%; text-align: center; }
+    .toast { position: fixed; bottom: 24px; bottom: calc(24px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); padding: 14px 28px; border-radius: 16px; font-weight: 600; font-size: 14px; z-index: 3000; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1); max-width: 90%; text-align: center; }
     .toast-success { background: rgba(74,155,122,0.2); color: #6db8a0; border-color: rgba(74,155,122,0.2); }
     .toast-error { background: rgba(232,132,138,0.2); color: #f0a0a5; border-color: rgba(232,132,138,0.2); }
     .toast-warning { background: rgba(212,160,23,0.2); color: #d4a017; border-color: rgba(212,160,23,0.2); }
@@ -155,7 +182,7 @@
     .jurnal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
     .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
     .sidebar-overlay.active { display: block; }
-    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: rgba(15,15,26,0.95); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.08); z-index: 1000; transition: left 0.3s cubic-bezier(0.4,0,0.2,1); padding: 20px 0; overflow-y: auto; display: flex; flex-direction: column; }
+    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; height: 100dvh; background: rgba(15,15,26,0.95); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.08); z-index: 1000; transition: left 0.3s cubic-bezier(0.4,0,0.2,1); padding: 20px 0; padding-top: calc(20px + env(safe-area-inset-top)); padding-bottom: calc(20px + env(safe-area-inset-bottom)); overflow-y: auto; display: flex; flex-direction: column; }
     .sidebar.open { left: 0; }
     .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px; }
     .sidebar-header h2 { font-size: 20px; font-weight: 700; color: white; }
@@ -201,6 +228,11 @@
     .cv-item:last-child { border-bottom: none; }
     .cv-label { width: 120px; font-size: 13px; color: rgba(255,255,255,0.4); flex-shrink: 0; }
     .cv-value { font-size: 13px; color: rgba(255,255,255,0.8); word-break: break-word; }
+    
+    /* PWA Install Button */
+    #pwaInstallBtn { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); right: 16px; z-index: 2500; display: none; padding: 12px 20px; border-radius: 50px; background: linear-gradient(135deg, #4a9bc7, #7b9cd6); color: white; font-weight: 700; font-size: 13px; border: none; box-shadow: 0 8px 32px rgba(74,155,199,0.5); cursor: pointer; align-items: center; gap: 8px; animation: pulse 2s infinite; }
+    #pwaInstallBtn.show { display: flex; }
+    #pwaInstallBtn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(74,155,199,0.6); }
   </style>
 </head>
 <body>
@@ -213,6 +245,11 @@
 <div class="orb orb-3"></div>
 
 <div id="toastContainer"></div>
+
+<!-- PWA INSTALL BUTTON -->
+<button id="pwaInstallBtn" onclick="installPWA()">
+  <i class="fas fa-download"></i> Install Aplikasi
+</button>
 
 <div id="loadingOverlay" class="loading-overlay hidden">
   <div class="loading-box">
@@ -274,12 +311,15 @@
       <i class="fas fa-comments"></i> Riwayat Curhat
       <span class="badge" id="sidebarChatBadge">0</span>
     </button>
-    <!-- MENU BARU KHUSUS WALI -->
     <button class="sidebar-menu-item" data-section="waliHapalan" onclick="showWaliSection('waliHapalan')">
       <i class="fas fa-quran"></i> Hapalan Juz 30
     </button>
     <button class="sidebar-menu-item" data-section="waliKokurikuler" onclick="showWaliSection('waliKokurikuler')">
       <i class="fas fa-laptop-code"></i> Nilai Kokurikuler
+    </button>
+    <!-- MENU BARU: CATATAN KASUS -->
+    <button class="sidebar-menu-item" data-section="waliKasus" onclick="showWaliSection('waliKasus')">
+      <i class="fas fa-exclamation-triangle"></i> Catatan Kasus
     </button>
     <button class="sidebar-menu-item" data-section="waliHapusChat" onclick="showWaliSection('waliHapusChat')">
       <i class="fas fa-trash-alt"></i> Hapus Riwayat Chat
@@ -302,7 +342,7 @@
 
 <div id="app" class="relative z-10">
   
-  <div class="flex justify-end items-center gap-3 p-3">
+  <div class="flex justify-end items-center gap-3 p-3" style="padding-top: calc(12px + env(safe-area-inset-top));">
     <div class="status-indicator">
       <span class="status-dot offline" id="statusDot"></span>
       <span id="statusText" class="text-white">Offline</span>
@@ -380,7 +420,6 @@
         </div>
       </div>
 
-      <!-- ===== SISWA: PROFIL DIRI (TANPA UPLOAD FOTO) ===== -->
       <div id="studentProfilSection" class="section-content hidden">
         <div class="glass p-5">
           <h3 class="font-bold text-white mb-4">
@@ -445,7 +484,6 @@
         </div>
       </div>
 
-      <!-- ===== SISWA: PETA POTENSI ===== -->
       <div id="studentPotensiSection" class="section-content">
         <div class="glass p-5">
           <h3 class="font-bold text-white mb-3">
@@ -482,7 +520,6 @@
         </div>
       </div>
 
-      <!-- ===== SISWA: CURHAT ===== -->
       <div id="studentCurhatSection" class="section-content hidden">
         <div class="glass p-5">
           <h3 class="font-bold text-white mb-3">
@@ -502,7 +539,6 @@
         </div>
       </div>
 
-      <!-- ===== SISWA: JURNAL ===== -->
       <div id="studentJurnalSection" class="section-content hidden">
         <div class="glass p-5">
           <h3 class="font-bold text-white mb-3">
@@ -524,7 +560,6 @@
         </div>
       </div>
 
-      <!-- ===== SISWA: PERBUATAN BAIK ===== -->
       <div id="studentPerbuatanSection" class="section-content hidden">
         <div class="glass p-5">
           <h3 class="font-bold text-white mb-3">
@@ -554,7 +589,6 @@
         </div>
       </div>
 
-      <!-- ===== SISWA: RIWAYAT CURHAT ===== -->
       <div id="studentRiwayatSection" class="section-content hidden">
         <div class="glass p-5 curhat-text">
           <div class="flex justify-between items-center mb-3">
@@ -697,7 +731,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: HAPALAN (BARU) ===== -->
       <div id="waliHapalanSection" class="section-content hidden">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -719,7 +752,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: KOKURIKULER (BARU) ===== -->
       <div id="waliKokurikulerSection" class="section-content hidden">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -737,6 +769,28 @@
           </div>
           <div id="kokurikulerContainer" class="space-y-2 max-h-96 overflow-y-auto">
             <div class="text-white/60 text-sm text-center py-4">Belum ada nilai kokurikuler</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: CATATAN KASUS (BARU) ===== -->
+      <div id="waliKasusSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-exclamation-triangle text-orange-300 mr-2"></i>Catatan Kasus
+            </h3>
+            <div class="flex gap-2">
+              <button onclick="exportKasusExcel()" class="btn-glass btn-glass-success text-sm py-1.5 px-3">
+                <i class="fas fa-file-excel mr-1"></i> Export
+              </button>
+              <button onclick="showTambahKasus()" class="btn-glass btn-glass-orange text-sm py-1.5 px-3">
+                <i class="fas fa-plus mr-1"></i> Tambah
+              </button>
+            </div>
+          </div>
+          <div id="kasusContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada catatan kasus</div>
           </div>
         </div>
       </div>
@@ -982,7 +1036,6 @@
     </div>
   </div>
 
-  <!-- ===== MODAL HAPALAN ===== -->
   <div id="tambahHapalanModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahHapalanModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
@@ -1023,7 +1076,7 @@
     </div>
   </div>
 
-  <!-- ===== MODAL KOKURIKULER ===== -->
+  <!-- ===== MODAL KOKURIKULER (DROPDOWN DESKRIPSI) ===== -->
   <div id="tambahKokurikulerModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahKokurikulerModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
@@ -1053,7 +1106,12 @@
         </div>
         <div>
           <label class="text-sm text-white/60 font-medium">Deskripsi Nilai</label>
-          <textarea id="kokurikulerDeskripsi" class="input-glass" rows="2" placeholder="Contoh: Siswa sangat aktif dan memimpin jalannya kerja bakti..."></textarea>
+          <select id="kokurikulerDeskripsi" class="select-glass">
+            <option value="">-- Pilih Deskripsi --</option>
+            <option>Mulai Berkembang</option>
+            <option>Berkembang Sesuai Harapan</option>
+            <option>Sangat Berkembang</option>
+          </select>
         </div>
         <button onclick="simpanKokurikuler()" class="btn-glass btn-glass-primary w-full mt-2">
           <i class="fas fa-save mr-2"></i>Simpan Nilai
@@ -1062,9 +1120,157 @@
     </div>
   </div>
 
+  <!-- ===== MODAL CATATAN KASUS (BARU) ===== -->
+  <div id="tambahKasusModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahKasusModal')">
+    <div class="modal-glass">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-exclamation-triangle text-orange-300 mr-2"></i>Catatan Kasus
+        </h3>
+        <button onclick="closeModal('tambahKasusModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="text-sm text-white/60 font-medium">Tanggal (otomatis)</label>
+          <input id="kasusTanggal" class="input-glass" readonly style="opacity:0.7;cursor:not-allowed;">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Nama Siswa</label>
+          <select id="kasusSiswaSelect" class="select-glass">
+            <option value="">-- Pilih Siswa --</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Kelas (otomatis)</label>
+          <input id="kasusKelas" class="input-glass" readonly placeholder="Terisi otomatis" style="opacity:0.7;cursor:not-allowed;">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Keterangan / Kasus</label>
+          <textarea id="kasusKeterangan" class="input-glass" rows="3" placeholder="Deskripsi kasus..."></textarea>
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Solusi / Tindakan</label>
+          <textarea id="kasusSolusi" class="input-glass" rows="3" placeholder="Solusi atau tindakan yang diambil..."></textarea>
+        </div>
+        <button onclick="simpanKasus()" class="btn-glass btn-glass-orange w-full mt-2">
+          <i class="fas fa-save mr-2"></i>Simpan Catatan
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
+// ============================================================
+// PWA: SERVICE WORKER REGISTRATION & INSTALL PROMPT
+// ============================================================
+let deferredPrompt = null;
+
+// Register Service Worker (inline via Blob)
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE_NAME = 'wali-digital-v1';
+    const URLS_TO_CACHE = [
+      '/',
+      'https://cdn.tailwindcss.com',
+      'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+      'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap'
+    ];
+    self.addEventListener('install', event => {
+      self.skipWaiting();
+      event.waitUntil(
+        caches.open(CACHE_NAME).then(cache => cache.addAll(URLS_TO_CACHE).catch(() => {}))
+      );
+    });
+    self.addEventListener('activate', event => {
+      event.waitUntil(clients.claim());
+    });
+    self.addEventListener('fetch', event => {
+      if (event.request.method !== 'GET') return;
+      event.respondWith(
+        caches.match(event.request).then(cached => {
+          return cached || fetch(event.request).then(response => {
+            if (response.ok && event.request.url.startsWith('http')) {
+              const clone = response.clone();
+              caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+            }
+            return response;
+          }).catch(() => cached);
+        })
+      );
+    });
+  `;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).then(() => {
+    console.log('✅ Service Worker registered');
+  }).catch(err => {
+    console.warn('SW registration failed:', err);
+  });
+}
+
+// Manifest inline
+(function() {
+  const manifest = {
+    name: 'Wali Digital - Premium',
+    short_name: 'Wali Digital',
+    description: 'Sistem Manajemen Siswa Premium',
+    start_url: '.',
+    display: 'standalone',
+    background_color: '#0f0f1a',
+    theme_color: '#0f0f1a',
+    orientation: 'portrait',
+    icons: [
+      {
+        src: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192"><rect width="192" height="192" rx="40" fill="#4a9bc7"/><text x="96" y="130" font-size="100" text-anchor="middle" fill="white">🏫</text></svg>'),
+        sizes: '192x192',
+        type: 'image/svg+xml',
+        purpose: 'any'
+      },
+      {
+        src: 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="#4a9bc7"/><text x="256" y="340" font-size="260" text-anchor="middle" fill="white">🏫</text></svg>'),
+        sizes: '512x512',
+        type: 'image/svg+xml',
+        purpose: 'any'
+      }
+    ]
+  };
+  const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.querySelector('link[rel="manifest"]');
+  if (link) link.href = url;
+})();
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const btn = document.getElementById('pwaInstallBtn');
+  if (btn) btn.classList.add('show');
+});
+
+function installPWA() {
+  const btn = document.getElementById('pwaInstallBtn');
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choice) => {
+      if (choice.outcome === 'accepted') {
+        showToast('✅ Aplikasi berhasil diinstall!', 'success');
+      }
+      deferredPrompt = null;
+      if (btn) btn.classList.remove('show');
+    });
+  } else {
+    showToast('ℹ️ Gunakan menu browser > "Add to Home Screen"', 'warning');
+  }
+}
+
+window.addEventListener('appinstalled', () => {
+  const btn = document.getElementById('pwaInstallBtn');
+  if (btn) btn.classList.remove('show');
+  showToast('🎉 Wali Digital sudah terinstall!', 'success');
+});
+
 // ============================================================
 // CONFIGURATION
 // ============================================================
@@ -1102,6 +1308,7 @@ let allPotensiCache = [];
 let allProfilCache = [];
 let allHapalanCache = [];
 let allKokurikulerCache = [];
+let allKasusCache = [];
 let dataLoaded = false;
 let loginInProgress = false;
 let currentStudentSection = 'studentPotensi';
@@ -1168,6 +1375,7 @@ function showWaliSection(section) {
   if (section === 'waliHapusChat') loadHapusChatList();
   if (section === 'waliHapalan') loadHapalanData();
   if (section === 'waliKokurikuler') loadKokurikulerData();
+  if (section === 'waliKasus') loadKasusData();
   currentWaliSection = section;
   closeSidebar();
 }
@@ -1217,7 +1425,13 @@ function closeModal(id) {
     ['hapalanCatatan'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
   }
   if (id === 'tambahKokurikulerModal') {
-    ['kokurikulerPertemuan','kokurikulerTema','kokurikulerTopik','kokurikulerDeskripsi'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
+    ['kokurikulerPertemuan','kokurikulerTema','kokurikulerTopik'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
+    const d = $('kokurikulerDeskripsi'); if (d) d.value = '';
+  }
+  if (id === 'tambahKasusModal') {
+    ['kasusKeterangan','kasusSolusi'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
+    const s = $('kasusSiswaSelect'); if (s) s.value = '';
+    const k = $('kasusKelas'); if (k) k.value = '';
   }
 }
 
@@ -1281,7 +1495,6 @@ async function callAPI(action, params = {}) {
         return { ok: true };
       }
 
-      // ---------- USERS ----------
       case 'getUserByEmail': {
         const { data, error } = await _supabase.from('users').select('*').eq('email', params.email).maybeSingle();
         if (error) throw error;
@@ -1305,7 +1518,6 @@ async function callAPI(action, params = {}) {
         return { success: true };
       }
 
-      // ---------- STUDENTS ----------
       case 'getAllStudents': {
         const { data, error } = await _supabase.from('students').select('*');
         if (error) throw error;
@@ -1334,7 +1546,6 @@ async function callAPI(action, params = {}) {
         return { success: true };
       }
 
-      // ---------- PROFIL ----------
       case 'getProfil': {
         const { data, error } = await _supabase.from('profil').select('*').eq('student_id', params.studentId).maybeSingle();
         if (error) throw error;
@@ -1363,7 +1574,6 @@ async function callAPI(action, params = {}) {
         return { success: true, data: result };
       }
 
-      // ---------- POTENSI ----------
       case 'getPotensi': {
         const { data, error } = await _supabase.from('potensi').select('*').eq('student_id', params.studentId).maybeSingle();
         if (error) throw error;
@@ -1392,7 +1602,6 @@ async function callAPI(action, params = {}) {
         return { success: true };
       }
 
-      // ---------- CURHAT ----------
       case 'getAllCurhat': {
         const { data, error } = await _supabase.from('curhat').select('*').order('created_at', { ascending: false });
         if (error) throw error;
@@ -1416,7 +1625,6 @@ async function callAPI(action, params = {}) {
         return { success: true };
       }
 
-      // ---------- CURHAT REPLIES ----------
       case 'getCurhatReplies': {
         const { data, error } = await _supabase.from('curhat_replies').select('*').eq('curhat_id', params.curhatId).order('created_at', { ascending: true });
         if (error) throw error;
@@ -1443,7 +1651,6 @@ async function callAPI(action, params = {}) {
         return !data || data.length === 0;
       }
 
-      // ---------- HAPUS CURHAT ----------
       case 'deleteCurhatByStudent': {
         const { data: curhats } = await _supabase.from('curhat').select('id').eq('student_id', params.studentId);
         if (curhats && curhats.length > 0) {
@@ -1456,7 +1663,6 @@ async function callAPI(action, params = {}) {
         return { success: true };
       }
 
-      // ---------- JURNAL ----------
       case 'getAllJurnal': {
         const { data, error } = await _supabase.from('jurnal').select('*').order('created_at', { ascending: false });
         if (error) throw error;
@@ -1470,7 +1676,6 @@ async function callAPI(action, params = {}) {
         return { success: true, data };
       }
 
-      // ---------- PERBUATAN BAIK ----------
       case 'getAllPerbuatanBaik': {
         const { data, error } = await _supabase.from('perbuatan_baik').select('*').order('created_at', { ascending: false });
         if (error) throw error;
@@ -1485,7 +1690,6 @@ async function callAPI(action, params = {}) {
         return { success: true, data };
       }
 
-      // ---------- LAPORAN KONDISI ----------
       case 'getStudentLaporanKondisi': {
         const { data, error } = await _supabase.from('laporan_kondisi').select('*').eq('student_id', params.studentId).order('created_at', { ascending: false }).limit(1).maybeSingle();
         if (error) throw error;
@@ -1509,7 +1713,6 @@ async function callAPI(action, params = {}) {
         return { success: true };
       }
 
-      // ---------- HAPALAN ----------
       case 'getAllHapalan': {
         const { data, error } = await _supabase.from('hapalan').select('*').order('created_at', { ascending: false });
         if (error) throw error;
@@ -1523,7 +1726,6 @@ async function callAPI(action, params = {}) {
         return { success: true, data };
       }
 
-      // ---------- KOKURIKULER ----------
       case 'getAllKokurikuler': {
         const { data, error } = await _supabase.from('kokurikuler').select('*').order('created_at', { ascending: false });
         if (error) throw error;
@@ -1535,6 +1737,25 @@ async function callAPI(action, params = {}) {
         }).select().single();
         if (error) return { success: false, error: error.message };
         return { success: true, data };
+      }
+
+      // ---------- CATATAN KASUS ----------
+      case 'getAllKasus': {
+        const { data, error } = await _supabase.from('catatan_kasus').select('*').order('tanggal', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addKasus': {
+        const { data, error } = await _supabase.from('catatan_kasus').insert({
+          student_id: params.studentId, tanggal: params.tanggal, keterangan: params.keterangan, solusi: params.solusi
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+      case 'deleteKasus': {
+        const { error } = await _supabase.from('catatan_kasus').delete().eq('id', params.kasusId);
+        if (error) return { success: false, error: error.message };
+        return { success: true };
       }
 
       default:
@@ -1554,7 +1775,8 @@ async function loadAllDataParallel() {
   if (dataLoaded && allStudentsCache.length > 0) {
     return {
       students: allStudentsCache, curhat: allCurhatCache, jurnal: allJurnalCache, perbuatan: allPerbuatanCache,
-      potensi: allPotensiCache, profil: allProfilCache, hapalan: allHapalanCache, kokurikuler: allKokurikulerCache
+      potensi: allPotensiCache, profil: allProfilCache, hapalan: allHapalanCache, kokurikuler: allKokurikulerCache,
+      kasus: allKasusCache
     };
   }
   const results = await Promise.all([
@@ -1565,7 +1787,8 @@ async function loadAllDataParallel() {
     callAPI('getAllPotensi').catch(() => []),
     callAPI('getAllProfil').catch(() => []),
     callAPI('getAllHapalan').catch(() => []),
-    callAPI('getAllKokurikuler').catch(() => [])
+    callAPI('getAllKokurikuler').catch(() => []),
+    callAPI('getAllKasus').catch(() => [])
   ]);
   allStudentsCache = results[0] || [];
   allCurhatCache = results[1] || [];
@@ -1575,10 +1798,12 @@ async function loadAllDataParallel() {
   allProfilCache = results[5] || [];
   allHapalanCache = results[6] || [];
   allKokurikulerCache = results[7] || [];
+  allKasusCache = results[8] || [];
   dataLoaded = allStudentsCache.length > 0;
   return {
     students: allStudentsCache, curhat: allCurhatCache, jurnal: allJurnalCache, perbuatan: allPerbuatanCache,
-    potensi: allPotensiCache, profil: allProfilCache, hapalan: allHapalanCache, kokurikuler: allKokurikulerCache
+    potensi: allPotensiCache, profil: allProfilCache, hapalan: allHapalanCache, kokurikuler: allKokurikulerCache,
+    kasus: allKasusCache
   };
 }
 
@@ -1736,7 +1961,7 @@ function logout() {
     dataLoaded = false;
     allStudentsCache = []; allCurhatCache = []; allJurnalCache = [];
     allPerbuatanCache = []; allPotensiCache = []; allProfilCache = [];
-    allHapalanCache = []; allKokurikulerCache = [];
+    allHapalanCache = []; allKokurikulerCache = []; allKasusCache = [];
     laporanDataCache = []; potensiDataCache = []; perbuatanDataCache = []; chatDataCache = [];
     currentCurhatId = null; chatCurrentStudentId = null;
     hide('dashboardContent'); hide('studentDashboard'); hide('waliDashboard'); hide('adminDashboard');
@@ -2221,6 +2446,7 @@ async function loadWaliData() {
     
     if (currentWaliSection === 'waliHapalan') loadHapalanData();
     if (currentWaliSection === 'waliKokurikuler') loadKokurikulerData();
+    if (currentWaliSection === 'waliKasus') loadKasusData();
   } catch(e) {
     showToast('⚠️ Gagal memuat data: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
   } finally { hideLoading(); }
@@ -3008,7 +3234,6 @@ async function loadHapalanData() {
   }
 }
 
-// Fungsi Export Hapalan (BARU)
 function exportHapalanExcel() {
   try {
     if (!allHapalanCache || allHapalanCache.length === 0) {
@@ -3058,7 +3283,7 @@ function exportHapalanExcel() {
 }
 
 // ============================================================
-// FUNGSI KOKURIKULER
+// FUNGSI KOKURIKULER (DROPDOWN DESKRIPSI)
 // ============================================================
 async function showTambahKokurikuler() {
   const select = document.getElementById('kokurikulerSiswaSelect');
@@ -3093,13 +3318,13 @@ async function simpanKokurikuler() {
   const pertemuan = document.getElementById('kokurikulerPertemuan').value.trim();
   const tema = document.getElementById('kokurikulerTema').value.trim();
   const topik = document.getElementById('kokurikulerTopik').value.trim();
-  const deskripsi = document.getElementById('kokurikulerDeskripsi').value.trim();
+  const deskripsi = document.getElementById('kokurikulerDeskripsi').value;
   
   if (!studentId) { showToast('❌ Pilih siswa terlebih dahulu', 'error'); return; }
   if (!pertemuan || isNaN(pertemuan) || parseInt(pertemuan) < 1) { showToast('❌ Masukkan pertemuan ke- (angka)', 'error'); return; }
   if (!tema) { showToast('❌ Tema harus diisi', 'error'); return; }
   if (!topik) { showToast('❌ Topik harus diisi', 'error'); return; }
-  if (!deskripsi) { showToast('❌ Deskripsi nilai harus diisi', 'error'); return; }
+  if (!deskripsi) { showToast('❌ Pilih deskripsi nilai', 'error'); return; }
 
   if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
   showLoading('Menyimpan nilai kokurikuler...');
@@ -3149,7 +3374,13 @@ async function loadKokurikulerData() {
 
       list.sort((a,b) => a.pertemuan_ke - b.pertemuan_ke);
 
-      let innerHtml = list.map(k => `
+      let innerHtml = list.map(k => {
+        let badgeClass = 'badge-glass-blue';
+        if (k.deskripsi_nilai === 'Mulai Berkembang') badgeClass = 'badge-glass-red';
+        else if (k.deskripsi_nilai === 'Berkembang Sesuai Harapan') badgeClass = 'badge-glass-yellow';
+        else if (k.deskripsi_nilai === 'Sangat Berkembang') badgeClass = 'badge-glass-green';
+        
+        return `
         <div class="mt-2 p-2 rounded bg-white/5 border border-white/10">
           <div class="flex justify-between items-center mb-1">
             <span class="text-xs font-bold text-blue-300">Pertemuan ${k.pertemuan_ke}</span>
@@ -3157,9 +3388,13 @@ async function loadKokurikulerData() {
           </div>
           <div class="text-sm font-semibold text-white">${escapeHtml(k.tema)}</div>
           <div class="text-xs text-white/70 mb-1">Topik: ${escapeHtml(k.topik)}</div>
-          <div class="text-xs text-white/90 bg-black/20 p-2 rounded">"${escapeHtml(k.deskripsi_nilai)}"</div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-white/60">Deskripsi:</span>
+            <span class="badge-glass ${badgeClass} text-[10px]">${escapeHtml(k.deskripsi_nilai)}</span>
+          </div>
         </div>
-      `).join('');
+      `;
+      }).join('');
 
       html += `
         <div class="glass p-4 border-l-4 border-blue-400 mb-3">
@@ -3221,11 +3456,214 @@ function exportKokurikulerExcel() {
 
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(excelData);
-    ws['!cols'] = [{ wch: 20 }, { wch: 12 }, { wch: 25 }, { wch: 25 }, { wch: 40 }, { wch: 15 }];
+    ws['!cols'] = [{ wch: 20 }, { wch: 12 }, { wch: 25 }, { wch: 25 }, { wch: 30 }, { wch: 15 }];
     XLSX.utils.book_append_sheet(wb, ws, 'Rekap Kokurikuler');
     const fileName = `Rekap_Kokurikuler_${currentWali.class}_${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(wb, fileName);
     showToast(`✅ Rekap berhasil diexport: ${fileName}`, 'success');
+  } catch(e) {
+    console.error('Export error:', e);
+    showToast('❌ Gagal export: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
+// CATATAN KASUS (BARU)
+// ============================================================
+async function loadKasusData() {
+  const container = document.getElementById('kasusContainer');
+  container.innerHTML = '<div class="text-center py-4"><div class="spinner inline-block"></div></div>';
+  try {
+    if (!dataLoaded) {
+      await loadAllDataParallel();
+    }
+    const students = allStudentsCache.filter(s => s.wali_id === currentWali.id);
+    const studentIds = students.map(s => s.id);
+    const kasusList = allKasusCache.filter(k => studentIds.includes(k.student_id));
+
+    if (kasusList.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada catatan kasus</div>';
+      return;
+    }
+
+    kasusList.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+
+    let html = '';
+    kasusList.forEach(k => {
+      const student = students.find(s => s.id === k.student_id);
+      if (!student) return;
+      
+      html += `
+        <div class="glass p-3 border-l-4 border-orange-400 mb-2">
+          <div class="flex justify-between items-start">
+            <div class="flex-1">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="font-semibold text-white">${escapeHtml(student.name)}</span>
+                <span class="badge-glass badge-glass-blue">${escapeHtml(student.class)}</span>
+                <span class="badge-glass badge-glass-orange">${new Date(k.tanggal).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</span>
+              </div>
+              <div class="mt-2">
+                <div class="text-xs text-white/60 mb-0.5">📋 Keterangan:</div>
+                <div class="text-sm text-white/90 bg-white/5 p-2 rounded">${escapeHtml(k.keterangan)}</div>
+              </div>
+              <div class="mt-2">
+                <div class="text-xs text-white/60 mb-0.5">✅ Solusi/Tindakan:</div>
+                <div class="text-sm text-white/90 bg-green-500/10 p-2 rounded border border-green-500/20">${escapeHtml(k.solusi)}</div>
+              </div>
+            </div>
+            <button onclick="hapusKasus('${k.id}')" class="text-red-400/70 hover:text-red-400 transition text-xs px-2 py-1 ml-2">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+  } catch(e) {
+    console.warn('Load kasus error:', e);
+    container.innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat catatan kasus</div>';
+  }
+}
+
+async function showTambahKasus() {
+  // Set tanggal otomatis (hari ini)
+  const now = new Date();
+  const tanggalStr = now.toLocaleDateString('id-ID', { 
+    weekday: 'long', 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  });
+  document.getElementById('kasusTanggal').value = tanggalStr;
+  document.getElementById('kasusKelas').value = '';
+  document.getElementById('kasusKeterangan').value = '';
+  document.getElementById('kasusSolusi').value = '';
+  
+  const select = document.getElementById('kasusSiswaSelect');
+  select.innerHTML = '<option value="">Memuat data siswa...</option>';
+  select.disabled = true;
+  
+  show('tambahKasusModal');
+  
+  try {
+    const students = await callAPI('getStudentsByWali', { waliId: currentWali.id });
+    select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
+    if (students && students.length > 0) {
+      students.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;
+        option.textContent = `${s.name} (${s.class})`;
+        option.dataset.kelas = s.class;
+        select.appendChild(option);
+      });
+    } else {
+      select.innerHTML = '<option value="">Tidak ada siswa</option>';
+    }
+    
+    // Event: saat siswa dipilih, kelas terisi otomatis
+    select.onchange = function() {
+      const selected = this.options[this.selectedIndex];
+      const kelas = selected.dataset.kelas || '';
+      document.getElementById('kasusKelas').value = kelas;
+    };
+  } catch(e) {
+    select.innerHTML = '<option value="">Gagal memuat siswa</option>';
+    showToast('⚠️ Gagal memuat siswa: ' + e.message, 'error');
+  } finally { select.disabled = false; }
+}
+
+async function simpanKasus() {
+  const studentId = document.getElementById('kasusSiswaSelect').value;
+  const keterangan = document.getElementById('kasusKeterangan').value.trim();
+  const solusi = document.getElementById('kasusSolusi').value.trim();
+  
+  if (!studentId) { showToast('❌ Pilih siswa terlebih dahulu', 'error'); return; }
+  if (!keterangan) { showToast('❌ Keterangan/kasus harus diisi', 'error'); return; }
+  if (!solusi) { showToast('❌ Solusi/tindakan harus diisi', 'error'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
+  
+  showLoading('Menyimpan catatan kasus...');
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const result = await callAPI('addKasus', {
+      studentId, tanggal: today, keterangan, solusi
+    });
+    if (result && result.success) {
+      showToast('✅ Catatan kasus berhasil disimpan!', 'success');
+      closeModal('tambahKasusModal');
+      dataLoaded = false;
+      await loadAllDataParallel();
+      await loadKasusData();
+    } else {
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan catatan'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
+}
+
+async function hapusKasus(kasusId) {
+  if (!confirm('Yakin ingin menghapus catatan kasus ini?')) return;
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
+  showLoading('Menghapus catatan...');
+  try {
+    const result = await callAPI('deleteKasus', { kasusId });
+    if (result && result.success) {
+      showToast('✅ Catatan kasus dihapus', 'success');
+      dataLoaded = false;
+      await loadAllDataParallel();
+      await loadKasusData();
+    } else {
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menghapus'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
+}
+
+function exportKasusExcel() {
+  try {
+    if (!allKasusCache || allKasusCache.length === 0) {
+      showToast('❌ Tidak ada catatan kasus untuk diexport', 'error'); return;
+    }
+    const students = allStudentsCache.filter(s => s.wali_id === currentWali.id);
+    const studentIds = students.map(s => s.id);
+    const kasusList = allKasusCache.filter(k => studentIds.includes(k.student_id));
+
+    if (kasusList.length === 0) {
+      showToast('❌ Tidak ada catatan kasus untuk diexport', 'error'); return;
+    }
+
+    kasusList.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal));
+
+    const excelData = [
+      ['REKAP CATATAN KASUS SISWA'],
+      ['Kelas:', currentWali.class || '-'],
+      ['Wali Kelas:', currentWali.name || '-'],
+      ['Dicetak pada:', new Date().toLocaleString('id-ID')],
+      ['Total Kasus:', kasusList.length],
+      [''],
+      ['No', 'Tanggal', 'Nama Siswa', 'Kelas', 'Keterangan Kasus', 'Solusi/Tindakan']
+    ];
+
+    kasusList.forEach((k, index) => {
+      const student = students.find(s => s.id === k.student_id);
+      excelData.push([
+        index + 1,
+        new Date(k.tanggal).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }),
+        student ? student.name : 'Siswa',
+        student ? student.class : '-',
+        k.keterangan || '-',
+        k.solusi || '-'
+      ]);
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(excelData);
+    ws['!cols'] = [{ wch: 5 }, { wch: 25 }, { wch: 20 }, { wch: 10 }, { wch: 45 }, { wch: 45 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Rekap Kasus');
+    const fileName = `Rekap_Kasus_${currentWali.class}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+    showToast(`✅ Rekap kasus berhasil diexport: ${fileName}`, 'success');
   } catch(e) {
     console.error('Export error:', e);
     showToast('❌ Gagal export: ' + e.message, 'error');
@@ -3383,7 +3821,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const defaultEmoji = document.querySelector('#studentJurnalSection .text-4xl span');
     if (defaultEmoji) defaultEmoji.style.transform = 'scale(1.4)';
   }, 100);
-  console.log('🏫 Wali Digital — Supabase Edition + Hapalan & Kokurikuler');
+  console.log('🏫 Wali Digital — PWA Edition + Kasus + Kokurikuler Dropdown');
 });
 
 document.addEventListener('keydown', function(e) {
