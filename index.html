@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Inter', sans-serif; min-height: 100vh; background: #0f0f1a; position: relative; overflow-x: hidden; }
@@ -115,9 +116,7 @@
     .reply-wali { background: rgba(168,85,247,0.15); border-left: 3px solid rgba(168,85,247,0.5); }
     .reply-siswa { background: rgba(59,130,246,0.15); border-left: 3px solid rgba(59,130,246,0.5); }
     .reply-wali .text-white, .reply-wali .text-white\/90, .reply-wali .text-white\/60,
-    .reply-siswa .text-white, .reply-siswa .text-white\/90, .reply-siswa .text-white\/60 {
-      color: #ffffff !important;
-    }
+    .reply-siswa .text-white, .reply-siswa .text-white\/90, .reply-siswa .text-white\/60 { color: #ffffff !important; }
     .reply-wali .text-purple-300 { color: #d8b4fe !important; }
     .reply-siswa .text-blue-300 { color: #93c5fd !important; }
     .chat-bubble-wali { background: rgba(168,85,247,0.2); border: 1px solid rgba(168,85,247,0.3); border-radius: 16px 16px 16px 4px; padding: 10px 14px; margin-bottom: 8px; }
@@ -154,283 +153,58 @@
     .chat-date-divider { text-align: center; padding: 8px 0; font-size: 11px; opacity: 0.5; }
     .jurnal-card { transition: all 0.3s; }
     .jurnal-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
-    
-    /* ===== SIDEBAR STYLES ===== */
-    .sidebar-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 999;
-      display: none;
-    }
-    .sidebar-overlay.active {
-      display: block;
-    }
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -280px;
-      width: 280px;
-      height: 100vh;
-      background: rgba(15,15,26,0.95);
-      backdrop-filter: blur(20px);
-      border-right: 1px solid rgba(255,255,255,0.08);
-      z-index: 1000;
-      transition: left 0.3s cubic-bezier(0.4,0,0.2,1);
-      padding: 20px 0;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-    }
-    .sidebar.open {
-      left: 0;
-    }
-    .sidebar-header {
-      padding: 0 20px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
-      margin-bottom: 16px;
-    }
-    .sidebar-header h2 {
-      font-size: 20px;
-      font-weight: 700;
-      color: white;
-    }
-    .sidebar-header p {
-      font-size: 12px;
-      color: rgba(255,255,255,0.4);
-    }
-    .sidebar-menu {
-      flex: 1;
-      padding: 0 12px;
-    }
-    .sidebar-menu-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 12px 16px;
-      border-radius: 12px;
-      color: rgba(255,255,255,0.6);
-      transition: all 0.3s;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      margin-bottom: 4px;
-      border: none;
-      background: transparent;
-      width: 100%;
-      text-align: left;
-    }
-    .sidebar-menu-item:hover {
-      background: rgba(255,255,255,0.06);
-      color: white;
-    }
-    .sidebar-menu-item.active {
-      background: rgba(74,155,199,0.15);
-      color: white;
-      border-left: 3px solid #4a9bc7;
-    }
-    .sidebar-menu-item i {
-      width: 22px;
-      font-size: 16px;
-      text-align: center;
-    }
-    .sidebar-menu-item .badge {
-      margin-left: auto;
-      background: rgba(74,155,199,0.2);
-      color: #6db8e0;
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 10px;
-    }
-    .sidebar-footer {
-      padding: 16px 20px;
-      border-top: 1px solid rgba(255,255,255,0.08);
-      margin-top: auto;
-    }
-    .sidebar-footer button {
-      width: 100%;
-      padding: 10px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.05);
-      color: rgba(255,255,255,0.6);
-      font-size: 13px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-    .sidebar-footer button:hover {
-      background: rgba(232,132,138,0.15);
-      border-color: rgba(232,132,138,0.3);
-      color: #f0a0a5;
-    }
-    .hamburger-btn {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 10px;
-      padding: 8px 12px;
-      color: white;
-      cursor: pointer;
-      font-size: 18px;
-      transition: all 0.3s;
-      display: none;
-    }
-    .hamburger-btn:hover {
-      background: rgba(255,255,255,0.12);
-    }
-    .sidebar-close-btn {
-      display: none;
-      background: none;
-      border: none;
-      color: rgba(255,255,255,0.6);
-      font-size: 20px;
-      cursor: pointer;
-      padding: 8px;
-      position: absolute;
-      right: 12px;
-      top: 12px;
-    }
-    .sidebar-close-btn:hover {
-      color: white;
-    }
-    
-    /* Content wrapper untuk sidebar */
-    .dashboard-content {
-      transition: margin-left 0.3s cubic-bezier(0.4,0,0.2,1);
-      padding: 16px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    
+    .sidebar-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; }
+    .sidebar-overlay.active { display: block; }
+    .sidebar { position: fixed; top: 0; left: -280px; width: 280px; height: 100vh; background: rgba(15,15,26,0.95); backdrop-filter: blur(20px); border-right: 1px solid rgba(255,255,255,0.08); z-index: 1000; transition: left 0.3s cubic-bezier(0.4,0,0.2,1); padding: 20px 0; overflow-y: auto; display: flex; flex-direction: column; }
+    .sidebar.open { left: 0; }
+    .sidebar-header { padding: 0 20px 20px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 16px; }
+    .sidebar-header h2 { font-size: 20px; font-weight: 700; color: white; }
+    .sidebar-header p { font-size: 12px; color: rgba(255,255,255,0.4); }
+    .sidebar-menu { flex: 1; padding: 0 12px; }
+    .sidebar-menu-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 12px; color: rgba(255,255,255,0.6); transition: all 0.3s; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: 500; margin-bottom: 4px; border: none; background: transparent; width: 100%; text-align: left; }
+    .sidebar-menu-item:hover { background: rgba(255,255,255,0.06); color: white; }
+    .sidebar-menu-item.active { background: rgba(74,155,199,0.15); color: white; border-left: 3px solid #4a9bc7; }
+    .sidebar-menu-item i { width: 22px; font-size: 16px; text-align: center; }
+    .sidebar-menu-item .badge { margin-left: auto; background: rgba(74,155,199,0.2); color: #6db8e0; font-size: 10px; padding: 2px 8px; border-radius: 10px; }
+    .sidebar-footer { padding: 16px 20px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: auto; }
+    .sidebar-footer button { width: 100%; padding: 10px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.6); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .sidebar-footer button:hover { background: rgba(232,132,138,0.15); border-color: rgba(232,132,138,0.3); color: #f0a0a5; }
+    .hamburger-btn { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 8px 12px; color: white; cursor: pointer; font-size: 18px; transition: all 0.3s; display: none; }
+    .hamburger-btn:hover { background: rgba(255,255,255,0.12); }
+    .sidebar-close-btn { display: none; background: none; border: none; color: rgba(255,255,255,0.6); font-size: 20px; cursor: pointer; padding: 8px; position: absolute; right: 12px; top: 12px; }
+    .sidebar-close-btn:hover { color: white; }
+    .dashboard-content { transition: margin-left 0.3s cubic-bezier(0.4,0,0.2,1); padding: 16px; max-width: 800px; margin: 0 auto; }
     @media (min-width: 768px) {
-      .sidebar {
-        left: 0;
-        width: 240px;
-      }
-      .sidebar-close-btn {
-        display: none !important;
-      }
-      .sidebar-overlay {
-        display: none !important;
-      }
-      .dashboard-content {
-        margin-left: 240px;
-        max-width: calc(100% - 240px);
-        padding: 20px 24px;
-      }
-      .hamburger-btn {
-        display: none !important;
-      }
-      .sidebar-header .sidebar-close-btn {
-        display: none !important;
-      }
+      .sidebar { left: 0; width: 240px; }
+      .sidebar-close-btn { display: none !important; }
+      .sidebar-overlay { display: none !important; }
+      .dashboard-content { margin-left: 240px; max-width: calc(100% - 240px); padding: 20px 24px; }
+      .hamburger-btn { display: none !important; }
+      .sidebar-header .sidebar-close-btn { display: none !important; }
     }
-    
     @media (max-width: 767px) {
-      .hamburger-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-      .sidebar-close-btn {
-        display: block;
-      }
-      .dashboard-content {
-        margin-left: 0;
-        padding: 12px;
-      }
-      .sidebar.open + .sidebar-overlay {
-        display: block;
-      }
+      .hamburger-btn { display: flex; align-items: center; gap: 8px; }
+      .sidebar-close-btn { display: block; }
+      .dashboard-content { margin-left: 0; padding: 12px; }
+      .sidebar.open + .sidebar-overlay { display: block; }
     }
-    
-    .menu-label {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: rgba(255,255,255,0.25);
-      padding: 12px 16px 6px;
-      font-weight: 600;
-    }
-    
-    /* Scrollbar sidebar */
+    .menu-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: rgba(255,255,255,0.25); padding: 12px 16px 6px; font-weight: 600; }
     .sidebar::-webkit-scrollbar { width: 3px; }
     .sidebar::-webkit-scrollbar-track { background: transparent; }
     .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
-    
-    /* Foto profile */
-    .profile-photo {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid rgba(255,255,255,0.2);
-    }
-    .profile-photo-sm {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid rgba(255,255,255,0.15);
-    }
-    .file-input-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-    }
-    .file-input-wrapper input[type=file] {
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
-    .curhat-flow-step {
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* CV Style */
-    .cv-container {
-      background: rgba(255,255,255,0.05);
-      border-radius: 16px;
-      padding: 20px;
-      border: 1px solid rgba(255,255,255,0.08);
-    }
-    .cv-item {
-      display: flex;
-      padding: 8px 0;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
-    }
-    .cv-item:last-child {
-      border-bottom: none;
-    }
-    .cv-label {
-      width: 120px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.4);
-      flex-shrink: 0;
-    }
-    .cv-value {
-      font-size: 13px;
-      color: rgba(255,255,255,0.8);
-      word-break: break-word;
-    }
+    .profile-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255,255,255,0.2); }
+    .profile-photo-sm { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.15); }
+    .curhat-flow-step { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .cv-container { background: rgba(255,255,255,0.05); border-radius: 16px; padding: 20px; border: 1px solid rgba(255,255,255,0.08); }
+    .cv-item { display: flex; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .cv-item:last-child { border-bottom: none; }
+    .cv-label { width: 120px; font-size: 13px; color: rgba(255,255,255,0.4); flex-shrink: 0; }
+    .cv-value { font-size: 13px; color: rgba(255,255,255,0.8); word-break: break-word; }
   </style>
 </head>
 <body>
 
-<!-- ===== BACKGROUND ===== -->
 <div class="bg-hero"></div>
 <div class="bg-overlay"></div>
 <div class="grid-bg"></div>
@@ -438,10 +212,8 @@
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
 
-<!-- ===== TOAST CONTAINER ===== -->
 <div id="toastContainer"></div>
 
-<!-- ===== LOADING OVERLAY ===== -->
 <div id="loadingOverlay" class="loading-overlay hidden">
   <div class="loading-box">
     <div class="spinner"></div>
@@ -449,10 +221,8 @@
   </div>
 </div>
 
-<!-- ===== SIDEBAR OVERLAY ===== -->
 <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
-<!-- ===== SIDEBAR ===== -->
 <div id="sidebar" class="sidebar">
   <div class="sidebar-header">
     <button class="sidebar-close-btn" onclick="closeSidebar()">✕</button>
@@ -460,7 +230,6 @@
     <p id="sidebarUserInfo">Selamat datang</p>
   </div>
   
-  <!-- ===== SIDEBAR MENU SISWA ===== -->
   <div id="sidebarStudentMenu" class="sidebar-menu hidden">
     <div class="menu-label">📋 Menu Siswa</div>
     <button class="sidebar-menu-item" data-section="studentProfil" onclick="showStudentSection('studentProfil')">
@@ -484,7 +253,6 @@
     </button>
   </div>
   
-  <!-- ===== SIDEBAR MENU WALI ===== -->
   <div id="sidebarWaliMenu" class="sidebar-menu hidden">
     <div class="menu-label">📋 Menu Wali</div>
     <button class="sidebar-menu-item active" data-section="waliSiswa" onclick="showWaliSection('waliSiswa')">
@@ -506,9 +274,18 @@
       <i class="fas fa-comments"></i> Riwayat Curhat
       <span class="badge" id="sidebarChatBadge">0</span>
     </button>
+    <!-- MENU BARU KHUSUS WALI -->
+    <button class="sidebar-menu-item" data-section="waliHapalan" onclick="showWaliSection('waliHapalan')">
+      <i class="fas fa-quran"></i> Hapalan Juz 30
+    </button>
+    <button class="sidebar-menu-item" data-section="waliKokurikuler" onclick="showWaliSection('waliKokurikuler')">
+      <i class="fas fa-laptop-code"></i> Nilai Kokurikuler
+    </button>
+    <button class="sidebar-menu-item" data-section="waliHapusChat" onclick="showWaliSection('waliHapusChat')">
+      <i class="fas fa-trash-alt"></i> Hapus Riwayat Chat
+    </button>
   </div>
   
-  <!-- ===== SIDEBAR MENU ADMIN ===== -->
   <div id="sidebarAdminMenu" class="sidebar-menu hidden">
     <div class="menu-label">🛡️ Menu Admin</div>
     <button class="sidebar-menu-item active" data-section="adminWali" onclick="showAdminSection('adminWali')">
@@ -523,10 +300,8 @@
   </div>
 </div>
 
-<!-- ===== APP ===== -->
 <div id="app" class="relative z-10">
   
-  <!-- ===== CONNECTION STATUS ===== -->
   <div class="flex justify-end items-center gap-3 p-3">
     <div class="status-indicator">
       <span class="status-dot offline" id="statusDot"></span>
@@ -537,7 +312,6 @@
     </button>
   </div>
 
-  <!-- ===== LOGIN PAGE ===== -->
   <div id="loginPage" class="glass p-8 mt-2 max-w-md mx-auto">
     <div class="text-center mb-8">
       <div class="text-6xl mb-3">🏫</div>
@@ -585,12 +359,10 @@
     <div id="loginError" class="text-red-400/80 text-sm mt-3 hidden text-center"></div>
   </div>
 
-  <!-- ===== DASHBOARD CONTENT ===== -->
   <div id="dashboardContent" class="dashboard-content hidden">
     
     <!-- ===== DASHBOARD SISWA ===== -->
     <div id="studentDashboard" class="hidden">
-      <!-- Header dengan hamburger -->
       <div class="flex items-center gap-3 mb-6">
         <button class="hamburger-btn" onclick="toggleSidebar()">
           <i class="fas fa-bars"></i>
@@ -608,24 +380,14 @@
         </div>
       </div>
 
-      <!-- ===== SISWA: PROFIL DIRI ===== -->
+      <!-- ===== SISWA: PROFIL DIRI (TANPA UPLOAD FOTO) ===== -->
       <div id="studentProfilSection" class="section-content hidden">
         <div class="glass p-5">
           <h3 class="font-bold text-white mb-4">
             <i class="fas fa-user-circle text-purple-300 mr-2"></i>Profil Diri
           </h3>
           
-          <!-- Form Profil (hidden jika sudah ada data) -->
           <div id="profilFormContainer">
-            <div class="flex flex-col items-center mb-4">
-              <div class="relative">
-                <img id="profilePhotoPreview" src="https://ui-avatars.com/api/?name=User&size=100&background=4a9bc7&color=fff" alt="Foto Profil" class="profile-photo">
-                <div class="file-input-wrapper mt-2">
-                  <button class="btn-glass btn-glass-cyan text-xs py-1 px-3">📷 Upload Foto</button>
-                  <input type="file" id="profilePhotoInput" accept="image/*" onchange="previewProfilePhoto(event)">
-                </div>
-              </div>
-            </div>
             <div class="space-y-3">
               <div>
                 <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
@@ -650,11 +412,10 @@
             </div>
           </div>
           
-          <!-- Tampilan CV (hidden jika belum ada data) -->
           <div id="profilCVContainer" class="hidden">
             <div class="cv-container">
               <div class="flex items-center gap-4 mb-4">
-                <img id="cvFoto" src="https://ui-avatars.com/api/?name=User&size=100&background=4a9bc7&color=fff" alt="Foto" class="profile-photo">
+                <div class="profile-photo flex items-center justify-center bg-blue-500/20 text-4xl">👤</div>
                 <div>
                   <h4 class="text-xl font-bold text-white" id="cvNama">-</h4>
                   <p class="text-sm text-white/60" id="cvKelas">-</p>
@@ -811,7 +572,6 @@
 
     <!-- ===== DASHBOARD WALI ===== -->
     <div id="waliDashboard" class="hidden">
-      <!-- Header dengan hamburger -->
       <div class="flex items-center gap-3 mb-6">
         <button class="hamburger-btn" onclick="toggleSidebar()">
           <i class="fas fa-bars"></i>
@@ -829,7 +589,6 @@
         </div>
       </div>
 
-      <!-- Stats -->
       <div class="grid grid-cols-4 gap-2 mb-4">
         <div class="glass p-3 text-center">
           <div class="text-xl font-bold text-blue-300" id="totalSiswa">0</div>
@@ -849,7 +608,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: DAFTAR SISWA ===== -->
       <div id="waliSiswaSection" class="section-content">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -862,7 +620,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: PETA POTENSI ===== -->
       <div id="waliPotensiSection" class="section-content hidden">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -877,7 +634,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: PERBUATAN BAIK ===== -->
       <div id="waliPerbuatanSection" class="section-content hidden">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -892,7 +648,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: JURNAL SISWA ===== -->
       <div id="waliJurnalSection" class="section-content hidden">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -907,7 +662,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: LAPORAN KONDISI ===== -->
       <div id="waliLaporanSection" class="section-content hidden">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -929,7 +683,6 @@
         </div>
       </div>
 
-      <!-- ===== WALI: RIWAYAT CURHAT (CHAT) ===== -->
       <div id="waliChatSection" class="section-content hidden">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -943,11 +696,68 @@
           </div>
         </div>
       </div>
+
+      <!-- ===== WALI: HAPALAN (BARU) ===== -->
+      <div id="waliHapalanSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-quran text-green-300 mr-2"></i>Catatan Hapalan Juz 30
+            </h3>
+            <div class="flex gap-2">
+              <button onclick="exportHapalanExcel()" class="btn-glass btn-glass-success text-sm py-1.5 px-3">
+                <i class="fas fa-file-excel mr-1"></i> Export
+              </button>
+              <button onclick="showTambahHapalan()" class="btn-glass btn-glass-purple text-sm py-1.5 px-3">
+                <i class="fas fa-plus mr-1"></i> Tambah
+              </button>
+            </div>
+          </div>
+          <div id="hapalanContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada catatan hapalan</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== WALI: KOKURIKULER (BARU) ===== -->
+      <div id="waliKokurikulerSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-laptop-code text-blue-300 mr-2"></i>Nilai Kokurikuler
+            </h3>
+            <div class="flex gap-2">
+              <button onclick="exportKokurikulerExcel()" class="btn-glass btn-glass-success text-sm py-1.5 px-3">
+                <i class="fas fa-file-excel mr-1"></i> Export
+              </button>
+              <button onclick="showTambahKokurikuler()" class="btn-glass btn-glass-purple text-sm py-1.5 px-3">
+                <i class="fas fa-plus mr-1"></i> Tambah
+              </button>
+            </div>
+          </div>
+          <div id="kokurikulerContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada nilai kokurikuler</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="waliHapusChatSection" class="section-content hidden">
+        <div class="glass p-5">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="font-bold text-white">
+              <i class="fas fa-trash-alt text-red-300 mr-2"></i>Hapus Riwayat Chat
+            </h3>
+            <span class="badge-glass badge-glass-red" id="hapusChatCount">0 siswa</span>
+          </div>
+          <div id="hapusChatContainer" class="space-y-2 max-h-96 overflow-y-auto">
+            <div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- ===== DASHBOARD ADMIN ===== -->
     <div id="adminDashboard" class="hidden">
-      <!-- Header dengan hamburger -->
       <div class="flex items-center gap-3 mb-6">
         <button class="hamburger-btn" onclick="toggleSidebar()">
           <i class="fas fa-bars"></i>
@@ -965,7 +775,6 @@
         </div>
       </div>
 
-      <!-- Stats -->
       <div class="grid grid-cols-3 gap-2 mb-4">
         <div class="glass p-4 text-center">
           <div class="text-2xl font-bold text-blue-300" id="totalWaliAdmin">0</div>
@@ -981,7 +790,6 @@
         </div>
       </div>
 
-      <!-- ===== ADMIN: WALI KELAS ===== -->
       <div id="adminWaliSection" class="section-content">
         <div class="glass p-5">
           <div class="flex justify-between items-center mb-4">
@@ -998,7 +806,6 @@
 
   <!-- ===== MODALS ===== -->
   
-  <!-- Detail Curhat Modal -->
   <div id="detailCurhatSiswaModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('detailCurhatSiswaModal')">
     <div class="modal-glass curhat-text">
       <div class="flex justify-between items-center mb-4">
@@ -1048,7 +855,6 @@
     </div>
   </div>
 
-  <!-- Tambah Siswa Modal -->
   <div id="tambahSiswaModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahSiswaModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
@@ -1069,7 +875,6 @@
     </div>
   </div>
 
-  <!-- Tambah Wali Modal -->
   <div id="tambahWaliModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahWaliModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
@@ -1090,7 +895,6 @@
     </div>
   </div>
 
-  <!-- Tambah Laporan Modal -->
   <div id="tambahLaporanModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahLaporanModal')">
     <div class="modal-glass">
       <div class="flex justify-between items-center mb-5">
@@ -1134,7 +938,6 @@
     </div>
   </div>
 
-  <!-- Chat Detail Modal -->
   <div id="chatDetailModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('chatDetailModal')">
     <div class="modal-glass curhat-text">
       <div class="flex justify-between items-center mb-4">
@@ -1179,6 +982,86 @@
     </div>
   </div>
 
+  <!-- ===== MODAL HAPALAN ===== -->
+  <div id="tambahHapalanModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahHapalanModal')">
+    <div class="modal-glass">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-quran text-green-300 mr-2"></i>Tambah Hapalan
+        </h3>
+        <button onclick="closeModal('tambahHapalanModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="text-sm text-white/60 font-medium">Pilih Siswa</label>
+          <select id="hapalanSiswaSelect" class="select-glass">
+            <option value="">-- Pilih Siswa --</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Nama Surah (Juz 30)</label>
+          <select id="hapalanSurahSelect" class="select-glass">
+            <!-- Akan diisi via JS -->
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Status</label>
+          <select id="hapalanStatus" class="select-glass">
+            <option>Lancar</option>
+            <option>Cukup</option>
+            <option>Kurang</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Catatan</label>
+          <textarea id="hapalanCatatan" class="input-glass" rows="2" placeholder="Catatan..."></textarea>
+        </div>
+        <button onclick="simpanHapalan()" class="btn-glass btn-glass-success w-full mt-2">
+          <i class="fas fa-save mr-2"></i>Simpan Hapalan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MODAL KOKURIKULER ===== -->
+  <div id="tambahKokurikulerModal" class="modal-overlay hidden" onclick="if(event.target===this) closeModal('tambahKokurikulerModal')">
+    <div class="modal-glass">
+      <div class="flex justify-between items-center mb-5">
+        <h3 class="text-xl font-bold text-white">
+          <i class="fas fa-laptop-code text-blue-300 mr-2"></i>Nilai Kokurikuler
+        </h3>
+        <button onclick="closeModal('tambahKokurikulerModal')" class="text-white/60 hover:text-white text-xl transition">✕</button>
+      </div>
+      <div class="space-y-3">
+        <div>
+          <label class="text-sm text-white/60 font-medium">Pilih Siswa</label>
+          <select id="kokurikulerSiswaSelect" class="select-glass">
+            <option value="">-- Pilih Siswa --</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Pertemuan Ke-</label>
+          <input id="kokurikulerPertemuan" type="number" class="input-glass" placeholder="Contoh: 1">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Tema</label>
+          <input id="kokurikulerTema" class="input-glass" placeholder="Contoh: Kebersihan Lingkungan">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Topik</label>
+          <input id="kokurikulerTopik" class="input-glass" placeholder="Contoh: Kerja Bakti Kelas">
+        </div>
+        <div>
+          <label class="text-sm text-white/60 font-medium">Deskripsi Nilai</label>
+          <textarea id="kokurikulerDeskripsi" class="input-glass" rows="2" placeholder="Contoh: Siswa sangat aktif dan memimpin jalannya kerja bakti..."></textarea>
+        </div>
+        <button onclick="simpanKokurikuler()" class="btn-glass btn-glass-primary w-full mt-2">
+          <i class="fas fa-save mr-2"></i>Simpan Nilai
+        </button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -1186,11 +1069,11 @@
 // CONFIGURATION
 // ============================================================
 const CONFIG = {
-  API_URL: 'https://script.google.com/macros/s/AKfycbx0S-fG9vIpr02dlnCn8q_amM-DGF4lY89zQG-JsMFmcj6OOTefINxiCUXiEUkdyWH18A/exec',
-  USE_API: true,
-  RETRY_COUNT: 2,
-  RETRY_DELAY: 500
+  SUPABASE_URL: 'https://qteekujaatdncqnaleln.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF0ZWVrdWphYXRkbmNxbmFsZWxuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI4NzE3MDMsImV4cCI6MjEwODQ0NzcwM30.i4Of8SaDRyP1IBusxLQAS-5_YvyW1ouOhKUMDyvxeB8'
 };
+
+const _supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
 
 // ============================================================
 // DATA STORE
@@ -1217,13 +1100,28 @@ let allJurnalCache = [];
 let allPerbuatanCache = [];
 let allPotensiCache = [];
 let allProfilCache = [];
+let allHapalanCache = [];
+let allKokurikulerCache = [];
 let dataLoaded = false;
 let loginInProgress = false;
 let currentStudentSection = 'studentPotensi';
 let currentWaliSection = 'waliSiswa';
 let currentAdminSection = 'adminWali';
-let profilePhotoData = null;
-let isPhotoUploaded = false;
+let loadingCount = 0;
+let connectionIntervalId = null;
+let openEditProfilModal = null;
+
+// Surah Juz 30
+const SURAH_JUZ_30 = [
+  "An-Naba'", "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar", 
+  "Al-Mutaffifin", "Al-Insyiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", 
+  "Al-Gasyiyah", "Al-Fajr", "Al-Balad", "Asy-Syams", "Al-Lail", 
+  "Ad-Duha", "Asy-Syarh", "At-Tin", "Al-'Alaq", "Al-Qadr", 
+  "Al-Bayyinah", "Al-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takasur", 
+  "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraisy", "Al-Ma'un", 
+  "Al-Kausar", "Al-Kafirun", "An-Nasr", "Al-Lahab", "Al-Ikhlas", 
+  "Al-Falaq", "An-Nas"
+];
 
 // ============================================================
 // SIDEBAR FUNCTIONS
@@ -1232,11 +1130,8 @@ function toggleSidebar() {
   const sidebar = document.getElementById('sidebar');
   const overlay = document.getElementById('sidebarOverlay');
   sidebar.classList.toggle('open');
-  if (sidebar.classList.contains('open')) {
-    overlay.classList.add('active');
-  } else {
-    overlay.classList.remove('active');
-  }
+  if (sidebar.classList.contains('open')) overlay.classList.add('active');
+  else overlay.classList.remove('active');
 }
 
 function closeSidebar() {
@@ -1250,18 +1145,13 @@ function showStudentSection(section) {
   document.querySelectorAll('#sidebarStudentMenu .sidebar-menu-item').forEach(el => {
     el.classList.toggle('active', el.dataset.section === section);
   });
-  
   document.querySelectorAll('#studentDashboard .section-content').forEach(el => {
     el.classList.add('hidden');
   });
-  
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
-  
-  if (section === 'studentCurhat') {
-    initCurhat();
-  }
-  
+  if (section === 'studentCurhat') initCurhat();
+  if (section === 'studentRiwayat') loadRiwayatCurhatSiswa();
   currentStudentSection = section;
   closeSidebar();
 }
@@ -1270,14 +1160,14 @@ function showWaliSection(section) {
   document.querySelectorAll('#sidebarWaliMenu .sidebar-menu-item').forEach(el => {
     el.classList.toggle('active', el.dataset.section === section);
   });
-  
   document.querySelectorAll('#waliDashboard .section-content').forEach(el => {
     el.classList.add('hidden');
   });
-  
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
-  
+  if (section === 'waliHapusChat') loadHapusChatList();
+  if (section === 'waliHapalan') loadHapalanData();
+  if (section === 'waliKokurikuler') loadKokurikulerData();
   currentWaliSection = section;
   closeSidebar();
 }
@@ -1286,14 +1176,11 @@ function showAdminSection(section) {
   document.querySelectorAll('#sidebarAdminMenu .sidebar-menu-item').forEach(el => {
     el.classList.toggle('active', el.dataset.section === section);
   });
-  
   document.querySelectorAll('#adminDashboard .section-content').forEach(el => {
     el.classList.add('hidden');
   });
-  
   const target = document.getElementById(section + 'Section');
   if (target) target.classList.remove('hidden');
-  
   currentAdminSection = section;
   closeSidebar();
 }
@@ -1302,174 +1189,397 @@ function showAdminSection(section) {
 // UTILITY FUNCTIONS
 // ============================================================
 function $(id) { return document.getElementById(id); }
+function show(id) { const el = $(id); if (el) el.classList.remove('hidden'); }
+function hide(id) { const el = $(id); if (el) el.classList.add('hidden'); }
 
-function show(id) { $(id).classList.remove('hidden'); }
-function hide(id) { $(id).classList.add('hidden'); }
-
-function closeModal(id) { $(id).classList.add('hidden'); }
+function closeModal(id) {
+  const modal = $(id);
+  if (modal) modal.classList.add('hidden');
+  if (id === 'chatDetailModal') {
+    chatCurrentStudentId = null;
+    chatCurrentStudentName = '';
+    chatCurrentStudentClass = '';
+    const t = $('chatBalasanText'); if (t) t.value = '';
+    const fb = $('chatBalasFeedback'); if (fb) fb.classList.add('hidden');
+  }
+  if (id === 'detailCurhatSiswaModal') {
+    currentCurhatId = null;
+    const t = $('siswaBalasanText'); if (t) t.value = '';
+    const fb = $('siswaBalasFeedback'); if (fb) fb.classList.add('hidden');
+  }
+  if (id === 'tambahSiswaModal') {
+    ['siswaNIS','siswaNama','siswaKelas'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
+  }
+  if (id === 'tambahWaliModal') {
+    ['waliNamaBaru','waliEmailBaru','waliKelasBaru'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
+  }
+  if (id === 'tambahHapalanModal') {
+    ['hapalanCatatan'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
+  }
+  if (id === 'tambahKokurikulerModal') {
+    ['kokurikulerPertemuan','kokurikulerTema','kokurikulerTopik','kokurikulerDeskripsi'].forEach(fid => { const el = $(fid); if (el) el.value = ''; });
+  }
+}
 
 function escapeHtml(text) {
-  if (!text) return '';
+  if (text === null || text === undefined) return '';
   const div = document.createElement('div');
-  div.textContent = text;
+  div.textContent = String(text);
   return div.innerHTML;
 }
 
+function escapeAttr(text) {
+  if (text === null || text === undefined) return '';
+  return String(text)
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+const toastQueue = [];
+let toastActive = false;
 function showToast(message, type = 'success') {
+  toastQueue.push({ message, type });
+  if (!toastActive) processToastQueue();
+}
+function processToastQueue() {
+  if (toastQueue.length === 0) { toastActive = false; return; }
+  toastActive = true;
+  const { message, type } = toastQueue.shift();
   const container = document.getElementById('toastContainer');
-  const existing = container.querySelector('.toast');
-  if (existing) existing.remove();
-  
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;
   toast.textContent = message;
   container.appendChild(toast);
-  
   setTimeout(() => {
     if (toast.parentNode) toast.remove();
-  }, 3000);
+    setTimeout(processToastQueue, 200);
+  }, 2800);
 }
 
 function showLoading(text = 'Memuat...') {
+  loadingCount++;
   const overlay = document.getElementById('loadingOverlay');
   document.getElementById('loadingText').textContent = text;
   overlay.classList.remove('hidden');
 }
-
 function hideLoading() {
-  document.getElementById('loadingOverlay').classList.add('hidden');
+  loadingCount = Math.max(0, loadingCount - 1);
+  if (loadingCount === 0) document.getElementById('loadingOverlay').classList.add('hidden');
 }
 
 // ============================================================
-// API CALL
+// SUPABASE API WRAPPER
 // ============================================================
-async function callAPI(action, params = {}, retryCount = 0) {
-  if (!CONFIG.USE_API) {
-    throw new Error('API disabled');
-  }
-  
-  if (!navigator.onLine) {
-    throw new Error('OFFLINE');
-  }
-  
-  return new Promise((resolve, reject) => {
-    let url = CONFIG.API_URL;
-    const queryParams = new URLSearchParams();
-    queryParams.append('action', action);
-    queryParams.append('callback', 'callback');
-    
-    Object.keys(params).forEach(key => {
-      queryParams.append(key, params[key]);
-    });
-    
-    if (url.includes('?')) {
-      url += '&' + queryParams.toString();
-    } else {
-      url += '?' + queryParams.toString();
-    }
-    
-    console.log('📡 API Call:', action);
-    
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
-    
-    fetch(url, { 
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Accept': 'application/javascript'
-      },
-      signal: controller.signal
-    })
-    .then(response => {
-      clearTimeout(timeoutId);
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
+async function callAPI(action, params = {}) {
+  if (!navigator.onLine) throw new Error('OFFLINE');
+
+  try {
+    switch (action) {
+      case 'ping': {
+        const { error } = await _supabase.from('users').select('id').limit(1);
+        if (error) throw error;
+        return { ok: true };
       }
-      return response.text();
-    })
-    .then(text => {
-      try {
-        const match = text.match(/callback\((.+)\)/);
-        if (match) {
-          const data = JSON.parse(match[1]);
-          resolve(data);
+
+      // ---------- USERS ----------
+      case 'getUserByEmail': {
+        const { data, error } = await _supabase.from('users').select('*').eq('email', params.email).maybeSingle();
+        if (error) throw error;
+        return data;
+      }
+      case 'getAllUsers': {
+        const { data, error } = await _supabase.from('users').select('*');
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addUser': {
+        const { data, error } = await _supabase.from('users').insert({
+          email: params.email, password: params.password, role: params.role, name: params.name, class: params.class
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+      case 'deleteUser': {
+        const { error } = await _supabase.from('users').delete().eq('id', params.userId);
+        if (error) return { success: false, error: error.message };
+        return { success: true };
+      }
+
+      // ---------- STUDENTS ----------
+      case 'getAllStudents': {
+        const { data, error } = await _supabase.from('students').select('*');
+        if (error) throw error;
+        return data || [];
+      }
+      case 'getStudentByNameAndClass': {
+        const { data, error } = await _supabase.from('students').select('*').eq('name', params.name).eq('class', params.class).maybeSingle();
+        if (error) throw error;
+        return data;
+      }
+      case 'getStudentsByWali': {
+        const { data, error } = await _supabase.from('students').select('*').eq('wali_id', params.waliId);
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addStudent': {
+        const { data, error } = await _supabase.from('students').insert({
+          nis: params.nis, name: params.name, password: params.password, wali_id: params.waliId, class: params.class
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+      case 'deleteStudent': {
+        const { error } = await _supabase.from('students').delete().eq('id', params.studentId);
+        if (error) return { success: false, error: error.message };
+        return { success: true };
+      }
+
+      // ---------- PROFIL ----------
+      case 'getProfil': {
+        const { data, error } = await _supabase.from('profil').select('*').eq('student_id', params.studentId).maybeSingle();
+        if (error) throw error;
+        return data;
+      }
+      case 'getAllProfil': {
+        const { data, error } = await _supabase.from('profil').select('*');
+        if (error) throw error;
+        return data || [];
+      }
+      case 'saveProfil': {
+        const { data: existing } = await _supabase.from('profil').select('id').eq('student_id', params.studentId).maybeSingle();
+        let result, err;
+        if (existing && existing.id) {
+          const r = await _supabase.from('profil').update({
+            tempat_lahir: params.tempatLahir, hobi: params.hobi, cita_cita: params.citaCita, alamat: params.alamat
+          }).eq('student_id', params.studentId).select().single();
+          result = r.data; err = r.error;
         } else {
-          const data = JSON.parse(text);
-          resolve(data);
+          const r = await _supabase.from('profil').insert({
+            student_id: params.studentId, tempat_lahir: params.tempatLahir, hobi: params.hobi, cita_cita: params.citaCita, alamat: params.alamat
+          }).select().single();
+          result = r.data; err = r.error;
         }
-      } catch(e) {
-        console.error('Parse error:', e);
-        reject(new Error('Invalid response'));
+        if (err) return { success: false, error: err.message };
+        return { success: true, data: result };
       }
-    })
-    .catch(err => {
-      clearTimeout(timeoutId);
-      console.warn(`API call failed (attempt ${retryCount + 1}):`, err.message);
-      
-      let errorMessage = err.message;
-      if (err.name === 'AbortError') {
-        errorMessage = 'TIMEOUT';
+
+      // ---------- POTENSI ----------
+      case 'getPotensi': {
+        const { data, error } = await _supabase.from('potensi').select('*').eq('student_id', params.studentId).maybeSingle();
+        if (error) throw error;
+        return data;
       }
-      
-      if (retryCount < CONFIG.RETRY_COUNT && errorMessage !== 'OFFLINE') {
-        setTimeout(() => {
-          callAPI(action, params, retryCount + 1)
-            .then(resolve)
-            .catch(reject);
-        }, CONFIG.RETRY_DELAY * (retryCount + 1));
-      } else {
-        reject(err);
+      case 'getAllPotensi': {
+        const { data, error } = await _supabase.from('potensi').select('*');
+        if (error) throw error;
+        return data || [];
       }
-    });
-  });
+      case 'savePotensi': {
+        const { data: existing } = await _supabase.from('potensi').select('id').eq('student_id', params.studentId).maybeSingle();
+        let err;
+        if (existing && existing.id) {
+          const r = await _supabase.from('potensi').update({
+            minat: params.minat, gaya_belajar: params.gayaBelajar, cita_cita: params.citaCita, kekuatan_karakter: params.kekuatanKarakter, ekstrakurikuler: params.ekstrakurikuler
+          }).eq('student_id', params.studentId);
+          err = r.error;
+        } else {
+          const r = await _supabase.from('potensi').insert({
+            student_id: params.studentId, minat: params.minat, gaya_belajar: params.gayaBelajar, cita_cita: params.citaCita, kekuatan_karakter: params.kekuatanKarakter, ekstrakurikuler: params.ekstrakurikuler
+          });
+          err = r.error;
+        }
+        if (err) return { success: false, error: err.message };
+        return { success: true };
+      }
+
+      // ---------- CURHAT ----------
+      case 'getAllCurhat': {
+        const { data, error } = await _supabase.from('curhat').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'getCurhatByStudent': {
+        const { data, error } = await _supabase.from('curhat').select('*').eq('student_id', params.studentId).order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addCurhat': {
+        const { data, error } = await _supabase.from('curhat').insert({
+          student_id: params.studentId, untuk_siapa: params.untukSiapa, kategori: params.kategori, sub_kategori: params.subKategori, tingkat_darurat: params.tingkatDarurat, cerita: params.cerita, is_read: false
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+      case 'markCurhatAsRead': {
+        const { error } = await _supabase.from('curhat').update({ is_read: true }).eq('id', params.curhatId);
+        if (error) return { success: false, error: error.message };
+        return { success: true };
+      }
+
+      // ---------- CURHAT REPLIES ----------
+      case 'getCurhatReplies': {
+        const { data, error } = await _supabase.from('curhat_replies').select('*').eq('curhat_id', params.curhatId).order('created_at', { ascending: true });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addCurhatReply': {
+        const isWali = (params.isWali === 'true' || params.isWali === true);
+        const { data, error } = await _supabase.from('curhat_replies').insert({
+          curhat_id: params.curhatId, student_id: params.studentId, sender: params.sender, sender_name: params.senderName, message: params.message, is_wali: isWali
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+      case 'addStudentReplyToCurhat': {
+        const { data, error } = await _supabase.from('curhat_replies').insert({
+          curhat_id: params.curhatId, student_id: params.studentId, sender: 'siswa', sender_name: params.studentName, message: params.message, is_wali: false
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+      case 'canStudentReplyToCurhat': {
+        const { data, error } = await _supabase.from('curhat_replies').select('is_wali').eq('curhat_id', params.curhatId).eq('is_wali', false);
+        if (error) throw error;
+        return !data || data.length === 0;
+      }
+
+      // ---------- HAPUS CURHAT ----------
+      case 'deleteCurhatByStudent': {
+        const { data: curhats } = await _supabase.from('curhat').select('id').eq('student_id', params.studentId);
+        if (curhats && curhats.length > 0) {
+          const ids = curhats.map(c => c.id);
+          const { error: e1 } = await _supabase.from('curhat_replies').delete().in('curhat_id', ids);
+          if (e1) return { success: false, error: e1.message };
+        }
+        const { error } = await _supabase.from('curhat').delete().eq('student_id', params.studentId);
+        if (error) return { success: false, error: error.message };
+        return { success: true };
+      }
+
+      // ---------- JURNAL ----------
+      case 'getAllJurnal': {
+        const { data, error } = await _supabase.from('jurnal').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addJurnal': {
+        const { data, error } = await _supabase.from('jurnal').insert({
+          student_id: params.studentId, emoji: params.emoji, cerita: params.cerita
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+
+      // ---------- PERBUATAN BAIK ----------
+      case 'getAllPerbuatanBaik': {
+        const { data, error } = await _supabase.from('perbuatan_baik').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addPerbuatanBaik': {
+        const today = new Date().toISOString().split('T')[0];
+        const { data, error } = await _supabase.from('perbuatan_baik').insert({
+          student_id: params.studentId, action: params.action, date: today
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+
+      // ---------- LAPORAN KONDISI ----------
+      case 'getStudentLaporanKondisi': {
+        const { data, error } = await _supabase.from('laporan_kondisi').select('*').eq('student_id', params.studentId).order('created_at', { ascending: false }).limit(1).maybeSingle();
+        if (error) throw error;
+        return data;
+      }
+      case 'saveLaporanKondisi': {
+        const { data: existing } = await _supabase.from('laporan_kondisi').select('id').eq('student_id', params.studentId).maybeSingle();
+        let err;
+        if (existing && existing.id) {
+          const r = await _supabase.from('laporan_kondisi').update({
+            nilai_akademik: params.nilaiAkademik, sikap: params.sikap, catatan_khusus: params.catatanKhusus, periode: params.periode
+          }).eq('student_id', params.studentId);
+          err = r.error;
+        } else {
+          const r = await _supabase.from('laporan_kondisi').insert({
+            student_id: params.studentId, nilai_akademik: params.nilaiAkademik, sikap: params.sikap, catatan_khusus: params.catatanKhusus, periode: params.periode
+          });
+          err = r.error;
+        }
+        if (err) return { success: false, error: err.message };
+        return { success: true };
+      }
+
+      // ---------- HAPALAN ----------
+      case 'getAllHapalan': {
+        const { data, error } = await _supabase.from('hapalan').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addHapalan': {
+        const { data, error } = await _supabase.from('hapalan').insert({
+          student_id: params.studentId, nama_surah: params.namaSurah, status: params.status, catatan: params.catatan
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+
+      // ---------- KOKURIKULER ----------
+      case 'getAllKokurikuler': {
+        const { data, error } = await _supabase.from('kokurikuler').select('*').order('created_at', { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }
+      case 'addKokurikuler': {
+        const { data, error } = await _supabase.from('kokurikuler').insert({
+          student_id: params.studentId, pertemuan_ke: params.pertemuanKe, tema: params.tema, topik: params.topik, deskripsi_nilai: params.deskripsiNilai
+        }).select().single();
+        if (error) return { success: false, error: error.message };
+        return { success: true, data };
+      }
+
+      default:
+        throw new Error('Unknown action: ' + action);
+    }
+  } catch (e) {
+    if (e.message === 'OFFLINE') throw e;
+    console.warn('callAPI error [' + action + ']:', e);
+    throw e;
+  }
 }
 
 // ============================================================
-// LOAD ALL DATA PARALLEL
+// LOAD ALL DATA
 // ============================================================
 async function loadAllDataParallel() {
   if (dataLoaded && allStudentsCache.length > 0) {
     return {
-      students: allStudentsCache,
-      curhat: allCurhatCache,
-      jurnal: allJurnalCache,
-      perbuatan: allPerbuatanCache,
-      potensi: allPotensiCache,
-      profil: allProfilCache
+      students: allStudentsCache, curhat: allCurhatCache, jurnal: allJurnalCache, perbuatan: allPerbuatanCache,
+      potensi: allPotensiCache, profil: allProfilCache, hapalan: allHapalanCache, kokurikuler: allKokurikulerCache
     };
   }
-  
-  try {
-    const [students, curhat, jurnal, perbuatan, potensi, profil] = await Promise.all([
-      callAPI('getAllStudents'),
-      callAPI('getAllCurhat'),
-      callAPI('getAllJurnal'),
-      callAPI('getAllPerbuatanBaik'),
-      callAPI('getAllPotensi'),
-      callAPI('getAllProfil') || []
-    ]);
-    
-    allStudentsCache = students || [];
-    allCurhatCache = curhat || [];
-    allJurnalCache = jurnal || [];
-    allPerbuatanCache = perbuatan || [];
-    allPotensiCache = potensi || [];
-    allProfilCache = profil || [];
-    dataLoaded = true;
-    
-    return {
-      students: allStudentsCache,
-      curhat: allCurhatCache,
-      jurnal: allJurnalCache,
-      perbuatan: allPerbuatanCache,
-      potensi: allPotensiCache,
-      profil: allProfilCache
-    };
-  } catch(e) {
-    console.warn('Load all data error:', e);
-    throw e;
-  }
+  const results = await Promise.all([
+    callAPI('getAllStudents').catch(() => []),
+    callAPI('getAllCurhat').catch(() => []),
+    callAPI('getAllJurnal').catch(() => []),
+    callAPI('getAllPerbuatanBaik').catch(() => []),
+    callAPI('getAllPotensi').catch(() => []),
+    callAPI('getAllProfil').catch(() => []),
+    callAPI('getAllHapalan').catch(() => []),
+    callAPI('getAllKokurikuler').catch(() => [])
+  ]);
+  allStudentsCache = results[0] || [];
+  allCurhatCache = results[1] || [];
+  allJurnalCache = results[2] || [];
+  allPerbuatanCache = results[3] || [];
+  allPotensiCache = results[4] || [];
+  allProfilCache = results[5] || [];
+  allHapalanCache = results[6] || [];
+  allKokurikulerCache = results[7] || [];
+  dataLoaded = allStudentsCache.length > 0;
+  return {
+    students: allStudentsCache, curhat: allCurhatCache, jurnal: allJurnalCache, perbuatan: allPerbuatanCache,
+    potensi: allPotensiCache, profil: allProfilCache, hapalan: allHapalanCache, kokurikuler: allKokurikulerCache
+  };
 }
 
 // ============================================================
@@ -1478,39 +1588,17 @@ async function loadAllDataParallel() {
 function checkConnection() {
   const statusEl = $('statusText');
   const dotEl = $('statusDot');
-  
-  if (!CONFIG.USE_API) {
-    isOnline = false;
-    statusEl.textContent = 'API Disabled';
-    dotEl.className = 'status-dot offline';
-    return;
-  }
-  
-  callAPI('ping', {}, 0)
-    .then(() => {
-      isOnline = true;
-      statusEl.textContent = 'Online';
-      dotEl.className = 'status-dot online';
-      console.log('✅ API Connected');
-    })
-    .catch(() => {
-      isOnline = false;
-      statusEl.textContent = 'Offline';
-      dotEl.className = 'status-dot offline';
-      console.warn('❌ API Offline');
-    });
+  callAPI('ping')
+    .then(() => { isOnline = true; statusEl.textContent = 'Online'; dotEl.className = 'status-dot online'; })
+    .catch(() => { isOnline = false; statusEl.textContent = 'Offline'; dotEl.className = 'status-dot offline'; });
 }
-
-function manualCheck() {
-  checkConnection();
-}
+function manualCheck() { checkConnection(); }
 
 // ============================================================
 // SET ROLE
 // ============================================================
 function setRole(role) {
-  const roles = ['student', 'wali', 'admin'];
-  roles.forEach(r => {
+  ['student','wali','admin'].forEach(r => {
     const btn = $('role' + r.charAt(0).toUpperCase() + r.slice(1));
     const login = $(r + 'Login');
     if (r === role) {
@@ -1529,206 +1617,90 @@ function setRole(role) {
 // ============================================================
 async function loginStudent() {
   if (loginInProgress) return;
-  loginInProgress = true;
-  
   const name = $('studentName').value.trim();
   const class_ = $('studentClass').value.trim();
-  const password = $('studentPassword').value || '51sw@qu';
-  
-  if (!name || !class_) {
-    showLoginError('Mohon isi nama dan kelas');
-    loginInProgress = false;
-    return;
-  }
-  
-  if (!isOnline) {
-    showLoginError('⚠️ Koneksi offline. Periksa internet Anda.');
-    loginInProgress = false;
-    return;
-  }
-  
+  const password = $('studentPassword').value;
+  if (!name || !class_) { showLoginError('Mohon isi nama dan kelas'); return; }
+  if (!password) { showLoginError('Masukkan PIN Anda'); return; }
+  if (!isOnline) { showLoginError('⚠️ Koneksi offline. Periksa internet Anda.'); return; }
+  loginInProgress = true;
   showLoading('Memeriksa data siswa...');
   try {
-    const student = await callAPI('getStudentByNameAndClass', { 
-      name: name, 
-      class: class_
-    });
-    
-    if (!student || !student.id) {
-      showLoginError('❌ Siswa tidak ditemukan. Periksa nama dan kelas.');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    if (student.password !== password) {
-      showLoginError('❌ PIN salah. Default: 51sw@qu');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    currentStudent = student;
-    currentUser = student;
-    currentRole = 'student';
+    const student = await callAPI('getStudentByNameAndClass', { name, class: class_ });
+    if (!student || !student.id) { showLoginError('❌ Siswa tidak ditemukan. Periksa nama dan kelas.'); return; }
+    if (student.password !== password) { showLoginError('❌ PIN salah.'); return; }
+    currentStudent = student; currentUser = student; currentRole = 'student';
     $('loginError').classList.add('hidden');
-    hideLoading();
-    loginInProgress = false;
     showStudentDashboard();
     showToast('✅ Selamat datang, ' + student.name + '!', 'success');
   } catch(e) {
-    hideLoading();
-    loginInProgress = false;
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showLoginError('❌ Error: ' + msg);
-  }
+    showLoginError('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message));
+  } finally { hideLoading(); loginInProgress = false; }
 }
 
 async function loginWali() {
   if (loginInProgress) return;
-  loginInProgress = true;
-  
   const email = $('waliEmail').value.trim();
-  const password = $('waliPassword').value || 'd4Rm@app';
-  
-  if (!email) {
-    showLoginError('Mohon isi email');
-    loginInProgress = false;
-    return;
-  }
-  
-  if (!isOnline) {
-    showLoginError('⚠️ Koneksi offline. Periksa internet Anda.');
-    loginInProgress = false;
-    return;
-  }
-  
+  const password = $('waliPassword').value;
+  if (!email) { showLoginError('Mohon isi email'); return; }
+  if (!password) { showLoginError('Masukkan password Anda'); return; }
+  if (!isOnline) { showLoginError('⚠️ Koneksi offline. Periksa internet Anda.'); return; }
+  loginInProgress = true;
   showLoading('Memeriksa data wali...');
   try {
     const user = await callAPI('getUserByEmail', { email });
-    
-    if (!user || !user.id) {
-      showLoginError('❌ Email tidak ditemukan');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    if (user.password !== password) {
-      showLoginError('❌ Password salah. Default: d4Rm@app');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    if (user.role !== 'wali') {
-      showLoginError('❌ Akun ini bukan Wali Kelas');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    currentWali = user;
-    currentUser = user;
-    currentRole = 'wali';
+    if (!user || !user.id) { showLoginError('❌ Email tidak ditemukan'); return; }
+    if (user.password !== password) { showLoginError('❌ Password salah.'); return; }
+    if (user.role !== 'wali') { showLoginError('❌ Akun ini bukan Wali Kelas'); return; }
+    currentWali = user; currentUser = user; currentRole = 'wali';
     $('loginError').classList.add('hidden');
-    hideLoading();
-    loginInProgress = false;
     showWaliDashboard();
     showToast('✅ Selamat datang, ' + user.name + '!', 'success');
   } catch(e) {
-    hideLoading();
-    loginInProgress = false;
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showLoginError('❌ Error: ' + msg);
-  }
+    showLoginError('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message));
+  } finally { hideLoading(); loginInProgress = false; }
 }
 
 async function loginAdmin() {
   if (loginInProgress) return;
-  loginInProgress = true;
-  
   const email = $('adminEmail').value.trim();
-  const password = $('adminPassword').value || 'd4Rm@app';
-  
-  if (!email) {
-    showLoginError('Mohon isi email');
-    loginInProgress = false;
-    return;
-  }
-  
-  if (!isOnline) {
-    showLoginError('⚠️ Koneksi offline. Periksa internet Anda.');
-    loginInProgress = false;
-    return;
-  }
-  
+  const password = $('adminPassword').value;
+  if (!email) { showLoginError('Mohon isi email'); return; }
+  if (!password) { showLoginError('Masukkan password Anda'); return; }
+  if (!isOnline) { showLoginError('⚠️ Koneksi offline. Periksa internet Anda.'); return; }
+  loginInProgress = true;
   showLoading('Memeriksa data admin...');
   try {
     const user = await callAPI('getUserByEmail', { email });
-    
-    if (!user || !user.id) {
-      showLoginError('❌ Email tidak ditemukan');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    if (user.password !== password) {
-      showLoginError('❌ Password salah. Default: d4Rm@app');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    if (user.role !== 'super_admin') {
-      showLoginError('❌ Akun ini bukan Admin Super');
-      hideLoading();
-      loginInProgress = false;
-      return;
-    }
-    
-    currentUser = user;
-    currentRole = 'admin';
+    if (!user || !user.id) { showLoginError('❌ Email tidak ditemukan'); return; }
+    if (user.password !== password) { showLoginError('❌ Password salah.'); return; }
+    if (user.role !== 'super_admin') { showLoginError('❌ Akun ini bukan Admin Super'); return; }
+    currentUser = user; currentRole = 'admin';
     $('loginError').classList.add('hidden');
-    hideLoading();
-    loginInProgress = false;
     showAdminDashboard();
     showToast('✅ Selamat datang, ' + user.name + '!', 'success');
   } catch(e) {
-    hideLoading();
-    loginInProgress = false;
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showLoginError('❌ Error: ' + msg);
-  }
+    showLoginError('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message));
+  } finally { hideLoading(); loginInProgress = false; }
 }
 
 function showLoginError(msg) {
   const el = $('loginError');
   el.textContent = msg;
   el.classList.remove('hidden');
-  
   clearTimeout(el._timeout);
-  el._timeout = setTimeout(() => {
-    el.classList.add('hidden');
-  }, 5000);
+  el._timeout = setTimeout(() => el.classList.add('hidden'), 5000);
 }
 
 // ============================================================
 // DASHBOARD FUNCTIONS
 // ============================================================
 function showStudentDashboard() {
-  hide('loginPage');
-  show('dashboardContent');
-  show('studentDashboard');
-  hide('waliDashboard');
-  hide('adminDashboard');
-  
-  hide('sidebarWaliMenu');
-  hide('sidebarAdminMenu');
+  hide('loginPage'); show('dashboardContent'); show('studentDashboard');
+  hide('waliDashboard'); hide('adminDashboard');
+  hide('sidebarWaliMenu'); hide('sidebarAdminMenu');
   show('sidebarStudentMenu');
   document.getElementById('sidebarUserInfo').textContent = '👤 ' + currentStudent.name;
-  
   $('studentNameDisplay').textContent = currentStudent.name;
   updateDateTime();
   if (dateInterval) clearInterval(dateInterval);
@@ -1737,60 +1709,39 @@ function showStudentDashboard() {
 }
 
 async function showWaliDashboard() {
-  hide('loginPage');
-  show('dashboardContent');
-  hide('studentDashboard');
-  show('waliDashboard');
-  hide('adminDashboard');
-  
-  hide('sidebarStudentMenu');
-  hide('sidebarAdminMenu');
+  hide('loginPage'); show('dashboardContent'); hide('studentDashboard');
+  show('waliDashboard'); hide('adminDashboard');
+  hide('sidebarStudentMenu'); hide('sidebarAdminMenu');
   show('sidebarWaliMenu');
   document.getElementById('sidebarUserInfo').textContent = '👨‍🏫 ' + currentWali.name;
-  
   $('waliNameDisplay').textContent = currentWali.name;
   await loadWaliData();
 }
 
 async function showAdminDashboard() {
-  hide('loginPage');
-  show('dashboardContent');
-  hide('studentDashboard');
-  hide('waliDashboard');
-  show('adminDashboard');
-  
-  hide('sidebarStudentMenu');
-  hide('sidebarWaliMenu');
+  hide('loginPage'); show('dashboardContent'); hide('studentDashboard');
+  hide('waliDashboard'); show('adminDashboard');
+  hide('sidebarStudentMenu'); hide('sidebarWaliMenu');
   show('sidebarAdminMenu');
   document.getElementById('sidebarUserInfo').textContent = '🛡️ ' + currentUser.name;
-  
   $('adminNameDisplay').textContent = currentUser.name;
   await loadAdminData();
 }
 
 function logout() {
   if (confirm('Yakin ingin keluar?')) {
-    if (dateInterval) {
-      clearInterval(dateInterval);
-      dateInterval = null;
-    }
-    currentUser = null;
-    currentRole = null;
-    currentStudent = null;
-    currentWali = null;
+    if (dateInterval) { clearInterval(dateInterval); dateInterval = null; }
+    if (connectionIntervalId) { clearInterval(connectionIntervalId); connectionIntervalId = null; }
+    currentUser = null; currentRole = null; currentStudent = null; currentWali = null;
     dataLoaded = false;
-    allStudentsCache = [];
-    allCurhatCache = [];
-    allJurnalCache = [];
-    allPerbuatanCache = [];
-    allPotensiCache = [];
-    allProfilCache = [];
-    hide('dashboardContent');
-    hide('studentDashboard');
-    hide('waliDashboard');
-    hide('adminDashboard');
+    allStudentsCache = []; allCurhatCache = []; allJurnalCache = [];
+    allPerbuatanCache = []; allPotensiCache = []; allProfilCache = [];
+    allHapalanCache = []; allKokurikulerCache = [];
+    laporanDataCache = []; potensiDataCache = []; perbuatanDataCache = []; chatDataCache = [];
+    currentCurhatId = null; chatCurrentStudentId = null;
+    hide('dashboardContent'); hide('studentDashboard'); hide('waliDashboard'); hide('adminDashboard');
     show('loginPage');
-    ['studentName', 'studentClass', 'studentPassword', 'waliEmail', 'waliPassword', 'adminEmail', 'adminPassword'].forEach(id => {
+    ['studentName','studentClass','studentPassword','waliEmail','waliPassword','adminEmail','adminPassword'].forEach(id => {
       if ($(id)) $(id).value = '';
     });
     closeSidebar();
@@ -1802,37 +1753,15 @@ function updateDateTime() {
   const now = new Date();
   const el = $('dateDisplay');
   if (el) {
-    el.textContent = now.toLocaleDateString('id-ID', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
+    try {
+      el.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    } catch(e) { el.textContent = now.toDateString(); }
   }
 }
 
 // ============================================================
-// PROFIL FUNCTIONS - DENGAN OPTIMASI FOTO
+// PROFIL FUNCTIONS
 // ============================================================
-function previewProfilePhoto(event) {
-  const file = event.target.files[0];
-  if (file) {
-    // Validasi ukuran file (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      showToast('❌ Ukuran foto maksimal 2MB', 'error');
-      event.target.value = '';
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      document.getElementById('profilePhotoPreview').src = e.target.result;
-      profilePhotoData = e.target.result;
-      isPhotoUploaded = true;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
 function showProfilForm() {
   document.getElementById('profilFormContainer').classList.remove('hidden');
   document.getElementById('profilCVContainer').classList.add('hidden');
@@ -1841,19 +1770,12 @@ function showProfilForm() {
 function showProfilCV(profil) {
   document.getElementById('profilFormContainer').classList.add('hidden');
   document.getElementById('profilCVContainer').classList.remove('hidden');
-  
   document.getElementById('cvNama').textContent = currentStudent.name || '-';
   document.getElementById('cvKelas').textContent = currentStudent.class || '-';
   document.getElementById('cvTempatLahir').textContent = profil.tempat_lahir || '-';
   document.getElementById('cvHobi').textContent = profil.hobi || '-';
   document.getElementById('cvCita').textContent = profil.cita_cita || '-';
   document.getElementById('cvAlamat').textContent = profil.alamat || '-';
-  
-  if (profil.foto && profil.foto.startsWith('data:image')) {
-    document.getElementById('cvFoto').src = profil.foto;
-  } else {
-    document.getElementById('cvFoto').src = 'https://ui-avatars.com/api/?name=' + encodeURIComponent(currentStudent.name) + '&size=100&background=4a9bc7&color=fff';
-  }
 }
 
 function editProfil() {
@@ -1863,11 +1785,6 @@ function editProfil() {
     document.getElementById('profilHobi').value = profil.hobi || '';
     document.getElementById('profilCita').value = profil.cita_cita || '';
     document.getElementById('profilAlamat').value = profil.alamat || '';
-    if (profil.foto && profil.foto.startsWith('data:image')) {
-      document.getElementById('profilePhotoPreview').src = profil.foto;
-      profilePhotoData = profil.foto;
-      isPhotoUploaded = true;
-    }
   }
   showProfilForm();
 }
@@ -1877,53 +1794,28 @@ async function simpanProfil() {
   const hobi = document.getElementById('profilHobi').value.trim();
   const cita = document.getElementById('profilCita').value.trim();
   const alamat = document.getElementById('profilAlamat').value.trim();
-  
-  // Kirim foto hanya jika ada upload baru
-  const foto = isPhotoUploaded ? profilePhotoData : '';
-  
-  if (!tempatLahir && !hobi && !cita && !alamat && !foto) {
-    showToast('❌ Isi minimal satu data profil', 'error');
-    return;
+  if (!tempatLahir && !hobi && !cita && !alamat) {
+    showToast('❌ Isi minimal satu data profil', 'error'); return;
   }
-  
-  if (!isOnline) {
-    showToast('⚠️ Koneksi offline', 'error');
-    return;
-  }
-  
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
   showLoading('Menyimpan profil...');
   try {
     const result = await callAPI('saveProfil', {
-      studentId: currentStudent.id,
-      tempatLahir: tempatLahir,
-      hobi: hobi,
-      citaCita: cita,
-      alamat: alamat,
-      foto: foto
+      studentId: currentStudent.id, tempatLahir, hobi, citaCita: cita, alamat
     });
-    
-    hideLoading();
     if (result && result.success) {
       document.getElementById('profilFeedback').textContent = '✅ Profil berhasil disimpan!';
       document.getElementById('profilFeedback').classList.remove('hidden');
       showToast('✅ Profil berhasil disimpan!', 'success');
-      
-      isPhotoUploaded = false;
       dataLoaded = false;
       await loadStudentData();
-      
-      setTimeout(() => {
-        document.getElementById('profilFeedback').classList.add('hidden');
-      }, 3000);
+      setTimeout(() => document.getElementById('profilFeedback').classList.add('hidden'), 3000);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan profil';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan profil'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -1939,24 +1831,23 @@ async function loadStudentData() {
       document.getElementById('potensiCita').value = potensi.cita_cita || '';
       document.getElementById('potensiKarakter').value = potensi.kekuatan_karakter || 'Pemberani';
     }
-    
+  } catch(e) { console.warn('Load potensi error:', e); }
+
+  try {
     const profil = await callAPI('getProfil', { studentId: currentStudent.id });
     if (profil && profil.id) {
       showProfilCV(profil);
-      const existingIdx = allProfilCache.findIndex(p => p.student_id === currentStudent.id);
-      if (existingIdx >= 0) {
-        allProfilCache[existingIdx] = profil;
-      } else {
-        allProfilCache.push(profil);
-      }
+      const idx = allProfilCache.findIndex(p => p.student_id === currentStudent.id);
+      if (idx >= 0) allProfilCache[idx] = profil; else allProfilCache.push(profil);
     } else {
       showProfilForm();
     }
-    
-    await loadRiwayatCurhatSiswa();
   } catch(e) {
-    console.warn('Load student data error:', e);
+    console.warn('Load profil error:', e);
+    showProfilForm();
   }
+
+  await loadRiwayatCurhatSiswa();
 }
 
 // ============================================================
@@ -1964,53 +1855,36 @@ async function loadStudentData() {
 // ============================================================
 async function loadRiwayatCurhatSiswa() {
   if (!isOnline || !currentStudent) return;
-  
   try {
     const curhatList = await callAPI('getCurhatByStudent', { studentId: currentStudent.id });
     const container = document.getElementById('riwayatCurhatSiswa');
     const badge = document.getElementById('curhatBadge');
     const sidebarBadge = document.getElementById('sidebarCurhatBadge');
-    
     if (!curhatList || curhatList.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada curhat</div>';
-      badge.classList.add('hidden');
-      sidebarBadge.textContent = '0';
+      badge.classList.add('hidden'); sidebarBadge.textContent = '0';
       return;
     }
-    
-    let hasNewReply = false;
-    let html = '';
-    let unreadCount = 0;
-    
-    for (const curhat of curhatList) {
-      const replies = await callAPI('getCurhatReplies', { curhatId: curhat.id });
-      const replyCount = replies ? replies.length : 0;
+    const repliesArr = await Promise.all(
+      curhatList.map(c => callAPI('getCurhatReplies', { curhatId: c.id }).catch(() => []))
+    );
+    let hasNewReply = false, html = '', unreadCount = 0;
+    curhatList.forEach((curhat, idx) => {
+      const replies = repliesArr[idx] || [];
+      const replyCount = replies.length;
       const lastReply = replyCount > 0 ? replies[replies.length - 1] : null;
-      
-      const waliReplies = replies ? replies.filter(r => r.is_wali === true || r.is_wali === 'TRUE') : [];
-      if (waliReplies.length > 0 && (curhat.is_read === false || curhat.is_read === 'FALSE')) {
-        hasNewReply = true;
-        unreadCount++;
-      }
-      
-      const daruratBadge = curhat.tingkat_darurat === 'Aku butuh bantuan sekarang' 
-        ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>' 
-        : '';
-      
-      const statusBadge = replyCount > 0 
+      const waliReplies = replies.filter(r => r.is_wali === true);
+      if (waliReplies.length > 0 && (curhat.is_read === false)) { hasNewReply = true; unreadCount++; }
+      const daruratBadge = curhat.tingkat_darurat === 'Aku butuh bantuan sekarang'
+        ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>' : '';
+      const statusBadge = replyCount > 0
         ? `<span class="badge-glass badge-glass-green">💬 ${replyCount} balasan</span>`
         : '<span class="badge-glass badge-glass-yellow">⏳ Menunggu balasan</span>';
-      
-      const lastReplyText = lastReply 
-        ? `<div class="text-xs text-white/60 mt-1">
-             <i class="fas fa-reply mr-1"></i> Balasan terakhir: "${escapeHtml(lastReply.message.substring(0, 40))}${lastReply.message.length > 40 ? '...' : ''}"
-             <span class="block text-[10px]">dari ${escapeHtml(lastReply.sender_name)} · ${new Date(lastReply.created_at).toLocaleString()}</span>
-           </div>`
+      const lastReplyText = lastReply
+        ? `<div class="text-xs text-white/60 mt-1"><i class="fas fa-reply mr-1"></i> Balasan terakhir: "${escapeHtml(lastReply.message.substring(0, 40))}${lastReply.message.length > 40 ? '...' : ''}" <span class="block text-[10px]">dari ${escapeHtml(lastReply.sender_name)} · ${new Date(lastReply.created_at).toLocaleString()}</span></div>`
         : '';
-      
       html += `
-        <div class="glass p-3 cursor-pointer hover:bg-white/5 transition ${!curhat.is_read ? 'border-l-4 border-purple-400' : ''}" 
-             onclick="openDetailCurhatSiswa('${curhat.id}')">
+        <div class="glass p-3 cursor-pointer hover:bg-white/5 transition ${!curhat.is_read ? 'border-l-4 border-purple-400' : ''}" onclick="openDetailCurhatSiswa('${curhat.id}')">
           <div class="flex justify-between items-start">
             <div class="flex-1">
               <div class="flex items-center gap-2 flex-wrap">
@@ -2026,23 +1900,13 @@ async function loadRiwayatCurhatSiswa() {
               ${!curhat.is_read ? '<span class="text-xs text-purple-300 animate-pulse">● Baru</span>' : ''}
             </div>
           </div>
-        </div>
-      `;
-    }
-    
+        </div>`;
+    });
     container.innerHTML = html;
     sidebarBadge.textContent = unreadCount > 0 ? unreadCount : '0';
-    
-    if (hasNewReply) {
-      badge.classList.remove('hidden');
-      badge.textContent = '📩 Balasan Baru';
-    } else {
-      badge.classList.add('hidden');
-    }
-    
-  } catch(e) {
-    console.warn('Load riwayat curhat error:', e);
-  }
+    if (hasNewReply) { badge.classList.remove('hidden'); badge.textContent = '📩 Balasan Baru'; }
+    else badge.classList.add('hidden');
+  } catch(e) { console.warn('Load riwayat curhat error:', e); }
 }
 
 // ============================================================
@@ -2050,81 +1914,57 @@ async function loadRiwayatCurhatSiswa() {
 // ============================================================
 async function openDetailCurhatSiswa(curhatId) {
   currentCurhatId = curhatId;
-  
   try {
     showLoading('Memuat detail curhat...');
-    
     const allCurhat = await callAPI('getCurhatByStudent', { studentId: currentStudent.id });
-    const curhatData = allCurhat ? allCurhat.find(c => c.id === curhatId) : null;
-    
-    if (!curhatData) {
-      hideLoading();
-      showToast('❌ Curhat tidak ditemukan', 'error');
-      return;
-    }
-    
+    const curhatData_ = allCurhat ? allCurhat.find(c => c.id === curhatId) : null;
+    if (!curhatData_) { showToast('❌ Curhat tidak ditemukan', 'error'); return; }
     const replies = await callAPI('getCurhatReplies', { curhatId: curhatId });
-    
-    document.getElementById('detailCurhatJudul').textContent = `${curhatData.kategori} · ${curhatData.sub_kategori}`;
-    document.getElementById('detailCurhatCerita').textContent = curhatData.cerita;
-    document.getElementById('detailCurhatWaktu').textContent = new Date(curhatData.created_at).toLocaleString();
-    document.getElementById('detailCurhatStatus').innerHTML = curhatData.tingkat_darurat === 'Aku butuh bantuan sekarang' 
-      ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>' 
+    document.getElementById('detailCurhatJudul').textContent = `${curhatData_.kategori} · ${curhatData_.sub_kategori}`;
+    document.getElementById('detailCurhatCerita').textContent = curhatData_.cerita;
+    document.getElementById('detailCurhatWaktu').textContent = new Date(curhatData_.created_at).toLocaleString();
+    document.getElementById('detailCurhatStatus').innerHTML = curhatData_.tingkat_darurat === 'Aku butuh bantuan sekarang'
+      ? '<span class="badge-glass badge-glass-red">⚠️ Darurat</span>'
       : '<span class="badge-glass badge-glass-blue">Normal</span>';
-    
     const repliesContainer = document.getElementById('detailCurhatReplies');
     let hasWaliReply = false;
-    
     if (!replies || replies.length === 0) {
-      repliesContainer.innerHTML = `
-        <div class="text-white/60 text-sm text-center py-4">
-          <i class="fas fa-clock text-2xl block mb-2"></i>
-          Belum ada balasan. Tunggu balasan dari Wali ya 😊
-        </div>
-      `;
+      repliesContainer.innerHTML = `<div class="text-white/60 text-sm text-center py-4"><i class="fas fa-clock text-2xl block mb-2"></i>Belum ada balasan. Tunggu balasan dari Wali ya 😊</div>`;
     } else {
-      hasWaliReply = replies.some(r => r.is_wali === true || r.is_wali === 'TRUE');
-      
+      hasWaliReply = replies.some(r => r.is_wali === true);
       repliesContainer.innerHTML = replies.map(r => {
-        const isWali = r.is_wali === true || r.is_wali === 'TRUE';
+        const isWali = r.is_wali === true;
         const icon = isWali ? '👨‍🏫' : '👤';
         const name = isWali ? (r.sender_name || 'Wali') : (r.sender_name || 'Siswa');
         const time = new Date(r.created_at).toLocaleString();
         const bubbleClass = isWali ? 'reply-wali p-3 rounded-lg' : 'reply-siswa p-3 rounded-lg';
         const label = isWali ? 'Balasan dari Wali' : 'Balasan dari Siswa';
         const labelClass = isWali ? 'text-purple-300' : 'text-blue-300';
-        
-        return `
-          <div class="${bubbleClass}">
+        return `<div class="${bubbleClass}">
             <div class="flex items-center gap-2">
               <span class="font-semibold text-sm ${isWali ? 'text-purple-300' : 'text-blue-300'}">${icon} ${escapeHtml(name)}</span>
               <span class="text-xs text-white/60">${time}</span>
             </div>
             <div class="text-sm text-white/90 mt-1">${escapeHtml(r.message)}</div>
             <div class="text-xs ${labelClass} mt-1"><i class="fas fa-check-circle"></i> ${label}</div>
-          </div>
-        `;
+          </div>`;
       }).join('');
     }
-    
     const siswaBalasArea = document.getElementById('siswaBalasArea');
     const siswaBalasFeedback = document.getElementById('siswaBalasFeedback');
-    
     siswaBalasFeedback.classList.add('hidden');
     siswaBalasFeedback.textContent = '';
-    
     if (hasWaliReply) {
-      const canReply = await callAPI('canStudentReplyToCurhat', {
-        studentId: currentStudent.id,
-        curhatId: curhatId
-      });
-      
-      if (canReply === true) {
+      let canReply = false;
+      try {
+        canReply = await callAPI('canStudentReplyToCurhat', { studentId: currentStudent.id, curhatId: curhatId });
+      } catch(e) { canReply = !replies.some(r => r.is_wali === false); }
+      if (canReply) {
         siswaBalasArea.classList.remove('hidden');
         document.getElementById('siswaBalasanText').value = '';
       } else {
         siswaBalasArea.classList.add('hidden');
-        if (replies && replies.some(r => r.is_wali === false || r.is_wali === 'FALSE')) {
+        if (replies && replies.some(r => r.is_wali === false)) {
           siswaBalasFeedback.textContent = '✅ Kamu sudah membalas balasan ini';
           siswaBalasFeedback.classList.remove('hidden');
           siswaBalasFeedback.className = 'text-xs text-green-300 mt-2';
@@ -2133,26 +1973,13 @@ async function openDetailCurhatSiswa(curhatId) {
     } else {
       siswaBalasArea.classList.add('hidden');
     }
-    
-    if (!curhatData.is_read || curhatData.is_read === 'FALSE') {
-      try {
-        await callAPI('markCurhatAsRead', { 
-          studentId: currentStudent.id, 
-          curhatId: curhatId 
-        });
-      } catch(e) {
-        console.warn('Failed to mark as read:', e);
-      }
+    if (!curhatData_.is_read) {
+      try { await callAPI('markCurhatAsRead', { studentId: currentStudent.id, curhatId: curhatId }); } catch(e) {}
     }
-    
-    hideLoading();
     document.getElementById('detailCurhatSiswaModal').classList.remove('hidden');
-    
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Gagal memuat detail: ' + msg, 'error');
-  }
+    showToast('❌ Gagal memuat detail: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -2160,108 +1987,67 @@ async function openDetailCurhatSiswa(curhatId) {
 // ============================================================
 async function kirimBalasanSiswa() {
   const message = document.getElementById('siswaBalasanText').value.trim();
-  if (!message) {
-    showToast('Tulis balasan dulu ya', 'warning');
-    return;
-  }
-  
-  if (!isOnline) {
-    showToast('⚠️ Koneksi offline', 'error');
-    return;
-  }
-  
-  if (!currentCurhatId) {
-    showToast('❌ Curhat tidak ditemukan', 'error');
-    return;
-  }
-  
+  if (!message) { showToast('Tulis balasan dulu ya', 'warning'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
+  if (!currentCurhatId) { showToast('❌ Curhat tidak ditemukan', 'error'); return; }
   showLoading('Mengirim balasan...');
   try {
     const result = await callAPI('addStudentReplyToCurhat', {
-      curhatId: currentCurhatId,
-      studentId: currentStudent.id,
-      studentName: currentStudent.name,
-      message: message
+      curhatId: currentCurhatId, studentId: currentStudent.id, studentName: currentStudent.name, message
     });
-    
-    hideLoading();
     if (result && result.success) {
       showToast('✅ Balasan terkirim!', 'success');
       document.getElementById('siswaBalasanText').value = '';
       document.getElementById('siswaBalasFeedback').textContent = '✅ Balasan berhasil dikirim!';
       document.getElementById('siswaBalasFeedback').classList.remove('hidden');
       document.getElementById('siswaBalasFeedback').className = 'text-xs text-green-300 mt-2';
-      
-      setTimeout(() => {
-        document.getElementById('siswaBalasArea').classList.add('hidden');
-      }, 1500);
-      
+      setTimeout(() => document.getElementById('siswaBalasArea').classList.add('hidden'), 1500);
       await loadRiwayatCurhatSiswa();
-      
-      setTimeout(() => {
-        closeModal('detailCurhatSiswaModal');
-      }, 2000);
+      setTimeout(() => closeModal('detailCurhatSiswaModal'), 2000);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal mengirim balasan';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal mengirim balasan'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
 // CURHAT FLOW
 // ============================================================
-function initCurhat() {
-  openCurhat();
-}
-
+function initCurhat() { openCurhat(); }
 function openCurhat() {
-  curhatStep = 0;
-  curhatData = {};
+  curhatStep = 0; curhatData = {};
   document.getElementById('curhatFlow').innerHTML = '<div class="text-white/60 curhat-flow-step">Siapa yang bermasalah?</div>';
   document.getElementById('curhatOptions').innerHTML = `
     <button onclick="curhatStep1('Aku sendiri')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Aku sendiri</button>
-    <button onclick="curhatStep1('Untuk temanku')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Untuk temanku</button>
-  `;
+    <button onclick="curhatStep1('Untuk temanku')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Untuk temanku</button>`;
   document.getElementById('curhatTextArea').classList.add('hidden');
   document.getElementById('curhatResult').classList.add('hidden');
+  const ta = document.getElementById('curhatCerita'); if (ta) ta.value = '';
 }
-
 function curhatStep1(siapa) {
   curhatData.untuk_siapa = siapa;
   document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">Masalah di mana?</div>';
   document.getElementById('curhatOptions').innerHTML = `
     <button onclick="curhatStep2('Sekolah')" class="btn-glass btn-glass-primary text-sm py-2 px-4">🏫 Sekolah</button>
-    <button onclick="curhatStep2('Rumah')" class="btn-glass btn-glass-warning text-sm py-2 px-4">🏠 Rumah</button>
-  `;
+    <button onclick="curhatStep2('Rumah')" class="btn-glass btn-glass-warning text-sm py-2 px-4">🏠 Rumah</button>`;
 }
-
 function curhatStep2(kategori) {
   curhatData.kategori = kategori;
-  const options = kategori === 'Sekolah' 
-    ? ['Perundungan', 'Pelajaran', 'Teman', 'Guru']
-    : ['Orang tua', 'Saudara', 'Keuangan'];
-  
+  const options = kategori === 'Sekolah' ? ['Perundungan','Pelajaran','Teman','Guru'] : ['Orang tua','Saudara','Keuangan'];
   document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">Masalah spesifik apa?</div>';
-  document.getElementById('curhatOptions').innerHTML = options.map(opt => 
-    `<button onclick="curhatStep3('${opt}')" class="btn-glass btn-glass-primary text-sm py-2 px-4">${opt}</button>`
-  ).join('');
+  document.getElementById('curhatOptions').innerHTML = options.map(opt =>
+    `<button onclick="curhatStep3('${opt}')" class="btn-glass btn-glass-primary text-sm py-2 px-4">${opt}</button>`).join('');
 }
-
 function curhatStep3(sub) {
   curhatData.sub = sub;
   document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">Bagaimana kondisimu?</div>';
   document.getElementById('curhatOptions').innerHTML = `
     <button onclick="curhatStep4('Aku cuma mau cerita')" class="btn-glass text-sm py-2 px-4">💬 Cuma mau cerita</button>
     <button onclick="curhatStep4('Aku butuh saran')" class="btn-glass btn-glass-warning text-sm py-2 px-4">💡 Butuh saran</button>
-    <button onclick="curhatStep4('Aku butuh bantuan sekarang')" class="btn-glass btn-glass-danger text-sm py-2 px-4">🚨 Darurat/Butuh bantuan</button>
-  `;
+    <button onclick="curhatStep4('Aku butuh bantuan sekarang')" class="btn-glass btn-glass-danger text-sm py-2 px-4">🚨 Darurat/Butuh bantuan</button>`;
 }
-
 function curhatStep4(darurat) {
   curhatData.darurat = darurat;
   document.getElementById('curhatFlow').innerHTML = '<div class="text-white curhat-flow-step">📝 Ceritakan masalahmu secara lengkap di sini</div>';
@@ -2270,112 +2056,74 @@ function curhatStep4(darurat) {
   document.getElementById('curhatCerita').placeholder = 'Ceritakan masalahmu secara lengkap...\n\nContoh: Saya merasa...';
   document.getElementById('curhatCerita').focus();
 }
-
 async function submitCurhat() {
   const cerita = document.getElementById('curhatCerita').value.trim();
-  if (!cerita) {
-    alert('Tulis cerita dulu ya');
-    return;
-  }
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!cerita) { showToast('Tulis cerita dulu ya', 'warning'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Mengirim curhat...');
   try {
     const result = await callAPI('addCurhat', {
-      studentId: currentStudent.id,
-      untukSiapa: curhatData.untuk_siapa,
-      kategori: curhatData.kategori,
-      subKategori: curhatData.sub,
-      tingkatDarurat: curhatData.darurat,
-      cerita: cerita
+      studentId: currentStudent.id, untukSiapa: curhatData.untuk_siapa,
+      kategori: curhatData.kategori, subKategori: curhatData.sub,
+      tingkatDarurat: curhatData.darurat, cerita
     });
-    
-    hideLoading();
     if (result && result.success) {
       document.getElementById('curhatTextArea').classList.add('hidden');
       document.getElementById('curhatResult').classList.remove('hidden');
       document.getElementById('curhatResult').textContent = '✅ Terima kasih sudah curhat!';
       document.getElementById('curhatCerita').value = '';
       showToast('✅ Curhat berhasil dikirim!', 'success');
-      
-      if (curhatData.darurat === 'Aku butuh bantuan sekarang') {
-        alert('⚠️ Kami akan segera menghubungimu! Tetap tenang ya.');
-      }
-      
+      if (curhatData.darurat === 'Aku butuh bantuan sekarang')
+        showToast('⚠️ Kami akan segera menghubungimu! Tetap tenang ya.', 'warning');
+      curhatData = {}; curhatStep = 0;
       setTimeout(() => {
         document.getElementById('curhatResult').classList.add('hidden');
         document.getElementById('curhatFlow').innerHTML = '<div class="text-white/60">Mulai curhat dengan memilih di bawah</div>';
         document.getElementById('curhatOptions').innerHTML = `
           <button onclick="curhatStep1('Aku sendiri')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Aku sendiri</button>
-          <button onclick="curhatStep1('Untuk temanku')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Untuk temanku</button>
-        `;
+          <button onclick="curhatStep1('Untuk temanku')" class="btn-glass btn-glass-primary text-sm py-2 px-4">Untuk temanku</button>`;
       }, 3000);
-      
       await loadRiwayatCurhatSiswa();
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal mengirim curhat';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal mengirim curhat'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
-// JURNAL FUNCTIONS
+// JURNAL
 // ============================================================
-function openJurnal() {
-  showStudentSection('studentJurnal');
-  document.getElementById('jurnalFeedback').textContent = '';
-}
-
+function openJurnal() { showStudentSection('studentJurnal'); const el = document.getElementById('jurnalFeedback'); if (el) el.textContent = ''; }
 function pilihEmoji(emoji) {
   document.getElementById('jurnalEmoji').value = emoji;
   document.querySelectorAll('#studentJurnalSection .text-4xl span').forEach(el => {
     el.style.transform = el.textContent === emoji ? 'scale(1.4)' : 'scale(1)';
   });
 }
-
 async function simpanJurnal() {
   const emoji = document.getElementById('jurnalEmoji').value;
   const cerita = document.getElementById('jurnalCerita').value.trim() || 'Hari ini biasa saja.';
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Menyimpan jurnal...');
   try {
-    const result = await callAPI('addJurnal', {
-      studentId: currentStudent.id,
-      emoji: emoji,
-      cerita: cerita
-    });
-    
-    hideLoading();
+    const result = await callAPI('addJurnal', { studentId: currentStudent.id, emoji, cerita });
     if (result && result.success) {
       document.getElementById('jurnalFeedback').textContent = '✅ Jurnal tersimpan!';
       document.getElementById('jurnalCerita').value = '';
+      document.getElementById('jurnalEmoji').value = '😊';
+      document.querySelectorAll('#studentJurnalSection .text-4xl span').forEach(el => {
+        el.style.transform = el.textContent === '😊' ? 'scale(1.4)' : 'scale(1)';
+      });
       showToast('✅ Jurnal tersimpan!', 'success');
-      setTimeout(() => {
-        document.getElementById('jurnalFeedback').textContent = '';
-      }, 3000);
+      setTimeout(() => { const el = document.getElementById('jurnalFeedback'); if (el) el.textContent = ''; }, 3000);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan jurnal';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan jurnal'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -2383,45 +2131,27 @@ async function simpanJurnal() {
 // ============================================================
 function openPerbuatanBaik() {
   showStudentSection('studentPerbuatan');
-  document.getElementById('perbuatanFeedback').textContent = '';
-  document.getElementById('perbuatanLain').value = '';
+  const el = document.getElementById('perbuatanFeedback'); if (el) el.textContent = '';
+  const inp = document.getElementById('perbuatanLain'); if (inp) inp.value = '';
 }
-
 async function catatPerbuatan(action) {
-  if (!action || action.trim() === '') {
-    alert('Tulis perbuatan baiknya');
-    return;
-  }
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!action || action.trim() === '') { showToast('Tulis perbuatan baiknya', 'warning'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Mencatat perbuatan baik...');
   try {
-    const result = await callAPI('addPerbuatanBaik', {
-      studentId: currentStudent.id,
-      action: action
-    });
-    
-    hideLoading();
+    const result = await callAPI('addPerbuatanBaik', { studentId: currentStudent.id, action });
     if (result && result.success) {
       const feedbacks = ['🌟 Good Job!', '💪 Luar biasa!', '😇 Kamu anak baik!', '⚡ Keren!'];
       document.getElementById('perbuatanFeedback').textContent = feedbacks[Math.floor(Math.random() * feedbacks.length)];
       showToast('✅ Perbuatan baik dicatat!', 'success');
-      setTimeout(() => {
-        document.getElementById('perbuatanFeedback').textContent = '';
-      }, 3000);
+      const inp = document.getElementById('perbuatanLain'); if (inp) inp.value = '';
+      setTimeout(() => { const el = document.getElementById('perbuatanFeedback'); if (el) el.textContent = ''; }, 3000);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal mencatat';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal mencatat'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -2431,93 +2161,69 @@ function openPotensi() {
   showStudentSection('studentPotensi');
   document.getElementById('potensiFeedback').classList.add('hidden');
 }
-
 async function simpanPotensi() {
   const minat = document.getElementById('potensiMinat').value;
   const gaya = document.getElementById('potensiGaya').value;
   const cita = document.getElementById('potensiCita').value.trim() || 'Belum diisi';
   const karakter = document.getElementById('potensiKarakter').value;
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Menyimpan peta potensi...');
   try {
     const result = await callAPI('savePotensi', {
-      studentId: currentStudent.id,
-      minat: minat,
-      gayaBelajar: gaya,
-      citaCita: cita,
-      kekuatanKarakter: karakter,
-      ekstrakurikuler: '-'
+      studentId: currentStudent.id, minat, gayaBelajar: gaya, citaCita: cita, kekuatanKarakter: karakter, ekstrakurikuler: '-'
     });
-    
-    hideLoading();
     if (result && result.success) {
       document.getElementById('potensiFeedback').textContent = '✅ Peta Potensi berhasil disimpan!';
       document.getElementById('potensiFeedback').classList.remove('hidden');
       showToast('✅ Peta Potensi berhasil disimpan!', 'success');
-      setTimeout(() => {
-        document.getElementById('potensiFeedback').classList.add('hidden');
-      }, 3000);
+      setTimeout(() => document.getElementById('potensiFeedback').classList.add('hidden'), 3000);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan potensi';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan potensi'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
-// WALI FUNCTIONS - DENGAN DATA PROFIL DI DAFTAR SISWA
+// WALI FUNCTIONS
 // ============================================================
 async function loadWaliData() {
   if (!isOnline) {
     document.getElementById('studentList').innerHTML = '<div class="text-red-400/80 text-center">⚠️ Koneksi offline</div>';
     return;
   }
-  
   showLoading('Memuat data wali...');
   try {
     const allData = await loadAllDataParallel();
-    
     const students = allData.students.filter(s => s.wali_id === currentWali.id);
     document.getElementById('totalSiswa').textContent = students.length;
-    
     const studentIds = students.map(s => s.id);
-    const waliCurhat = allData.curhat.filter(c => studentIds.includes(c.student_id));
     
-    waliCurhat.forEach(c => {
-      const student = students.find(s => s.id === c.student_id);
-      c.student_name = student ? student.name : 'Siswa';
-    });
+    const waliCurhat = allData.curhat
+      .filter(c => studentIds.includes(c.student_id))
+      .map(c => {
+        const student = students.find(s => s.id === c.student_id);
+        return { ...c, student_name: student ? student.name : 'Siswa' };
+      });
     
-    const unread = waliCurhat.filter(c => c.is_read === false || c.is_read === 'FALSE');
+    const unread = waliCurhat.filter(c => c.is_read === false);
     const darurat = waliCurhat.filter(c => c.tingkat_darurat === 'Aku butuh bantuan sekarang');
-    
     document.getElementById('curhatBelumDibaca').textContent = unread.length;
     document.getElementById('curhatDarurat').textContent = darurat.length;
     
-    // Render daftar siswa DENGAN data profil
     renderStudentList(students, allData.profil);
     await loadLaporanKondisi(students);
     await loadPotensiSiswa(students, allData.potensi);
     await loadPerbuatanBaik(students, allData.perbuatan);
-    await loadChatHistory(students, allData.curhat);
+    await loadChatHistory(students, waliCurhat);
     await loadJurnalSiswa(students, allData.jurnal);
     
-    hideLoading();
+    if (currentWaliSection === 'waliHapalan') loadHapalanData();
+    if (currentWaliSection === 'waliKokurikuler') loadKokurikulerData();
   } catch(e) {
-    hideLoading();
-    console.warn('Load wali data error:', e);
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('⚠️ Gagal memuat data: ' + msg, 'error');
-  }
+    showToast('⚠️ Gagal memuat data: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 function renderStudentList(students, profilData) {
@@ -2526,21 +2232,16 @@ function renderStudentList(students, profilData) {
     list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada siswa</div>';
     return;
   }
-  
   list.innerHTML = students.map(s => {
     const profil = profilData ? profilData.find(p => p.student_id === s.id) : null;
-    const foto = (profil && profil.foto && profil.foto.startsWith('data:image')) 
-      ? profil.foto 
-      : 'https://ui-avatars.com/api/?name=' + encodeURIComponent(s.name) + '&size=50&background=4a9bc7&color=fff';
     const tempatLahir = profil ? profil.tempat_lahir || '-' : '-';
     const hobi = profil ? profil.hobi || '-' : '-';
     const cita = profil ? profil.cita_cita || '-' : '-';
     const alamat = profil ? profil.alamat || '-' : '-';
-    
     return `
       <div class="glass p-4 hover:bg-white/5 transition">
         <div class="flex items-center gap-3">
-          <img src="${escapeHtml(foto)}" alt="${escapeHtml(s.name)}" class="profile-photo-sm">
+          <div class="profile-photo-sm flex items-center justify-center bg-blue-500/20 text-xl">👤</div>
           <div class="flex-1">
             <div class="font-semibold text-white">${escapeHtml(s.name)}</div>
             <div class="text-xs text-white/60">NIS: ${escapeHtml(s.nis)} · Kelas: ${escapeHtml(s.class)}</div>
@@ -2560,8 +2261,7 @@ function renderStudentList(students, profilData) {
             </button>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
@@ -2569,14 +2269,10 @@ function renderStudentList(students, profilData) {
 // EDIT PROFIL SISWA (WALI)
 // ============================================================
 function editProfilSiswa(studentId) {
+  if (openEditProfilModal) { showToast('Tutup form edit yang sedang terbuka dulu', 'warning'); return; }
   const student = allStudentsCache.find(s => s.id === studentId);
-  if (!student) {
-    showToast('❌ Siswa tidak ditemukan', 'error');
-    return;
-  }
-  
+  if (!student) { showToast('❌ Siswa tidak ditemukan', 'error'); return; }
   const profil = allProfilCache ? allProfilCache.find(p => p.student_id === studentId) : null;
-  
   const modal = document.createElement('div');
   modal.className = 'modal-overlay';
   modal.style.display = 'flex';
@@ -2589,33 +2285,27 @@ function editProfilSiswa(studentId) {
         <button onclick="this.closest('.modal-overlay').remove()" class="text-white/60 hover:text-white text-xl transition">✕</button>
       </div>
       <div class="space-y-3">
-        <div>
-          <label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
-          <input id="editTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010" value="${escapeHtml(profil ? profil.tempat_lahir || '' : '')}">
-        </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Hobi</label>
-          <input id="editHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda" value="${escapeHtml(profil ? profil.hobi || '' : '')}">
-        </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Cita-cita</label>
-          <input id="editCita" class="input-glass" placeholder="Contoh: Dokter, Pilot" value="${escapeHtml(profil ? profil.cita_cita || '' : '')}">
-        </div>
-        <div>
-          <label class="text-sm text-white/60 font-medium">Alamat</label>
-          <textarea id="editAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap...">${escapeHtml(profil ? profil.alamat || '' : '')}</textarea>
-        </div>
+        <div><label class="text-sm text-white/60 font-medium">Tempat, Tanggal Lahir</label>
+          <input id="editTempatLahir" class="input-glass" placeholder="Contoh: Jakarta, 15 Januari 2010" value="${escapeAttr(profil ? profil.tempat_lahir || '' : '')}"></div>
+        <div><label class="text-sm text-white/60 font-medium">Hobi</label>
+          <input id="editHobi" class="input-glass" placeholder="Contoh: Membaca, Bersepeda" value="${escapeAttr(profil ? profil.hobi || '' : '')}"></div>
+        <div><label class="text-sm text-white/60 font-medium">Cita-cita</label>
+          <input id="editCita" class="input-glass" placeholder="Contoh: Dokter, Pilot" value="${escapeAttr(profil ? profil.cita_cita || '' : '')}"></div>
+        <div><label class="text-sm text-white/60 font-medium">Alamat</label>
+          <textarea id="editAlamat" class="input-glass" rows="2" placeholder="Alamat lengkap...">${escapeHtml(profil ? profil.alamat || '' : '')}</textarea></div>
         <button onclick="simpanEditProfil('${studentId}')" class="btn-glass btn-glass-primary w-full mt-2">
           <i class="fas fa-save mr-2"></i>Simpan Perubahan
         </button>
         <div id="editProfilFeedback" class="text-green-300 text-sm mt-2 hidden"></div>
       </div>
-    </div>
-  `;
+    </div>`;
   document.body.appendChild(modal);
-  
+  openEditProfilModal = modal;
   modal.addEventListener('click', function(e) {
-    if (e.target === this) this.remove();
+    if (e.target === this) {
+      this.remove();
+      if (openEditProfilModal === this) openEditProfilModal = null;
+    }
   });
 }
 
@@ -2624,44 +2314,27 @@ async function simpanEditProfil(studentId) {
   const hobi = document.getElementById('editHobi').value.trim();
   const cita = document.getElementById('editCita').value.trim();
   const alamat = document.getElementById('editAlamat').value.trim();
-  
-  if (!isOnline) {
-    showToast('⚠️ Koneksi offline', 'error');
-    return;
-  }
-  
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
   showLoading('Menyimpan profil...');
   try {
     const result = await callAPI('saveProfil', {
-      studentId: studentId,
-      tempatLahir: tempatLahir,
-      hobi: hobi,
-      citaCita: cita,
-      alamat: alamat,
-      foto: ''
+      studentId, tempatLahir, hobi, citaCita: cita, alamat
     });
-    
-    hideLoading();
     if (result && result.success) {
       document.getElementById('editProfilFeedback').textContent = '✅ Profil berhasil diperbarui!';
       document.getElementById('editProfilFeedback').classList.remove('hidden');
       showToast('✅ Profil berhasil diperbarui!', 'success');
-      
       setTimeout(() => {
-        const modal = document.querySelector('.modal-overlay');
-        if (modal) modal.remove();
+        if (openEditProfilModal) { openEditProfilModal.remove(); openEditProfilModal = null; }
         dataLoaded = false;
         loadWaliData();
       }, 1500);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan profil';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan profil'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -2673,47 +2346,34 @@ async function loadChatHistory(students, curhatData) {
     const countBadge = document.getElementById('chatCount');
     const sidebarBadge = document.getElementById('sidebarChatBadge');
     chatDataCache = [];
-    
     if (!students || students.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
-      countBadge.textContent = '0 percakapan';
-      sidebarBadge.textContent = '0';
+      countBadge.textContent = '0 percakapan'; sidebarBadge.textContent = '0';
       return;
     }
-    
-    let html = '';
-    let totalChats = 0;
-    let totalUnread = 0;
-    
+    let html = '', totalChats = 0, totalUnread = 0;
     for (const student of students) {
       const curhats = curhatData.filter(c => c.student_id === student.id);
-      
       if (curhats && curhats.length > 0) {
         totalChats++;
-        const unreadCount = curhats.filter(c => c.is_read === false || c.is_read === 'FALSE').length;
+        const unreadCount = curhats.filter(c => c.is_read === false).length;
         totalUnread += unreadCount;
-        
-        const lastCurhat = curhats.sort((a, b) => 
-          new Date(b.created_at) - new Date(a.created_at)
-        )[0];
-        
-        const replies = await callAPI('getCurhatReplies', { curhatId: lastCurhat.id });
-        const lastReply = replies && replies.length > 0 
-          ? replies.sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0]
-          : null;
-        
+        const lastCurhat = [...curhats].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
+        const replies = await callAPI('getCurhatReplies', { curhatId: lastCurhat.id }).catch(() => []);
+        const lastReply = replies && replies.length > 0
+          ? [...replies].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0] : null;
         const lastMessage = lastReply ? lastReply.message : lastCurhat.cerita;
-        const lastSender = lastReply 
-          ? (lastReply.is_wali === true || lastReply.is_wali === 'TRUE' ? 'Wali' : student.name)
-          : student.name;
+        const lastSender = lastReply ? (lastReply.is_wali === true ? 'Wali' : student.name) : student.name;
         const lastTime = lastReply ? lastReply.created_at : lastCurhat.created_at;
-        
         const statusColor = unreadCount > 0 ? 'text-cyan-300' : 'text-white/60';
         const statusIcon = unreadCount > 0 ? '🔵' : '⚪';
-        
+        chatDataCache.push({
+          studentId: student.id, studentName: student.name, studentClass: student.class,
+          lastMessage, lastSender, lastTime, unreadCount, totalMessages: curhats.length
+        });
         html += `
-          <div class="glass p-3 cursor-pointer hover:bg-white/5 transition border-l-4 border-cyan-400" 
-               onclick="openChatDetail('${student.id}', '${escapeHtml(student.name)}', '${escapeHtml(student.class)}')">
+          <div class="glass p-3 cursor-pointer hover:bg-white/5 transition border-l-4 border-cyan-400"
+               onclick="openChatDetail('${student.id}', '${escapeAttr(student.name)}', '${escapeAttr(student.class)}')">
             <div class="flex justify-between items-start">
               <div class="flex-1">
                 <div class="flex items-center gap-2">
@@ -2721,37 +2381,97 @@ async function loadChatHistory(students, curhatData) {
                   <span class="text-xs text-white/60">${escapeHtml(student.class)}</span>
                   ${unreadCount > 0 ? `<span class="badge-glass badge-glass-cyan">${unreadCount} baru</span>` : ''}
                 </div>
-                <div class="text-sm text-white/70 mt-1 truncate">
-                  ${escapeHtml(lastMessage.substring(0, 60))}${lastMessage.length > 60 ? '...' : ''}
-                </div>
+                <div class="text-sm text-white/70 mt-1 truncate">${escapeHtml(lastMessage.substring(0, 60))}${lastMessage.length > 60 ? '...' : ''}</div>
                 <div class="flex items-center gap-2 mt-1">
                   <span class="text-xs text-white/40">${new Date(lastTime).toLocaleString()}</span>
-                  <span class="text-xs ${statusColor}">${statusIcon} ${lastSender}</span>
+                  <span class="text-xs ${statusColor}">${statusIcon} ${escapeHtml(lastSender)}</span>
                 </div>
               </div>
               <div class="flex flex-col items-end gap-1 ml-2">
                 <span class="badge-glass badge-glass-cyan">${curhats.length} pesan</span>
               </div>
             </div>
-          </div>
-        `;
+          </div>`;
       }
     }
-    
     countBadge.textContent = `${totalChats} percakapan`;
     sidebarBadge.textContent = totalUnread > 0 ? totalUnread : '0';
-    
-    if (totalChats === 0) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>';
-    } else {
-      container.innerHTML = html;
-    }
-    
+    if (totalChats === 0) container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>';
+    else container.innerHTML = html;
   } catch(e) {
     console.warn('Load chat history error:', e);
-    document.getElementById('chatHistoryContainer').innerHTML = 
-      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat percakapan</div>';
+    document.getElementById('chatHistoryContainer').innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat percakapan</div>';
   }
+}
+
+// ============================================================
+// MENU HAPUS RIWAYAT CHAT (KHUSUS WALI)
+// ============================================================
+async function loadHapusChatList() {
+  const container = document.getElementById('hapusChatContainer');
+  const countBadge = document.getElementById('hapusChatCount');
+  try {
+    if (!chatDataCache || chatDataCache.length === 0) {
+      const allData = await loadAllDataParallel();
+      const students = allData.students.filter(s => s.wali_id === currentWali.id);
+      const studentIds = students.map(s => s.id);
+      const waliCurhat = allData.curhat
+        .filter(c => studentIds.includes(c.student_id))
+        .map(c => {
+          const st = students.find(s => s.id === c.student_id);
+          return { ...c, student_name: st ? st.name : 'Siswa' };
+        });
+      await loadChatHistory(students, waliCurhat);
+    }
+    if (!chatDataCache || chatDataCache.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada percakapan</div>';
+      countBadge.textContent = '0 siswa';
+      return;
+    }
+    countBadge.textContent = `${chatDataCache.length} siswa`;
+    container.innerHTML = chatDataCache.map(item => `
+      <div class="glass p-3 border-l-4 border-rose-400">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <div class="flex items-center gap-2">
+              <span class="font-semibold text-white">${escapeHtml(item.studentName)}</span>
+              <span class="text-xs text-white/60">${escapeHtml(item.studentClass)}</span>
+              <span class="badge-glass badge-glass-cyan">${item.totalMessages} pesan</span>
+            </div>
+            <div class="text-xs text-white/60 mt-1">
+              Pesan terakhir: ${escapeHtml(item.lastMessage.substring(0, 60))}${item.lastMessage.length > 60 ? '...' : ''}
+            </div>
+          </div>
+          <button onclick="hapusChatSiswa('${item.studentId}', '${escapeAttr(item.studentName)}')"
+                  class="btn-glass btn-glass-danger text-xs py-1 px-3 ml-2 whitespace-nowrap">
+            <i class="fas fa-trash-alt mr-1"></i> Hapus
+          </button>
+        </div>
+      </div>`).join('');
+  } catch(e) {
+    console.warn('Load hapus chat error:', e);
+    container.innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat daftar</div>';
+  }
+}
+
+async function hapusChatSiswa(studentId, studentName) {
+  if (!confirm(`Yakin ingin menghapus SEMUA riwayat curhat ${studentName}?\n\nTindakan ini tidak dapat dibatalkan.`)) return;
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
+  showLoading('Menghapus riwayat chat...');
+  try {
+    const result = await callAPI('deleteCurhatByStudent', { studentId });
+    if (result && result.success) {
+      showToast('✅ Riwayat chat berhasil dihapus', 'success');
+      dataLoaded = false;
+      chatDataCache = [];
+      await loadWaliData();
+      await loadHapusChatList();
+    } else {
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menghapus'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -2760,46 +2480,30 @@ async function loadChatHistory(students, curhatData) {
 async function openChatDetail(studentId, studentName, studentClass) {
   try {
     showLoading('Memuat percakapan...');
-    
     chatCurrentStudentId = studentId;
     chatCurrentStudentName = studentName;
     chatCurrentStudentClass = studentClass;
-    
     document.getElementById('chatDetailTitle').textContent = `💬 ${studentName}`;
     document.getElementById('chatDetailStudentName').textContent = studentName;
     document.getElementById('chatDetailStudentClass').textContent = `Kelas ${studentClass}`;
-    
     document.getElementById('chatBalasFeedback').classList.add('hidden');
     document.getElementById('chatBalasFeedback').textContent = '';
     document.getElementById('chatBalasanText').value = '';
-    
-    const curhats = await callAPI('getCurhatByStudent', { studentId: studentId });
-    
+    const curhats = await callAPI('getCurhatByStudent', { studentId });
     if (!curhats || curhats.length === 0) {
-      document.getElementById('chatDetailMessages').innerHTML = 
-        '<div class="text-white/60 text-sm text-center py-4">Belum ada pesan</div>';
-      hideLoading();
+      document.getElementById('chatDetailMessages').innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada pesan</div>';
       document.getElementById('chatDetailModal').classList.remove('hidden');
       return;
     }
-    
-    let html = '';
-    let lastDate = '';
-    
-    for (const curhat of curhats) {
+    const repliesArr = await Promise.all(
+      curhats.map(c => callAPI('getCurhatReplies', { curhatId: c.id }).catch(() => []))
+    );
+    let html = '', lastDate = '';
+    curhats.forEach((curhat, idx) => {
+      const replies = repliesArr[idx] || [];
       const curhatDate = new Date(curhat.created_at);
-      const dateStr = curhatDate.toLocaleDateString('id-ID', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-      
-      if (dateStr !== lastDate) {
-        html += `<div class="chat-date-divider text-white/40">${dateStr}</div>`;
-        lastDate = dateStr;
-      }
-      
+      const dateStr = curhatDate.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+      if (dateStr !== lastDate) { html += `<div class="chat-date-divider text-white/40">${dateStr}</div>`; lastDate = dateStr; }
       html += `
         <div class="chat-bubble-siswa text-white">
           <div class="flex justify-between items-start gap-2">
@@ -2813,20 +2517,15 @@ async function openChatDetail(studentId, studentName, studentClass) {
             </div>
             <span class="chat-time text-white/40 whitespace-nowrap">${curhatDate.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'})}</span>
           </div>
-        </div>
-      `;
-      
-      const replies = await callAPI('getCurhatReplies', { curhatId: curhat.id });
-      
+        </div>`;
       if (replies && replies.length > 0) {
         for (const reply of replies) {
           const replyDate = new Date(reply.created_at);
-          const isWali = reply.is_wali === true || reply.is_wali === 'TRUE';
+          const isWali = reply.is_wali === true;
           const senderName = isWali ? 'Wali Kelas' : studentName;
           const bubbleClass = isWali ? 'chat-bubble-wali text-white' : 'chat-bubble-siswa text-white';
           const nameColor = isWali ? 'text-purple-300' : 'text-blue-300';
           const icon = isWali ? '👨‍🏫' : '👤';
-          
           html += `
             <div class="${bubbleClass}">
               <div class="flex justify-between items-start gap-2">
@@ -2839,70 +2538,43 @@ async function openChatDetail(studentId, studentName, studentClass) {
                 </div>
                 <span class="chat-time text-white/40 whitespace-nowrap">${replyDate.toLocaleTimeString('id-ID', {hour:'2-digit',minute:'2-digit'})}</span>
               </div>
-            </div>
-          `;
+            </div>`;
         }
       }
-    }
-    
+    });
     document.getElementById('chatDetailMessages').innerHTML = html;
-    hideLoading();
     document.getElementById('chatDetailModal').classList.remove('hidden');
-    
     setTimeout(() => {
       const container = document.getElementById('chatDetailMessages');
       container.scrollTop = container.scrollHeight;
     }, 100);
-    
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Gagal memuat percakapan: ' + msg, 'error');
-  }
+    showToast('❌ Gagal memuat percakapan: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
-// KIRIM BALASAN WALI DARI CHAT DETAIL
+// KIRIM BALASAN WALI
 // ============================================================
 async function kirimBalasanWaliDariChat() {
   const message = document.getElementById('chatBalasanText').value.trim();
-  if (!message) {
-    showToast('Tulis balasan dulu ya', 'warning');
-    return;
-  }
-  
-  if (!isOnline) {
-    showToast('⚠️ Koneksi offline', 'error');
-    return;
-  }
-  
-  if (!chatCurrentStudentId) {
-    showToast('❌ Siswa tidak ditemukan', 'error');
-    return;
-  }
+  if (!message) { showToast('Tulis balasan dulu ya', 'warning'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
+  if (!chatCurrentStudentId) { showToast('❌ Siswa tidak ditemukan', 'error'); return; }
   
   try {
     const curhats = await callAPI('getCurhatByStudent', { studentId: chatCurrentStudentId });
-    if (!curhats || curhats.length === 0) {
-      showToast('❌ Belum ada curhat dari siswa ini', 'error');
-      return;
-    }
+    if (!curhats || curhats.length === 0) { showToast('❌ Belum ada curhat dari siswa ini', 'error'); return; }
     
-    const latestCurhat = curhats.sort((a, b) => 
-      new Date(b.created_at) - new Date(a.created_at)
-    )[0];
+    const latestCurhat = [...curhats].sort((a, b) => new Date(b.created_at) - new Date(a.created_at))[0];
     
     showLoading('Mengirim balasan...');
+    
     const result = await callAPI('addCurhatReply', {
-      curhatId: latestCurhat.id,
-      studentId: currentWali.id,
-      sender: 'wali',
-      senderName: currentWali.name,
-      message: message,
-      isWali: 'true'
+      curhatId: latestCurhat.id, studentId: chatCurrentStudentId,
+      sender: 'wali', senderName: currentWali.name, message: message, isWali: 'true'
     });
     
-    hideLoading();
     if (result && result.success) {
       showToast('✅ Balasan terkirim!', 'success');
       document.getElementById('chatBalasanText').value = '';
@@ -2910,149 +2582,98 @@ async function kirimBalasanWaliDariChat() {
       document.getElementById('chatBalasFeedback').classList.remove('hidden');
       document.getElementById('chatBalasFeedback').className = 'text-xs text-green-300 mt-2';
       
-      setTimeout(() => {
-        openChatDetail(chatCurrentStudentId, chatCurrentStudentName, chatCurrentStudentClass);
-      }, 1000);
-      
-      setTimeout(() => {
-        dataLoaded = false;
-        loadWaliData();
-      }, 1500);
+      setTimeout(() => openChatDetail(chatCurrentStudentId, chatCurrentStudentName, chatCurrentStudentClass), 1000);
+      setTimeout(() => { dataLoaded = false; loadWaliData(); }, 1500);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal mengirim balasan';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal mengirim balasan'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
-// LAPORAN KONDISI - LOAD & DISPLAY
+// LAPORAN KONDISI
 // ============================================================
 async function loadLaporanKondisi(students) {
   try {
     const container = document.getElementById('laporanKondisiContainer');
     laporanDataCache = [];
-    
     if (!students || students.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
       return;
     }
-    
-    let html = '';
-    let hasLaporan = false;
-    
-    for (const student of students) {
-      try {
-        const laporan = await callAPI('getStudentLaporanKondisi', { studentId: student.id });
-        
-        if (laporan) {
-          hasLaporan = true;
-          const nilai = laporan.nilai_akademik || '-';
-          const sikap = laporan.sikap || 'Baik';
-          const catatan = laporan.catatan_khusus || '-';
-          const periode = laporan.periode || 'Semester 1';
-          
-          laporanDataCache.push({
-            nama: student.name,
-            nis: student.nis,
-            kelas: student.class,
-            nilai: nilai,
-            sikap: sikap,
-            catatan: catatan,
-            periode: periode
-          });
-          
-          let nilaiColor = 'text-green-300';
-          if (nilai !== '-') {
-            const numNilai = parseInt(nilai);
+    const laporanArr = await Promise.all(
+      students.map(s => callAPI('getStudentLaporanKondisi', { studentId: s.id }).catch(() => null))
+    );
+    let html = '', hasLaporan = false;
+    students.forEach((student, idx) => {
+      const laporan = laporanArr[idx];
+      if (laporan) {
+        hasLaporan = true;
+        const nilai = laporan.nilai_akademik || '-';
+        const sikap = laporan.sikap || 'Baik';
+        const catatan = laporan.catatan_khusus || '-';
+        const periode = laporan.periode || 'Semester 1';
+        laporanDataCache.push({ nama: student.name, nis: student.nis, kelas: student.class, nilai, sikap, catatan, periode });
+        let nilaiColor = 'text-green-300';
+        if (nilai !== '-') {
+          const numNilai = parseFloat(nilai);
+          if (!isNaN(numNilai)) {
             if (numNilai < 60) nilaiColor = 'text-red-300';
             else if (numNilai < 75) nilaiColor = 'text-yellow-300';
           }
-          
-          let sikapColor = 'text-green-300';
-          if (sikap === 'Kurang') sikapColor = 'text-red-300';
-          else if (sikap === 'Cukup') sikapColor = 'text-yellow-300';
-          
-          html += `
-            <div class="laporan-card glass p-3 border-l-4 border-green-400">
-              <div class="flex justify-between items-start">
-                <div>
-                  <div class="font-semibold text-white">${escapeHtml(student.name)}</div>
-                  <div class="text-xs text-white/60">${escapeHtml(student.class)} · ${escapeHtml(periode)}</div>
-                </div>
-                <span class="badge-glass badge-glass-green">${escapeHtml(sikap)}</span>
-              </div>
-              <div class="grid grid-cols-2 gap-2 mt-2">
-                <div>
-                  <div class="text-xs text-white/60">Nilai Akademik</div>
-                  <div class="text-sm font-semibold ${nilaiColor}">${escapeHtml(nilai)}</div>
-                </div>
-                <div>
-                  <div class="text-xs text-white/60">Sikap</div>
-                  <div class="text-sm font-semibold ${sikapColor}">${escapeHtml(sikap)}</div>
-                </div>
-              </div>
-              ${catatan !== '-' ? `<div class="text-xs text-white/60 mt-1">📝 ${escapeHtml(catatan)}</div>` : ''}
-            </div>
-          `;
         }
-      } catch(e) {
-        console.warn('Error loading laporan for student:', student.name, e);
+        let sikapColor = 'text-green-300';
+        if (sikap === 'Kurang') sikapColor = 'text-red-300';
+        else if (sikap === 'Cukup') sikapColor = 'text-yellow-300';
+        html += `
+          <div class="laporan-card glass p-3 border-l-4 border-green-400">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-semibold text-white">${escapeHtml(student.name)}</div>
+                <div class="text-xs text-white/60">${escapeHtml(student.class)} · ${escapeHtml(periode)}</div>
+              </div>
+              <span class="badge-glass badge-glass-green">${escapeHtml(sikap)}</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-2">
+              <div><div class="text-xs text-white/60">Nilai Akademik</div><div class="text-sm font-semibold ${nilaiColor}">${escapeHtml(nilai)}</div></div>
+              <div><div class="text-xs text-white/60">Sikap</div><div class="text-sm font-semibold ${sikapColor}">${escapeHtml(sikap)}</div></div>
+            </div>
+            ${catatan !== '-' ? `<div class="text-xs text-white/60 mt-1">📝 ${escapeHtml(catatan)}</div>` : ''}
+          </div>`;
       }
-    }
-    
-    if (!hasLaporan) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada laporan kondisi</div>';
-    } else {
-      container.innerHTML = html;
-    }
-    
+    });
+    if (!hasLaporan) container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada laporan kondisi</div>';
+    else container.innerHTML = html;
   } catch(e) {
     console.warn('Load laporan kondisi error:', e);
-    document.getElementById('laporanKondisiContainer').innerHTML = 
-      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat laporan</div>';
+    document.getElementById('laporanKondisiContainer').innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat laporan</div>';
   }
 }
 
 // ============================================================
-// PETA POTENSI SISWA - DARI CACHE
+// PETA POTENSI SISWA
 // ============================================================
 async function loadPotensiSiswa(students, potensiData) {
   try {
     const container = document.getElementById('potensiContainer');
     const countBadge = document.getElementById('potensiCount');
     potensiDataCache = [];
-    
     if (!students || students.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
-      countBadge.textContent = '0 siswa';
-      return;
+      countBadge.textContent = '0 siswa'; return;
     }
-    
-    let html = '';
-    let hasPotensi = false;
-    let potensiCount = 0;
-    
+    let html = '', hasPotensi = false, potensiCount = 0;
     for (const student of students) {
       const potensi = potensiData ? potensiData.find(p => p.student_id === student.id) : null;
-      
       if (potensi && potensi.id) {
-        hasPotensi = true;
-        potensiCount++;
-        
+        hasPotensi = true; potensiCount++;
         potensiDataCache.push({
-          nama: student.name,
-          kelas: student.class,
-          minat: potensi.minat || '-',
-          gayaBelajar: potensi.gaya_belajar || '-',
-          citaCita: potensi.cita_cita || '-',
-          karakter: potensi.kekuatan_karakter || '-'
+          nama: student.name, kelas: student.class,
+          minat: potensi.minat || '-', gayaBelajar: potensi.gaya_belajar || '-',
+          citaCita: potensi.cita_cita || '-', karakter: potensi.kekuatan_karakter || '-'
         });
-        
         html += `
           <div class="glass p-3 border-l-4 border-orange-400">
             <div class="flex justify-between items-start">
@@ -3063,80 +2684,52 @@ async function loadPotensiSiswa(students, potensiData) {
               <span class="badge-glass badge-glass-orange">🎯 ${escapeHtml(potensi.minat || 'Belum diisi')}</span>
             </div>
             <div class="grid grid-cols-2 gap-2 mt-2">
-              <div>
-                <div class="text-xs text-white/60">Gaya Belajar</div>
-                <div class="text-sm text-white">${escapeHtml(potensi.gaya_belajar || '-')}</div>
-              </div>
-              <div>
-                <div class="text-xs text-white/60">Karakter</div>
-                <div class="text-sm text-white">${escapeHtml(potensi.kekuatan_karakter || '-')}</div>
-              </div>
+              <div><div class="text-xs text-white/60">Gaya Belajar</div><div class="text-sm text-white">${escapeHtml(potensi.gaya_belajar || '-')}</div></div>
+              <div><div class="text-xs text-white/60">Karakter</div><div class="text-sm text-white">${escapeHtml(potensi.kekuatan_karakter || '-')}</div></div>
             </div>
             <div class="text-xs text-white/60 mt-1">💭 Cita-cita: ${escapeHtml(potensi.cita_cita || 'Belum diisi')}</div>
-          </div>
-        `;
+          </div>`;
       }
     }
-    
     countBadge.textContent = `${potensiCount} siswa`;
-    
-    if (!hasPotensi) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada data potensi</div>';
-    } else {
-      container.innerHTML = html;
-    }
-    
+    if (!hasPotensi) container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada data potensi</div>';
+    else container.innerHTML = html;
   } catch(e) {
     console.warn('Load potensi error:', e);
-    document.getElementById('potensiContainer').innerHTML = 
-      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat data potensi</div>';
+    document.getElementById('potensiContainer').innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat data potensi</div>';
   }
 }
 
 // ============================================================
-// PERBUATAN BAIK SISWA - DARI CACHE
+// PERBUATAN BAIK SISWA
 // ============================================================
 async function loadPerbuatanBaik(students, perbuatanData) {
   try {
     const container = document.getElementById('perbuatanContainer');
     const countBadge = document.getElementById('perbuatanCount');
     perbuatanDataCache = [];
-    
     if (!students || students.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
-      countBadge.textContent = '0 hari ini';
-      return;
+      countBadge.textContent = '0 hari ini'; return;
     }
-    
-    let html = '';
-    let hasPerbuatan = false;
-    let totalPerbuatan = 0;
+    let html = '', hasPerbuatan = false, totalPerbuatan = 0;
     const today = new Date().toISOString().split('T')[0];
-    
     for (const student of students) {
       const perbuatan = perbuatanData ? perbuatanData.find(p => p.student_id === student.id && p.date === today) : null;
-      
       let displayPerbuatan = perbuatan;
       if (!displayPerbuatan) {
         const allPerbuatan = perbuatanData ? perbuatanData.filter(p => p.student_id === student.id) : [];
-        const sorted = allPerbuatan.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        const sorted = [...allPerbuatan].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
         displayPerbuatan = sorted.length > 0 ? sorted[0] : null;
       }
-      
       if (displayPerbuatan && displayPerbuatan.id) {
-        hasPerbuatan = true;
-        totalPerbuatan++;
-        
+        hasPerbuatan = true; totalPerbuatan++;
         perbuatanDataCache.push({
-          nama: student.name,
-          kelas: student.class,
-          action: displayPerbuatan.action || '-',
-          date: displayPerbuatan.date || today
+          nama: student.name, kelas: student.class,
+          action: displayPerbuatan.action || '-', date: displayPerbuatan.date || today
         });
-        
         const isToday = displayPerbuatan.date === today;
         const dateLabel = isToday ? 'Hari ini' : displayPerbuatan.date || today;
-        
         html += `
           <div class="glass p-3 border-l-4 border-yellow-400">
             <div class="flex justify-between items-start">
@@ -3149,63 +2742,41 @@ async function loadPerbuatanBaik(students, perbuatanData) {
               </div>
               <span class="badge-glass badge-glass-yellow">${isToday ? '✨ Baru' : '📅'}</span>
             </div>
-            <div class="text-sm text-white/90 mt-1">
-              <i class="fas fa-star text-yellow-300 mr-1"></i> ${escapeHtml(displayPerbuatan.action)}
-            </div>
-            <div class="text-xs text-white/40 mt-1">
-              <i class="fas fa-clock mr-1"></i> ${new Date(displayPerbuatan.created_at).toLocaleString('id-ID')}
-            </div>
-          </div>
-        `;
+            <div class="text-sm text-white/90 mt-1"><i class="fas fa-star text-yellow-300 mr-1"></i> ${escapeHtml(displayPerbuatan.action)}</div>
+            <div class="text-xs text-white/40 mt-1"><i class="fas fa-clock mr-1"></i> ${new Date(displayPerbuatan.created_at).toLocaleString('id-ID')}</div>
+          </div>`;
       }
     }
-    
     countBadge.textContent = `${totalPerbuatan} siswa`;
-    
-    if (!hasPerbuatan) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik</div>';
-    } else {
-      container.innerHTML = html;
-    }
-    
+    if (!hasPerbuatan) container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada perbuatan baik</div>';
+    else container.innerHTML = html;
   } catch(e) {
     console.warn('Load perbuatan error:', e);
-    document.getElementById('perbuatanContainer').innerHTML = 
-      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat data perbuatan baik</div>';
+    document.getElementById('perbuatanContainer').innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat data perbuatan baik</div>';
   }
 }
 
 // ============================================================
-// JURNAL SISWA - DARI CACHE
+// JURNAL SISWA
 // ============================================================
 async function loadJurnalSiswa(students, jurnalData) {
   try {
     const container = document.getElementById('jurnalContainer');
     const countBadge = document.getElementById('jurnalCount');
-    
     if (!students || students.length === 0) {
       container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada siswa</div>';
-      countBadge.textContent = '0 siswa';
-      return;
+      countBadge.textContent = '0 siswa'; return;
     }
-    
-    let html = '';
-    let hasJurnal = false;
-    let totalJurnal = 0;
-    
+    let html = '', hasJurnal = false, totalJurnal = 0;
     for (const student of students) {
       const studentJurnals = jurnalData ? jurnalData.filter(j => j.student_id === student.id) : [];
-      const sortedJurnals = studentJurnals.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      const sortedJurnals = [...studentJurnals].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
       const latestJurnal = sortedJurnals.length > 0 ? sortedJurnals[0] : null;
-      
       if (latestJurnal) {
-        hasJurnal = true;
-        totalJurnal++;
-        
+        hasJurnal = true; totalJurnal++;
         const emoji = latestJurnal.emoji || '😊';
         const cerita = latestJurnal.cerita || 'Hari ini biasa saja';
-        const date = latestJurnal.date || latestJurnal.created_at ? new Date(latestJurnal.created_at).toLocaleDateString('id-ID') : 'Tanggal tidak diketahui';
-        
+        const date = latestJurnal.date || (latestJurnal.created_at ? new Date(latestJurnal.created_at).toLocaleDateString('id-ID') : 'Tanggal tidak diketahui');
         html += `
           <div class="jurnal-card glass p-3 border-l-4 border-rose-400">
             <div class="flex justify-between items-start">
@@ -3218,30 +2789,18 @@ async function loadJurnalSiswa(students, jurnalData) {
               </div>
               <span class="text-2xl">${escapeHtml(emoji)}</span>
             </div>
-            <div class="text-sm text-white/90 mt-1">
-              <i class="fas fa-book-open text-rose-300 mr-1"></i> ${escapeHtml(cerita)}
-            </div>
-            <div class="text-xs text-white/40 mt-1">
-              <i class="fas fa-clock mr-1"></i> ${new Date(latestJurnal.created_at).toLocaleString('id-ID')}
-            </div>
-          </div>
-        `;
+            <div class="text-sm text-white/90 mt-1"><i class="fas fa-book-open text-rose-300 mr-1"></i> ${escapeHtml(cerita)}</div>
+            <div class="text-xs text-white/40 mt-1"><i class="fas fa-clock mr-1"></i> ${new Date(latestJurnal.created_at).toLocaleString('id-ID')}</div>
+          </div>`;
       }
     }
-    
     countBadge.textContent = `${totalJurnal} siswa`;
     document.getElementById('jurnalHariIni').textContent = totalJurnal;
-    
-    if (!hasJurnal) {
-      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>';
-    } else {
-      container.innerHTML = html;
-    }
-    
+    if (!hasJurnal) container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada jurnal</div>';
+    else container.innerHTML = html;
   } catch(e) {
     console.warn('Load jurnal error:', e);
-    document.getElementById('jurnalContainer').innerHTML = 
-      '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat jurnal</div>';
+    document.getElementById('jurnalContainer').innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat jurnal</div>';
   }
 }
 
@@ -3251,46 +2810,24 @@ async function loadJurnalSiswa(students, jurnalData) {
 function exportLaporanExcel() {
   try {
     if (!laporanDataCache || laporanDataCache.length === 0) {
-      showToast('❌ Tidak ada data laporan untuk diexport', 'error');
-      return;
+      showToast('❌ Tidak ada data laporan untuk diexport', 'error'); return;
     }
-    
     const excelData = [
-      ['LAPORAN KONDISI SISWA'],
-      [''],
-      ['No', 'Nama Siswa', 'NIS', 'Kelas', 'Nilai Akademik', 'Sikap', 'Catatan Khusus', 'Periode']
+      ['LAPORAN KONDISI SISWA'], [''],
+      ['No','Nama Siswa','NIS','Kelas','Nilai Akademik','Sikap','Catatan Khusus','Periode']
     ];
-    
     laporanDataCache.forEach((item, index) => {
-      excelData.push([
-        index + 1,
-        item.nama || '-',
-        item.nis || '-',
-        item.kelas || '-',
-        item.nilai || '-',
-        item.sikap || '-',
-        item.catatan || '-',
-        item.periode || '-'
-      ]);
+      excelData.push([index + 1, item.nama || '-', item.nis || '-', item.kelas || '-', item.nilai || '-', item.sikap || '-', item.catatan || '-', item.periode || '-']);
     });
-    
     excelData.push(['']);
     excelData.push(['Dicetak pada:', new Date().toLocaleString('id-ID')]);
     excelData.push(['Total Siswa:', laporanDataCache.length]);
-    
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(excelData);
-    
-    ws['!cols'] = [
-      { wch: 5 }, { wch: 20 }, { wch: 15 }, { wch: 12 }, 
-      { wch: 15 }, { wch: 15 }, { wch: 30 }, { wch: 15 }
-    ];
-    
+    ws['!cols'] = [{ wch: 5 }, { wch: 20 }, { wch: 15 }, { wch: 12 }, { wch: 15 }, { wch: 15 }, { wch: 30 }, { wch: 15 }];
     XLSX.utils.book_append_sheet(wb, ws, 'Laporan Kondisi');
-    
     const fileName = `Laporan_Kondisi_Siswa_${new Date().toISOString().split('T')[0]}.xlsx`;
     XLSX.writeFile(wb, fileName);
-    
     showToast(`✅ Laporan berhasil diexport: ${fileName}`, 'success');
   } catch(e) {
     console.error('Export error:', e);
@@ -3299,94 +2836,408 @@ function exportLaporanExcel() {
 }
 
 // ============================================================
-// TAMBAH LAPORAN KONDISI
+// TAMBAH LAPORAN
 // ============================================================
-function showTambahLaporan() {
+async function showTambahLaporan() {
   const select = document.getElementById('laporanSiswaSelect');
-  select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
-  
-  callAPI('getStudentsByWali', { waliId: currentWali.id })
-    .then(students => {
-      if (students && students.length > 0) {
-        students.forEach(s => {
-          const option = document.createElement('option');
-          option.value = s.id;
-          option.textContent = `${s.name} (${s.class})`;
-          select.appendChild(option);
-        });
-      } else {
-        const option = document.createElement('option');
-        option.value = '';
-        option.textContent = 'Tidak ada siswa';
-        select.appendChild(option);
-      }
-    })
-    .catch(e => {
-      console.warn('Error loading students:', e);
-    });
-  
+  select.innerHTML = '<option value="">Memuat data siswa...</option>';
+  select.disabled = true;
   document.getElementById('laporanNilai').value = '';
   document.getElementById('laporanSikap').value = 'Baik';
   document.getElementById('laporanCatatan').value = '';
   document.getElementById('laporanPeriode').value = 'Semester 1';
-  
   show('tambahLaporanModal');
+  try {
+    const students = await callAPI('getStudentsByWali', { waliId: currentWali.id });
+    select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
+    if (students && students.length > 0) {
+      students.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;
+        option.textContent = `${s.name} (${s.class})`;
+        select.appendChild(option);
+      });
+    } else {
+      select.innerHTML = '<option value="">Tidak ada siswa</option>';
+    }
+  } catch(e) {
+    select.innerHTML = '<option value="">Gagal memuat siswa</option>';
+    showToast('⚠️ Gagal memuat siswa: ' + e.message, 'error');
+  } finally { select.disabled = false; }
 }
 
 async function simpanLaporanKondisi() {
   const studentId = document.getElementById('laporanSiswaSelect').value;
-  const nilai = document.getElementById('laporanNilai').value.trim();
+  const nilaiRaw = document.getElementById('laporanNilai').value.trim();
   const sikap = document.getElementById('laporanSikap').value;
   const catatan = document.getElementById('laporanCatatan').value.trim();
   const periode = document.getElementById('laporanPeriode').value.trim() || 'Semester 1';
-  
-  if (!studentId) {
-    showToast('❌ Pilih siswa terlebih dahulu', 'error');
-    return;
+  if (!studentId) { showToast('❌ Pilih siswa terlebih dahulu', 'error'); return; }
+  const nilaiNum = parseFloat(nilaiRaw);
+  if (nilaiRaw === '' || isNaN(nilaiNum) || nilaiNum < 0 || nilaiNum > 100) {
+    showToast('❌ Masukkan nilai akademik (0-100)', 'error'); return;
   }
-  
-  if (!nilai || isNaN(nilai) || nilai < 0 || nilai > 100) {
-    showToast('❌ Masukkan nilai akademik (0-100)', 'error');
-    return;
-  }
-  
-  if (!isOnline) {
-    showToast('⚠️ Koneksi offline', 'error');
-    return;
-  }
-  
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
   showLoading('Menyimpan laporan...');
   try {
     const result = await callAPI('saveLaporanKondisi', {
-      studentId: studentId,
-      nilaiAkademik: nilai,
-      sikap: sikap,
-      catatanKhusus: catatan || '-',
-      periode: periode
+      studentId, nilaiAkademik: nilaiNum, sikap,
+      catatanKhusus: catatan || '-', periode
     });
-    
-    hideLoading();
     if (result && result.success) {
       showToast('✅ Laporan kondisi berhasil disimpan!', 'success');
       closeModal('tambahLaporanModal');
       const students = await callAPI('getStudentsByWali', { waliId: currentWali.id });
       await loadLaporanKondisi(students);
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menyimpan laporan';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan laporan'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
+}
+
+// ============================================================
+// FUNGSI HAPALAN
+// ============================================================
+function populateSurahDropdown() {
+  const select = document.getElementById('hapalanSurahSelect');
+  if(!select) return;
+  select.innerHTML = '';
+  SURAH_JUZ_30.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s; opt.textContent = s;
+    select.appendChild(opt);
+  });
+}
+
+async function showTambahHapalan() {
+  const select = document.getElementById('hapalanSiswaSelect');
+  select.innerHTML = '<option value="">Memuat data siswa...</option>';
+  select.disabled = true;
+  populateSurahDropdown();
+  document.getElementById('hapalanStatus').value = 'Lancar';
+  document.getElementById('hapalanCatatan').value = '';
+  show('tambahHapalanModal');
+  try {
+    const students = await callAPI('getStudentsByWali', { waliId: currentWali.id });
+    select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
+    if (students && students.length > 0) {
+      students.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;
+        option.textContent = `${s.name} (${s.class})`;
+        select.appendChild(option);
+      });
+    } else {
+      select.innerHTML = '<option value="">Tidak ada siswa</option>';
+    }
+  } catch(e) {
+    select.innerHTML = '<option value="">Gagal memuat siswa</option>';
+    showToast('⚠️ Gagal memuat siswa: ' + e.message, 'error');
+  } finally { select.disabled = false; }
+}
+
+async function simpanHapalan() {
+  const studentId = document.getElementById('hapalanSiswaSelect').value;
+  const surah = document.getElementById('hapalanSurahSelect').value;
+  const status = document.getElementById('hapalanStatus').value;
+  const catatan = document.getElementById('hapalanCatatan').value.trim();
+  if (!studentId) { showToast('❌ Pilih siswa terlebih dahulu', 'error'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
+  showLoading('Menyimpan hapalan...');
+  try {
+    const result = await callAPI('addHapalan', {
+      studentId, namaSurah: surah, status, catatan
+    });
+    if (result && result.success) {
+      showToast('✅ Hapalan berhasil disimpan!', 'success');
+      closeModal('tambahHapalanModal');
+      dataLoaded = false; 
+      await loadHapalanData();
+    } else {
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan hapalan'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
+}
+
+async function loadHapalanData() {
+  const container = document.getElementById('hapalanContainer');
+  container.innerHTML = '<div class="text-center py-4"><div class="spinner inline-block"></div></div>';
+  try {
+    if (!dataLoaded || allHapalanCache.length === 0) {
+      await loadAllDataParallel();
+    }
+    const students = allStudentsCache.filter(s => s.wali_id === currentWali.id);
+    const studentIds = students.map(s => s.id);
+    const hapalans = allHapalanCache.filter(h => studentIds.includes(h.student_id));
+
+    if (hapalans.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada catatan hapalan</div>';
+      return;
+    }
+
+    let html = '';
+    hapalans.sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    hapalans.forEach(h => {
+      const student = students.find(s => s.id === h.student_id);
+      if (!student) return;
+      let statusClass = 'badge-glass-green';
+      if (h.status === 'Cukup') statusClass = 'badge-glass-yellow';
+      if (h.status === 'Kurang') statusClass = 'badge-glass-red';
+
+      html += `
+        <div class="glass p-3 border-l-4 border-green-400">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="font-semibold text-white">${escapeHtml(student.name)}</div>
+              <div class="text-xs text-white/60">${new Date(h.created_at).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</div>
+            </div>
+            <span class="badge-glass ${statusClass}">${escapeHtml(h.status)}</span>
+          </div>
+          <div class="text-sm text-white/90 mt-2"><i class="fas fa-book text-green-300 mr-1"></i> ${escapeHtml(h.nama_surah)}</div>
+          ${h.catatan ? `<div class="text-xs text-white/60 mt-1">📝 ${escapeHtml(h.catatan)}</div>` : ''}
+        </div>`;
+    });
+    container.innerHTML = html;
+  } catch(e) {
+    console.warn('Load hapalan error:', e);
+    container.innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat hapalan</div>';
+  }
+}
+
+// Fungsi Export Hapalan (BARU)
+function exportHapalanExcel() {
+  try {
+    if (!allHapalanCache || allHapalanCache.length === 0) {
+      showToast('❌ Tidak ada data hapalan untuk diexport', 'error'); return;
+    }
+    const students = allStudentsCache.filter(s => s.wali_id === currentWali.id);
+    const studentIds = students.map(s => s.id);
+    const hapalans = allHapalanCache.filter(h => studentIds.includes(h.student_id));
+
+    const excelData = [
+      ['REKAP CATATAN HAPALAN JUZ 30'],
+      ['Kelas:', currentWali.class || '-'],
+      ['Dicetak pada:', new Date().toLocaleString('id-ID')],
+      [''],
+      ['Nama Siswa', 'Surah', 'Status', 'Catatan', 'Tanggal']
+    ];
+
+    hapalans.sort((a,b) => {
+       const studentA = students.find(s => s.id === a.student_id)?.name || '';
+       const studentB = students.find(s => s.id === b.student_id)?.name || '';
+       if (studentA !== studentB) return studentA.localeCompare(studentB);
+       return new Date(a.created_at) - new Date(b.created_at);
+    });
+
+    hapalans.forEach(h => {
+      const student = students.find(s => s.id === h.student_id);
+      excelData.push([
+        student ? student.name : 'Siswa',
+        h.nama_surah,
+        h.status,
+        h.catatan || '-',
+        new Date(h.created_at).toLocaleDateString('id-ID')
+      ]);
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(excelData);
+    ws['!cols'] = [{ wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 30 }, { wch: 15 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Rekap Hapalan');
+    const fileName = `Rekap_Hapalan_${currentWali.class}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+    showToast(`✅ Rekap berhasil diexport: ${fileName}`, 'success');
+  } catch(e) {
+    console.error('Export error:', e);
+    showToast('❌ Gagal export: ' + e.message, 'error');
   }
 }
 
 // ============================================================
-// WALI - TAMBAH SISWA & DELETE
+// FUNGSI KOKURIKULER
+// ============================================================
+async function showTambahKokurikuler() {
+  const select = document.getElementById('kokurikulerSiswaSelect');
+  select.innerHTML = '<option value="">Memuat data siswa...</option>';
+  select.disabled = true;
+  document.getElementById('kokurikulerPertemuan').value = '';
+  document.getElementById('kokurikulerTema').value = '';
+  document.getElementById('kokurikulerTopik').value = '';
+  document.getElementById('kokurikulerDeskripsi').value = '';
+  show('tambahKokurikulerModal');
+  try {
+    const students = await callAPI('getStudentsByWali', { waliId: currentWali.id });
+    select.innerHTML = '<option value="">-- Pilih Siswa --</option>';
+    if (students && students.length > 0) {
+      students.forEach(s => {
+        const option = document.createElement('option');
+        option.value = s.id;
+        option.textContent = `${s.name} (${s.class})`;
+        select.appendChild(option);
+      });
+    } else {
+      select.innerHTML = '<option value="">Tidak ada siswa</option>';
+    }
+  } catch(e) {
+    select.innerHTML = '<option value="">Gagal memuat siswa</option>';
+    showToast('⚠️ Gagal memuat siswa: ' + e.message, 'error');
+  } finally { select.disabled = false; }
+}
+
+async function simpanKokurikuler() {
+  const studentId = document.getElementById('kokurikulerSiswaSelect').value;
+  const pertemuan = document.getElementById('kokurikulerPertemuan').value.trim();
+  const tema = document.getElementById('kokurikulerTema').value.trim();
+  const topik = document.getElementById('kokurikulerTopik').value.trim();
+  const deskripsi = document.getElementById('kokurikulerDeskripsi').value.trim();
+  
+  if (!studentId) { showToast('❌ Pilih siswa terlebih dahulu', 'error'); return; }
+  if (!pertemuan || isNaN(pertemuan) || parseInt(pertemuan) < 1) { showToast('❌ Masukkan pertemuan ke- (angka)', 'error'); return; }
+  if (!tema) { showToast('❌ Tema harus diisi', 'error'); return; }
+  if (!topik) { showToast('❌ Topik harus diisi', 'error'); return; }
+  if (!deskripsi) { showToast('❌ Deskripsi nilai harus diisi', 'error'); return; }
+
+  if (!isOnline) { showToast('⚠️ Koneksi offline', 'error'); return; }
+  showLoading('Menyimpan nilai kokurikuler...');
+  try {
+    const result = await callAPI('addKokurikuler', {
+      studentId, pertemuanKe: parseInt(pertemuan), tema, topik, deskripsiNilai: deskripsi
+    });
+    if (result && result.success) {
+      showToast('✅ Nilai kokurikuler berhasil disimpan!', 'success');
+      closeModal('tambahKokurikulerModal');
+      dataLoaded = false;
+      await loadKokurikulerData();
+    } else {
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menyimpan nilai'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
+}
+
+async function loadKokurikulerData() {
+  const container = document.getElementById('kokurikulerContainer');
+  container.innerHTML = '<div class="text-center py-4"><div class="spinner inline-block"></div></div>';
+  try {
+    if (!dataLoaded || allKokurikulerCache.length === 0) {
+      await loadAllDataParallel();
+    }
+    const students = allStudentsCache.filter(s => s.wali_id === currentWali.id);
+    const studentIds = students.map(s => s.id);
+    const kokurikulers = allKokurikulerCache.filter(k => studentIds.includes(k.student_id));
+
+    if (kokurikulers.length === 0) {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada nilai kokurikuler</div>';
+      return;
+    }
+
+    let rekap = {};
+    kokurikulers.forEach(k => {
+      if (!rekap[k.student_id]) rekap[k.student_id] = [];
+      rekap[k.student_id].push(k);
+    });
+
+    let html = '';
+    students.forEach(student => {
+      const list = rekap[student.id];
+      if (!list || list.length === 0) return;
+
+      list.sort((a,b) => a.pertemuan_ke - b.pertemuan_ke);
+
+      let innerHtml = list.map(k => `
+        <div class="mt-2 p-2 rounded bg-white/5 border border-white/10">
+          <div class="flex justify-between items-center mb-1">
+            <span class="text-xs font-bold text-blue-300">Pertemuan ${k.pertemuan_ke}</span>
+            <span class="text-[10px] text-white/50">${new Date(k.created_at).toLocaleDateString('id-ID')}</span>
+          </div>
+          <div class="text-sm font-semibold text-white">${escapeHtml(k.tema)}</div>
+          <div class="text-xs text-white/70 mb-1">Topik: ${escapeHtml(k.topik)}</div>
+          <div class="text-xs text-white/90 bg-black/20 p-2 rounded">"${escapeHtml(k.deskripsi_nilai)}"</div>
+        </div>
+      `).join('');
+
+      html += `
+        <div class="glass p-4 border-l-4 border-blue-400 mb-3">
+          <div class="flex justify-between items-start border-b border-white/10 pb-2 mb-2">
+            <div class="font-bold text-white text-lg">${escapeHtml(student.name)}</div>
+            <span class="badge-glass badge-glass-blue">${escapeHtml(student.class)}</span>
+          </div>
+          ${innerHtml}
+        </div>
+      `;
+    });
+
+    if (html === '') {
+      container.innerHTML = '<div class="text-white/60 text-sm text-center py-4">Belum ada data rekap</div>';
+    } else {
+      container.innerHTML = html;
+    }
+  } catch(e) {
+    console.warn('Load kokurikuler error:', e);
+    container.innerHTML = '<div class="text-red-400/80 text-sm text-center py-4">❌ Gagal memuat nilai kokurikuler</div>';
+  }
+}
+
+function exportKokurikulerExcel() {
+  try {
+    if (!allKokurikulerCache || allKokurikulerCache.length === 0) {
+      showToast('❌ Tidak ada data kokurikuler untuk diexport', 'error'); return;
+    }
+    const students = allStudentsCache.filter(s => s.wali_id === currentWali.id);
+    const studentIds = students.map(s => s.id);
+    const kokurikulers = allKokurikulerCache.filter(k => studentIds.includes(k.student_id));
+
+    const excelData = [
+      ['REKAP NILAI KOKURIKULER'],
+      ['Kelas:', currentWali.class || '-'],
+      ['Dicetak pada:', new Date().toLocaleString('id-ID')],
+      [''],
+      ['Nama Siswa', 'Pertemuan Ke', 'Tema', 'Topik', 'Deskripsi Nilai', 'Tanggal']
+    ];
+
+    kokurikulers.sort((a,b) => {
+       const studentA = students.find(s => s.id === a.student_id)?.name || '';
+       const studentB = students.find(s => s.id === b.student_id)?.name || '';
+       if (studentA !== studentB) return studentA.localeCompare(studentB);
+       return a.pertemuan_ke - b.pertemuan_ke;
+    });
+
+    kokurikulers.forEach(k => {
+      const student = students.find(s => s.id === k.student_id);
+      excelData.push([
+        student ? student.name : 'Siswa',
+        k.pertemuan_ke,
+        k.tema,
+        k.topik,
+        k.deskripsi_nilai,
+        new Date(k.created_at).toLocaleDateString('id-ID')
+      ]);
+    });
+
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet(excelData);
+    ws['!cols'] = [{ wch: 20 }, { wch: 12 }, { wch: 25 }, { wch: 25 }, { wch: 40 }, { wch: 15 }];
+    XLSX.utils.book_append_sheet(wb, ws, 'Rekap Kokurikuler');
+    const fileName = `Rekap_Kokurikuler_${currentWali.class}_${new Date().toISOString().split('T')[0]}.xlsx`;
+    XLSX.writeFile(wb, fileName);
+    showToast(`✅ Rekap berhasil diexport: ${fileName}`, 'success');
+  } catch(e) {
+    console.error('Export error:', e);
+    showToast('❌ Gagal export: ' + e.message, 'error');
+  }
+}
+
+// ============================================================
+// WALI — TAMBAH SISWA & DELETE
 // ============================================================
 function showTambahSiswa() {
   document.getElementById('siswaKelas').value = currentWali.class || '';
+  document.getElementById('siswaPIN').value = '51sw@qu';
   show('tambahSiswaModal');
 }
 
@@ -3395,79 +3246,44 @@ async function tambahSiswa() {
   const name = document.getElementById('siswaNama').value.trim();
   const kelas = document.getElementById('siswaKelas').value.trim();
   const pin = document.getElementById('siswaPIN').value.trim() || '51sw@qu';
-  
-  if (!nis || !name || !kelas) {
-    alert('Mohon isi semua data');
-    return;
-  }
-  
-  if (nis.length < 5) {
-    alert('NIS minimal 5 karakter');
-    return;
-  }
-  
-  if (pin.length < 6) {
-    alert('PIN minimal 6 karakter');
-    return;
-  }
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!nis || !name || !kelas) { showToast('Mohon isi semua data', 'warning'); return; }
+  if (nis.length < 5) { showToast('NIS minimal 5 karakter', 'warning'); return; }
+  if (pin.length < 6) { showToast('PIN minimal 6 karakter', 'warning'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Menambahkan siswa...');
   try {
     const result = await callAPI('addStudent', {
-      nis: nis,
-      name: name,
-      password: pin,
-      waliId: currentWali.id,
-      class: kelas
+      nis, name, password: pin, waliId: currentWali.id, class: kelas
     });
-    
-    hideLoading();
     if (result && result.success) {
       showToast('✅ Siswa berhasil ditambahkan!', 'success');
       closeModal('tambahSiswaModal');
       dataLoaded = false;
       loadWaliData();
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menambahkan siswa';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menambahkan siswa'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 async function deleteStudent(id) {
   if (!confirm('Yakin ingin menghapus siswa ini?')) return;
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Menghapus siswa...');
   try {
     const result = await callAPI('deleteStudent', { studentId: id });
-    hideLoading();
     if (result && result.success) {
       showToast('✅ Siswa dihapus', 'success');
       dataLoaded = false;
       loadWaliData();
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menghapus siswa';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menghapus siswa'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -3478,35 +3294,26 @@ async function loadAdminData() {
     document.getElementById('waliList').innerHTML = '<div class="text-red-400/80 text-center">⚠️ Koneksi offline</div>';
     return;
   }
-  
   showLoading('Memuat data admin...');
   try {
     const users = await callAPI('getAllUsers');
     const students = await callAPI('getAllStudents');
     const curhat = await callAPI('getAllCurhat');
-    
     const waliUsers = users ? users.filter(u => u.role === 'wali') : [];
     document.getElementById('totalWaliAdmin').textContent = waliUsers.length;
     document.getElementById('totalSiswaAdmin').textContent = students ? students.length : 0;
     document.getElementById('totalCurhatAdmin').textContent = curhat ? curhat.length : 0;
-    
     renderWaliList(waliUsers);
-    hideLoading();
   } catch(e) {
-    hideLoading();
-    console.warn('Load admin data error:', e);
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('⚠️ Gagal memuat data: ' + msg, 'error');
-  }
+    showToast('⚠️ Gagal memuat data: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 function renderWaliList(walis) {
   const list = document.getElementById('waliList');
   if (!walis || walis.length === 0) {
-    list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada wali</div>';
-    return;
+    list.innerHTML = '<div class="text-white/60 text-center py-4">Belum ada wali</div>'; return;
   }
-  
   list.innerHTML = walis.map(w => `
     <div class="glass p-4 flex items-center justify-between hover:bg-white/5 transition">
       <div>
@@ -3516,11 +3323,11 @@ function renderWaliList(walis) {
       <button onclick="deleteWali('${w.id}')" class="text-red-400/70 hover:text-red-400 transition">
         <i class="fas fa-trash"></i>
       </button>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 function showTambahWali() {
+  document.getElementById('waliPasswordBaru').value = 'd4Rm@app';
   show('tambahWaliModal');
 }
 
@@ -3529,77 +3336,40 @@ async function tambahWali() {
   const email = document.getElementById('waliEmailBaru').value.trim();
   const kelas = document.getElementById('waliKelasBaru').value.trim();
   const password = document.getElementById('waliPasswordBaru').value.trim() || 'd4Rm@app';
-  
-  if (!name || !email || !kelas) {
-    alert('Mohon isi semua data');
-    return;
-  }
-  
-  if (!email.includes('@') || !email.includes('.')) {
-    alert('Email tidak valid');
-    return;
-  }
-  
-  if (password.length < 6) {
-    alert('Password minimal 6 karakter');
-    return;
-  }
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!name || !email || !kelas) { showToast('Mohon isi semua data', 'warning'); return; }
+  if (!email.includes('@') || !email.includes('.')) { showToast('Email tidak valid', 'warning'); return; }
+  if (password.length < 6) { showToast('Password minimal 6 karakter', 'warning'); return; }
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Menambahkan wali...');
   try {
-    const result = await callAPI('addUser', {
-      email: email,
-      password: password,
-      role: 'wali',
-      name: name,
-      class: kelas
-    });
-    
-    hideLoading();
+    const result = await callAPI('addUser', { email, password, role: 'wali', name, class: kelas });
     if (result && result.success) {
       showToast('✅ Wali berhasil ditambahkan!', 'success');
       closeModal('tambahWaliModal');
       loadAdminData();
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menambahkan wali';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menambahkan wali'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 async function deleteWali(id) {
   if (!confirm('Yakin ingin menghapus wali ini?')) return;
-  
-  if (!isOnline) {
-    alert('⚠️ Koneksi offline. Periksa internet Anda.');
-    return;
-  }
-  
+  if (!isOnline) { showToast('⚠️ Koneksi offline. Periksa internet Anda.', 'error'); return; }
   showLoading('Menghapus wali...');
   try {
     const result = await callAPI('deleteUser', { userId: id });
-    hideLoading();
     if (result && result.success) {
       showToast('✅ Wali dihapus', 'success');
       loadAdminData();
     } else {
-      const errorMsg = result && result.error ? result.error : 'Gagal menghapus wali';
-      showToast('❌ ' + errorMsg, 'error');
+      showToast('❌ ' + (result && result.error ? result.error : 'Gagal menghapus wali'), 'error');
     }
   } catch(e) {
-    hideLoading();
-    const msg = e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message;
-    showToast('❌ Error: ' + msg, 'error');
-  }
+    showToast('❌ Error: ' + (e.message === 'OFFLINE' ? 'Koneksi internet terputus' : e.message), 'error');
+  } finally { hideLoading(); }
 }
 
 // ============================================================
@@ -3607,36 +3377,21 @@ async function deleteWali(id) {
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
   setRole('student');
-  
-  setTimeout(checkConnection, 1500);
-  setInterval(checkConnection, 30000);
-  
-  console.log('🏫 Wali Digital v25.0 - FULL FIXED');
-  console.log('📌 Default Login:');
-  console.log('  Siswa: Ahmad Fauzi / 7A / 51sw@qu');
-  console.log('  Siswa: Budi Santoso / 7A / 51sw@qu');
-  console.log('  Wali: wali@walidigital.com / d4Rm@app');
-  console.log('  Admin: admin@walidigital.com / d4Rm@app');
-  console.log('🔧 PERBAIKAN:');
-  console.log('  ✅ Upload foto profil dengan optimasi (max 2MB)');
-  console.log('  ✅ Data profil tampil di daftar siswa wali');
-  console.log('  ✅ Edit profil siswa oleh wali');
-  console.log('  ✅ Profil hanya 1x isi, tampil CV');
-  console.log('  ✅ Timeout API 15 detik');
-  console.log('  ✅ Retry 2x dengan delay 500ms');
+  setTimeout(checkConnection, 1000);
+  connectionIntervalId = setInterval(checkConnection, 30000);
+  setTimeout(() => {
+    const defaultEmoji = document.querySelector('#studentJurnalSection .text-4xl span');
+    if (defaultEmoji) defaultEmoji.style.transform = 'scale(1.4)';
+  }, 100);
+  console.log('🏫 Wali Digital — Supabase Edition + Hapalan & Kokurikuler');
 });
 
-// Enter key untuk login
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
     if (!document.getElementById('loginPage').classList.contains('hidden')) {
-      if (!document.getElementById('studentLogin').classList.contains('hidden')) {
-        loginStudent();
-      } else if (!document.getElementById('waliLogin').classList.contains('hidden')) {
-        loginWali();
-      } else if (!document.getElementById('adminLogin').classList.contains('hidden')) {
-        loginAdmin();
-      }
+      if (!document.getElementById('studentLogin').classList.contains('hidden')) loginStudent();
+      else if (!document.getElementById('waliLogin').classList.contains('hidden')) loginWali();
+      else if (!document.getElementById('adminLogin').classList.contains('hidden')) loginAdmin();
     }
   }
 });
